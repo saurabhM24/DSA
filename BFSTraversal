@@ -1,0 +1,21 @@
+https://www.geeksforgeeks.org/problems/bfs-traversal-of-graph/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=bfs_of_graph
+
+Space Complexity: O(N)
+TimeComplexity : O(N +2E)
+
+Time Complexity Analysis
+Node Processing:
+
+## BFS Traversal Time Complexity
+
+### Node Processing
+
+Each node is enqueued and dequeued exactly once. Therefore, processing all nodes takes `O(N)` time.
+
+### Edge Processing
+
+- For each node, BFS examines all its neighbors.
+- If a node `u` has `d(u)` neighbors (where `d(u)` is the degree of node `u`), examining all neighbors across all nodes involves examining all edges.
+- The total number of operations across all nodes for edge examination is the sum of the degrees of all nodes, which is `2E` for an undirected graph (since each edge is counted twice, once from each endpoint).
+- Hence, the edge processing time is `O(2E)`.
+

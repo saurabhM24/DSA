@@ -21,6 +21,9 @@ An island is surrounded by water and is formed by connecting adjacent lands hori
    - For DFS, recursively visit all adjacent cells (up, down, left, right) that contain `'1'`.
    - For BFS, use a queue to iteratively visit and mark all connected `'1'` cells.
 
+Time : O(n*m)
+Space: O(N×M) for the DFS recursion stack or BFS queue in the worst case if the grid is filled with land ('1').
+
 ### Pseudocode for DFS
 
 ```java

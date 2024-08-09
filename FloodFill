@@ -1,0 +1,40 @@
+https://leetcode.com/problems/flood-fill/description/
+
+## Flood Fill Algorithm
+
+### Problem Statement
+
+Given a 2D grid (image) of integers representing colors, replace the color of the starting pixel and all connected pixels with the same color with a new color.
+
+### Approach
+
+- **Depth-First Search (DFS)**: 
+  - Start from the given pixel and recursively apply the new color to all adjacent pixels that share the same original color.
+  - Use a 4-directional approach (up, down, left, right) to check adjacent pixels.
+
+Time : O(n*m)
+Space : O(n*m)
+
+### Pseudocode (DFS)
+
+```java
+public int[][] floodFill(int[][] image, int sr, int sc, int color) {
+    if (image[sr][sc] != color) {
+        dfs(image, sr, sc, image[sr][sc], color);
+    }
+    return image;
+}
+
+void dfs(int[][] image, int sr, int sc, int scolor, int color) {
+    if (image[sr][sc] == scolor) {
+        image[sr][sc] = color;
+        int directions[][] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        for (int[] dir : directions) {
+            int newRow = sr + dir[0];
+            int newCol = sc + dir[1];
+            if (newRow >= 0 && newRow < image.length && newCol >= 0 && newCol < image[0].length) {
+                dfs(image, newRow, newCol, scolor, color);
+            }
+        }
+    }
+}

@@ -1,0 +1,47 @@
+https://leetcode.com/problems/number-of-islands/
+
+## Number of Islands Problem
+
+### Problem Statement
+
+Given a 2D binary grid where `'1'` represents land and `'0'` represents water, find the number of islands.
+An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically.
+
+### Approach
+
+1. **Traversal**: Use Depth-First Search (DFS) or Breadth-First Search (BFS) to traverse the grid.
+
+2. **Island Counting**:
+   - Initialize a count to `0`.
+   - Iterate over each cell in the grid.
+   - When a cell with `'1'` is found, it signifies the start of a new island. Increment the island count.
+   - Use DFS or BFS to mark all connected `'1'`s to `'0'` to indicate they have been visited.
+
+3. **DFS/BFS Implementation**:
+   - For DFS, recursively visit all adjacent cells (up, down, left, right) that contain `'1'`.
+   - For BFS, use a queue to iteratively visit and mark all connected `'1'` cells.
+
+### Pseudocode for DFS
+
+```java
+function numIslands(grid):
+    if grid is empty:
+        return 0
+    
+    count = 0
+    for each cell (i, j) in grid:
+        if grid[i][j] == '1':
+            dfs(grid, i, j)
+            count += 1
+    
+    return count
+
+function dfs(grid, i, j):
+    if i < 0 or j < 0 or i >= number of rows or j >= number of columns or grid[i][j] != '1':
+        return
+    
+    grid[i][j] = '0' // mark as visited
+    dfs(grid, i + 1, j) // down
+    dfs(grid, i - 1, j) // up
+    dfs(grid, i, j + 1) // right
+    dfs(grid, i, j - 1) // left

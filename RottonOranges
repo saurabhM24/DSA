@@ -1,0 +1,93 @@
+https://leetcode.com/problems/rotting-oranges/
+
+# Rotten Oranges Problem
+
+## Problem Description
+You are given a 2D grid representing a box of oranges, where:
+- `0` represents an empty cell,
+- `1` represents a fresh orange, and
+- `2` represents a rotten orange.
+
+Each minute, any fresh orange adjacent (up, down, left, or right) to a rotten orange becomes rotten. The goal is to determine the minimum number of minutes that must elapse until no cell has a fresh orange. If it is impossible to rot all fresh oranges, return `-1`.
+
+## Approach
+
+The solution uses a Breadth-First Search (BFS) strategy to simulate the rotting process. The key idea is to use a queue to manage the rotten oranges and their propagation to adjacent fresh oranges.
+
+### Steps:
+1. **Initialize Variables**:
+   - Create a `Queue<int[]>` to store the positions of rotten oranges.
+   - Count the number of fresh oranges in the grid.
+
+2. **Populate Queue and Count Fresh Oranges**:
+   - Traverse the grid to find all rotten oranges and add their positions to the queue.
+   - Count the number of fresh oranges as you traverse the grid.
+
+3. **Breadth-First Search (BFS) Execution**:
+   - Use a loop to process the queue. For each level of BFS, check all adjacent cells of the current rotten oranges.
+   - If an adjacent cell contains a fresh orange, rot it (change its value to `2`), decrement the count of fresh oranges, and add its position to the queue.
+   - Track the number of minutes required to rot all reachable oranges. This is done by incrementing the minute counter each time a level of BFS is fully processed.
+
+4. **Check Result**:
+   - After processing all possible rotting, check if there are any fresh oranges left.
+   - If no fresh oranges remain, return the number of minutes elapsed.
+   - If there are still fresh oranges, return `-1` indicating that not all oranges can be rotted.
+
+### Complexity Analysis
+
+- **Time Complexity**: `O(n * m)`
+  - Scanning the grid to initialize the queue and count fresh oranges takes `O(n * m)`.
+  - Each orange (both rotten and fresh) is processed in the BFS, leading to `O(n * m)` operations.
+
+- **Space Complexity**: `O(n * m)`
+  - The queue can store up to `n * m` elements in the worst case.
+  - The grid itself requires `O(n * m)` space.
+
+## Code
+
+```java
+public int orangesRotting(int[][] grid) {
+    int fresh = 0;
+    Queue<int[]> q = new LinkedList<>();
+    int n = grid.length;
+    int m = grid[0].length;
+
+    // Initialize the queue and count fresh oranges
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            if (grid[i][j] == 1) {
+                fresh++;
+            }
+            if (grid[i][j] == 2) {
+                q.add(new int[]{i, j});
+            }
+        }
+    }
+
+    int mins = 0;
+    int directions[][] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+
+    // Perform BFS
+    while (!q.isEmpty() && fresh > 0) {
+        int size = q.size();
+        for (int i = 0; i < size; i++) {
+            int[] loc = q.poll();
+            int r = loc[0];
+            int c = loc[1];
+
+            for (int[] dir : directions) {
+                int newRow = r + dir[0];
+                int newCol = c + dir[1];
+
+                if (newRow >= 0 && newRow < n && newCol >= 0 && newCol < m && grid[newRow][newCol] == 1) {
+                    grid[newRow][newCol] = 2;
+                    fresh--;
+                    q.add(new int[]{newRow, newCol});
+                }
+            }
+        }
+        mins++; // Increment minutes after processing one level of BFS
+    }
+
+    return fresh == 0 ? mins : -1;
+}

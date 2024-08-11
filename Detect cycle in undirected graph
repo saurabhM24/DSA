@@ -1,0 +1,13 @@
+https://www.geeksforgeeks.org/problems/detect-cycle-in-an-undirected-graph/1
+
+Time Complexity: O(V + 2E) 2E for undirected graph
+Space Complexity: O(V) for the visited and parent arrays.
+
+1. Using Depth-First Search (DFS)
+In DFS, you can detect a cycle by keeping track of visited nodes and the parent node of each node. If you encounter a node that has been visited and is not the parent of the current node, then there is a cycle.
+
+Steps:
+
+Use a DFS traversal from each unvisited node.
+During DFS, maintain a parent variable to track the parent of each node.
+If you encounter a node that is visited and is not the parent of the current node, a cycle is detected.

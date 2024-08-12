@@ -1,0 +1,13 @@
+https://leetcode.com/problems/number-of-enclaves/
+
+space: O(nxm)
+time: O(nxm)
+
+Approach :
+
+Mark Boundary-Connected Lands
+
+Use Depth-First Search (DFS) or Breadth-First Search (BFS) starting from the land cells ('1') on the boundary of the grid. Mark these cells and any cells connected to them as visited, as they are not part of an enclave.
+Count Unvisited Land Cells:
+
+After marking all boundary-connected land cells, traverse the grid and count the remaining land cells. These cells represent enclaves, as they are not connected to the boundary.

@@ -1,0 +1,11 @@
+https://www.geeksforgeeks.org/problems/replace-os-with-xs0052/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=replace-os-with-xs
+
+Approach :
+Identify and Mark Boundary-Connected Regions:
+
+Traverse the boundary of the matrix and start a Depth-First Search (DFS) from each 'O' found. Mark all connected 'O' cells as a temporary character (e.g., 'E').
+These cells are not surrounded and should not be flipped to 'X'.
+Flip Surrounded Regions:
+
+Traverse the entire board. Any 'O' that has not been marked by the DFS is surrounded by 'X' and should be flipped to 'X'.
+Convert the temporary character 'E' back to 'O' to restore the original unsurrrounded regions.

@@ -1,0 +1,24 @@
+https://www.geeksforgeeks.org/problems/number-of-distinct-islands/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=number-of-distinct-islands
+
+Approach
+Initialize Data Structures:
+
+Use a Set<Set<String>> to store the unique shapes of the islands.
+Traverse the Grid:
+
+Iterate over each cell in the grid. When a land cell (1) is found, initiate a Depth-First Search (DFS) to explore the entire island.
+DFS Exploration and Shape Recording:
+
+During the DFS, keep track of the starting position of the island (baseRow, baseCol).
+For each cell in the island, calculate its relative position to the starting cell as row_offset = current_row - baseRow and col_offset = current_col - baseCol.
+Record these relative positions in a set to represent the shape of the island.
+Store and Compare Island Shapes:
+
+After completing the DFS for an island, store its shape (set of relative positions) in the main set of unique island shapes.
+This ensures that islands with the same shape (relative positions) are considered identical.
+Count the Number of Distinct Islands:
+
+The size of the main set of unique island shapes represents the number of distinct islands.
+Time Complexity
+Time Complexity: O(m * n), where m is the number of rows and n is the number of columns. Each cell is visited once.
+Space Complexity: O(m * n) for storing the shapes of the islands and the recursion stack in DFS.

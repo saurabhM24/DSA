@@ -1,0 +1,20 @@
+https://leetcode.com/problems/network-delay-time/description/
+
+Approach:
+To solve this problem, we can use Dijkstra's algorithm, which is well-suited for finding the shortest path from a single source to all other nodes in a graph with non-negative edge weights.
+
+Graph Representation:
+
+Use an adjacency list to represent the graph, where each node points to a list of (neighbor, weight) pairs.
+Dijkstra's Algorithm:
+
+Initialize a priority queue to explore the nodes by the shortest known distance.
+Start with the source node K, and set its distance to 0.
+Pop nodes from the priority queue, updating the shortest path to their neighbors.
+Track the maximum time it takes to reach any node from K.
+Result:
+
+If all nodes are reachable, return the maximum time from the starting node K to any other node.
+If any node is unreachable, return -1.
+
+Time Complexity: O(V+ElogV)

@@ -1,0 +1,21 @@
+https://leetcode.com/problems/find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance/description/
+
+Approach:
+Graph Representation:
+
+Represent the cities and distances between them as a graph using an adjacency matrix.
+The problem can be solved using the Floyd-Warshall algorithm, which calculates the shortest paths between all pairs of nodes in the graph.
+Floyd-Warshall Algorithm:
+
+Initialize the adjacency matrix with inf (infinity) for all pairs except the diagonal (distance to self is 0).
+Update the matrix for the direct connections given in the input.
+Run the Floyd-Warshall algorithm to compute the shortest path between all pairs of cities.
+Count Neighbors:
+
+For each city, count how many cities are reachable within the given threshold distance.
+Track the city with the smallest number of neighbors. If there's a tie, select the city with the higher index.
+Return the Result:
+
+Return the city with the smallest number of neighbors (or the largest index in case of a tie).
+
+Time Complexity: O(v raise to 3)

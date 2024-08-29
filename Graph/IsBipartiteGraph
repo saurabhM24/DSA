@@ -1,0 +1,3 @@
+https://leetcode.com/problems/is-graph-bipartite/description/
+
+Dfs and pass the parent colour. If parent colur and the adjacent node is already visited and color is same then return false.

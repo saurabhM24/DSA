@@ -1,0 +1,19 @@
+https://leetcode.com/problems/find-eventual-safe-states/description/
+
+Approach
+Graph Representation: Represent the graph using adjacency lists and calculate the in-degrees for each node.
+
+Find Terminal Nodes: Nodes with no outgoing edges are safe by definition, as they are terminal nodes.
+
+Topological Sorting:
+
+Kahn's Algorithm (BFS-based) can be used to sort nodes and detect cycles.
+Initialize a queue with nodes that have an in-degree of zero (safe nodes).
+Process each node, updating the in-degrees of its neighbors. If a neighbor's in-degree becomes zero, add it to the queue.
+Nodes processed in this way are safe because they can eventually reach a terminal node.
+Reverse the Process:
+
+Since Kahn's Algorithm processes nodes from safe to unsafe, reverse the order to identify safe nodes.
+After processing, nodes that are never added to the safe list are part of a cycle and thus unsafe.
+
+TC: O(V+E)

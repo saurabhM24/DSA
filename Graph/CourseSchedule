@@ -1,0 +1,14 @@
+https://leetcode.com/problems/course-schedule/description/
+
+Solution Approach
+This problem can also be solved using Topological Sorting to detect if there is a cycle in the graph:
+
+Graph Representation: Represent the courses and prerequisites as a directed graph.
+
+In-Degree Calculation: Compute the in-degrees for all nodes.
+
+Cycle Detection:
+
+Use Kahn’s Algorithm (BFS-based) or DFS-based approach to try to generate a topological order.
+If you can process all nodes (i.e., the number of nodes processed equals numCourses), there’s no cycle, and it’s possible to complete all courses.
+If you cannot process all nodes, there is a cycle, and it’s not possible to complete all courses.

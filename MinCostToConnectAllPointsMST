@@ -1,0 +1,18 @@
+https://leetcode.com/problems/min-cost-to-connect-all-points/description/
+
+Approach
+Graph Representation: Represent the points as nodes of a graph, where each node is connected to every other node with an edge weighted by the Manhattan distance between the two points. The graph is dense, so we'll use an adjacency list where each node stores a list of edges to other nodes.
+
+Priority Queue (Min-Heap): Use a priority queue to keep track of the minimum edge connecting the current MST to the remaining nodes. The priority queue will store tuples in the form (cost, point), where cost is the Manhattan distance and point is the node.
+
+Visited Set: Maintain a set to keep track of nodes that are already included in the MST.
+
+Prim's Algorithm:
+
+Start from any node (say, node 0).
+Add the node to the visited set and push all its edges into the priority queue.
+While the priority queue is not empty, extract the minimum edge, add the corresponding node to the MST if it's not already visited, and add the edges from this node to the priority queue.
+Continue this process until all nodes are included in the MST.
+
+TimeComplexity: The time complexity is O(V^2 * log(V)), where V is the number of points. The priority queue operations are O(log(V)), and for each point, we might push up to V edges.
+

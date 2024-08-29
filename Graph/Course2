@@ -1,0 +1,12 @@
+https://leetcode.com/problems/course-schedule-ii/description/
+
+Approach:
+The problem can be solved using Topological Sorting of a Directed Graph. Here's a high-level approach:
+
+Graph Representation: Represent the courses and prerequisites as a directed graph using adjacency lists.
+
+In-Degree Calculation: Compute the in-degrees for all nodes (i.e., the number of incoming edges for each node).
+
+Topological Sort: Use Kahn's Algorithm (BFS-based) or DFS-based approach to generate the topological order. If you can process all nodes, return the order; otherwise, return an empty list indicating a cycle exists.
+
+BFS-based approach (Kahn's Algorithm): Processing each node and edge takes O(V+E) time.

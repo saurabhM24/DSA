@@ -1,0 +1,39 @@
+https://leetcode.com/problems/critical-connections-in-a-network/
+
+The code you've provided is an implementation of an algorithm to find all the critical connections (also known as bridges) in a network. A critical connection is an edge that, if removed, would make the network disconnected. The algorithm used here is based on Tarjan's algorithm for finding bridges in a graph, which is a depth-first search (DFS)-based approach.
+
+Explanation of the Code
+1. Graph Representation
+The graph is represented using an adjacency list.
+The adjacency list adj is an array of lists where each index represents a node, and the list at each index contains the adjacent nodes.
+2. DFS Initialization
+Arrays vis, tin, and low are initialized:
+vis[i]: Tracks if the node i has been visited.
+tin[i]: The time of first visit (discovery time) of node i.
+low[i]: The lowest discovery time reachable from node i.
+The ans list stores the critical connections found.
+3. DFS Traversal
+Start DFS from node 0 (or any arbitrary node since the graph is assumed to be connected).
+Tracking Discovery and Low Times:
+For each node, record the discovery time (tin) and initialize the low time to the discovery time.
+Increment the timer as you proceed deeper into the graph.
+Explore Adjacent Nodes:
+For each adjacent node adjNode, skip the parent node to avoid trivial back edges.
+If adjNode is not visited, recursively call dfs for it.
+Check for Bridge:
+After returning from the DFS call, check if the low value of adjNode is greater than the discovery time of node. If it is, the edge (node, adjNode) is a bridge and is added to the ans list.
+Update the low[node] value based on the low value of the adjacent nodes.
+Back Edge Handling:
+If adjNode has already been visited (i.e., it forms a back edge), update low[node] with the minimum of its current value and the tin of adjNode.
+4. Edge Cases
+The code assumes the graph is connected and undirected.
+If the graph is not connected, you would need to ensure that all components are explored.
+Correction in the Code
+There are a couple of issues with the original code:
+
+Incorrectly Updating low[] Array:
+In both conditions (if (vis[adjNode] == 0) and else), low[node] should be updated with the correct value.
+The code mistakenly uses low[adjNode] twice instead of comparing it with the current low[node].
+
+
+TC: Tc of dfs O(V + 2E)

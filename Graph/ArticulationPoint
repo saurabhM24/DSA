@@ -1,0 +1,23 @@
+https://www.geeksforgeeks.org/problems/articulation-point-1/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=articulation-point
+
+Your implementation of finding articulation points (or cut vertices) in a graph using DFS is mostly correct. However, there's a minor issue in how you're handling the root node (i.e., the first node of the DFS tree) when determining if it's an articulation point. Below is an explanation of your code along with some improvements:
+
+Key Components of the Algorithm
+DFS to Explore the Graph:
+
+vis[] is used to keep track of visited nodes.
+tin[] stores the discovery time of nodes.
+lowTin[] stores the lowest discovery time reachable from a node, which helps in identifying back edges.
+Articulation Point Criteria:
+
+For a non-root node, node is an articulation point if there is any child adjNode such that lowTin[adjNode] >= tin[node].
+For the root node, node is an articulation point if it has more than one child in the DFS tree.
+Issues and Corrections
+Root Node Handling:
+
+The check for whether the root node should be considered an articulation point is based on whether it has more than one child in the DFS tree. The current implementation checks if (parent == -1 && adj.get(0).size() > 1), which is close but not completely correct because adj.get(0).size() checks the degree of the root in the original graph, not the DFS tree.
+Using timer:
+
+The timer should be passed by reference or incremented in the DFS call to ensure each node gets the correct time of entry.
+
+Time complexity of dfs O(V+2E)

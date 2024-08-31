@@ -1,0 +1,25 @@
+https://leetcode.com/problems/most-stones-removed-with-same-row-or-column/
+
+Approach 1: Union-Find (Disjoint Set Union)
+Key Idea:
+Consider each stone as a node in a graph.
+Connect stones that share the same row or the same column.
+The problem reduces to finding the number of connected components in the graph.
+If there are C connected components, then N - C stones can be removed, where N is the total number of stones.
+Steps:
+Union-Find Initialization:
+
+Create a parent array to represent the disjoint sets.
+Use a map to keep track of rows and columns, treating them as nodes in the union-find structure.
+Union Operation:
+
+For each stone at (x, y), connect the row x with the column y. To avoid collisions between row indices and column indices, use some offset or encoding method.
+Find Operation:
+
+For each unique stone, determine its root parent. The number of unique parents gives the number of connected components.
+Calculate Result:
+
+Subtract the number of connected components from the total number of stones to get the maximum number of stones that can be removed.
+
+TC: (NlogN) where 
+N is the number of stones. The logarithmic factor comes from the path compression and union by rank operations in the Union-Find algorithm.

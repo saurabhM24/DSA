@@ -1,0 +1,33 @@
+https://www.geeksforgeeks.org/problems/strongly-connected-components-kosarajus-algo/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=strongly-connected-components-kosarajus-algo
+
+Key Concepts
+SCC (Strongly Connected Component):
+
+A directed graph is strongly connected if there is a path between all pairs of vertices.
+A strongly connected component is a maximal strongly connected subgraph.
+Kosaraju's Algorithm Overview:
+
+Kosaraju’s algorithm uses two depth-first searches (DFS) to identify all SCCs.
+The algorithm relies on the fact that performing a DFS on the transpose (reversed) graph in the order of decreasing finish times (from the first DFS) will yield the SCCs.
+Steps in Kosaraju's Algorithm
+First DFS to Calculate Finish Times:
+
+Perform a DFS on the original graph to compute the finish times of each vertex.
+Store the vertices in a stack in the order of their finish times (i.e., push the vertex onto the stack when its DFS call finishes).
+Transpose the Graph:
+
+Create the transpose (reverse) of the original graph. This involves reversing the direction of all the edges.
+Second DFS on the Transposed Graph:
+
+Perform DFS on the transposed graph, but this time process the vertices in the order defined by the stack from the first DFS.
+Each DFS call on the transposed graph will give a strongly connected component.
+Time Complexity
+The time complexity of Kosaraju’s algorithm is O(V + E), where:
+
+V is the number of vertices.
+E is the number of edges.
+The reason for this is:
+
+The first DFS takes O(V + E) time.
+Creating the transpose of the graph also takes O(V + E) time.
+The second DFS on the transposed graph takes O(V + E) time.

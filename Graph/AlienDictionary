@@ -1,0 +1,12 @@
+https://www.geeksforgeeks.org/problems/alien-dictionary/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=alien-dictionary
+
+To solve the problem of finding the order of characters in an alien language given a sorted dictionary, you can use a topological sort approach. The idea is to build a directed graph where each node represents a character, and a directed edge from character u to character v indicates that u comes before v in the alien language.
+
+Approach
+Build the Graph:
+
+Compare adjacent words in the dictionary. For each pair of words, find the first character that differs. This differing character determines the ordering of the characters in the alien language.
+Create a directed edge from the first differing character of the first word to the first differing character of the second word.
+Topological Sort:
+
+Perform a topological sort on the graph to determine the order of characters. Topological sort is valid because the graph is a Directed Acyclic Graph (DAG).

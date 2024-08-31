@@ -1,0 +1,21 @@
+https://leetcode.com/problems/redundant-connection/
+
+Approach: Union-Find (Disjoint Set Union)
+The Union-Find (Disjoint Set Union, DSU) algorithm is an effective way to solve this problem. The idea is to detect cycles in the graph using Union-Find.
+
+Key Idea:
+Union-Find Operations:
+
+Find: Determine which component (or subset) a particular element is in.
+Union: Merge two subsets into a single subset.
+Cycle Detection: If two nodes are already in the same subset and an edge connecting them is found, that edge is the redundant connection.
+Process:
+
+Iterate over each edge in the graph.
+For each edge, check if the two vertices of the edge are already connected (i.e., they share the same root).
+If they are connected, this edge is redundant.
+If they are not connected, union the two vertices.
+Output:
+
+Return the first edge that creates a cycle.
+

@@ -1,0 +1,8 @@
+https://www.geeksforgeeks.org/problems/boundary-traversal-of-binary-tree/1
+
+Approach:
+If traversal is anti-clockwise
+Right 3 methods.
+1 to get the left boundary (Don't add leaf node)
+2, To get all the leaf nodes
+3. To get right boundary. (In this add the node in the temp list and then reverse the list and add it in final list) (Don't add leaf node)

@@ -1,0 +1,5 @@
+https://www.geeksforgeeks.org/problems/bottom-view-of-binary-tree/1
+
+Approach
+In this don't use dfs as it fails in some cases
+Use BFS. Modify the node to have the level. User TreeMap to sort accoriding to level.

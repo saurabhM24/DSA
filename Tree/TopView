@@ -1,0 +1,7 @@
+https://www.geeksforgeeks.org/problems/top-view-of-binary-tree/1
+
+Approach:
+DO NOT use dfs traversal for this. It fails in some cases.
+Use TreeMap for sorting according to horizontal distance(hd)
+
+TC: nlogn because of insertion in treemap takes logn

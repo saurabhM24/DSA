@@ -1,0 +1,6 @@
+https://leetcode.com/problems/house-robber/
+
+Apprach:
+Take and not take.
+Think of smallest valid input for base condition.
+DP based on the changing variable. Here only one variable is changing that is n. So it's a 1D DP.

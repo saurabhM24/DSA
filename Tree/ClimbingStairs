@@ -1,0 +1,42 @@
+https://leetcode.com/problems/climbing-stairs/description/
+
+Given a staircase with n steps, you can either climb 1 step or 2 steps at a time. You need to find the total number of distinct ways to reach the top of the staircase.
+
+Recursive Approach:
+Define the Recursive Function:
+
+Let climbStairs(n) represent the number of distinct ways to reach the n-th step.
+
+There are two ways to reach the n-th step:
+
+From the (n-1)-th step by taking 1 step.
+From the (n-2)-th step by taking 2 steps.
+The recursive relation can be defined as:
+
+climbStairs
+(
+𝑛
+)
+=
+climbStairs
+(
+𝑛
+−
+1
+)
++
+climbStairs
+(
+𝑛
+−
+2
+)
+climbStairs(n)=climbStairs(n−1)+climbStairs(n−2)
+The base cases:
+
+climbStairs(0) = 1 (1 way to stay at the ground).
+climbStairs(1) = 1 (1 way to reach the first step).
+
+TC:
+The time complexity is O(2^n) because the function generates a binary tree of height n, with each node branching into two recursive calls. This leads to a very large number of overlapping subproblems, especially for larger n.
+If you apply memoization it will be o(n)

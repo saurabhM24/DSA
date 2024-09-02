@@ -1,0 +1,6 @@
+https://leetcode.com/problems/house-robber-ii/
+
+Approach:
+Since houses are in circle. We have to spilt the arr in to 2 arrays.
+1 array includes the 1st house and exludes the last and other vice versa. Then problem will be become House Robber 1.
+Return the max of 2 ans.

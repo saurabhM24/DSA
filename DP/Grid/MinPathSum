@@ -1,0 +1,6 @@
+https://leetcode.com/problems/minimum-path-sum/
+
+Self Explanatory
+TC: O(mxn) because of dp. We calculate for a cell only once
+SC: O(mxn) because of dp matrix.
+

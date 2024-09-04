@@ -1,0 +1,21 @@
+https://leetcode.com/problems/flatten-binary-tree-to-linked-list/description/
+
+Approach:
+We can solve this problem using a reverse postorder traversal (right -> left -> root) to flatten the tree in-place. This approach ensures that each node's right child points to the next node in the preorder sequence, while left pointers are set to null.
+
+Intuition:
+Reverse Postorder Traversal:
+
+In a standard postorder traversal (left -> right -> root), we process the left and right subtrees before the root. To flatten the tree into a linked list, we reverse this order (right -> left -> root). This allows us to set up the right pointers correctly as we move back up the tree.
+Maintaining a prev Pointer:
+
+We maintain a pointer prev to keep track of the last processed node in the flattened list. Initially, prev is null.
+As we traverse the tree in reverse postorder:
+Process the right subtree first. After it’s flattened, prev points to the head of this subtree.
+Process the left subtree next. Flatten it, and adjust the current node’s pointers:
+Set root.right to prev (link the current node to the previously processed node).
+Set root.left to null (since it should be a linked list).
+Update prev to the current root node.
+Why This Works:
+
+By processing the right subtree first, when we move to the left subtree and eventually to the root, the right pointers can be directly set to prev, ensuring that each node points to the next node in the preorder sequence.

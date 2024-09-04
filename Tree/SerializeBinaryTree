@@ -1,0 +1,5 @@
+https://leetcode.com/problems/serialize-and-deserialize-binary-tree/submissions/1379162327/
+
+Approach:
+Do level order traversal and make a string. The same string is passed to deserialise method where we will traverse the string one by one. And create the Nodes. We will keep first 
+node separte and will return it.

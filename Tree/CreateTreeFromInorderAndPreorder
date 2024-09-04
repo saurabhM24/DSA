@@ -1,0 +1,23 @@
+https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/description/
+
+The problem "Construct Binary Tree from Preorder and Inorder Traversal" on LeetCode requires you to reconstruct a binary tree given its preorder and inorder traversal sequences.
+
+Problem Breakdown
+Preorder Traversal: Visits nodes in the order: root -> left subtree -> right subtree.
+Inorder Traversal: Visits nodes in the order: left subtree -> root -> right subtree.
+Approach to Solve the Problem
+To reconstruct the binary tree, the key insight is that:
+
+The first element in the preorder list is always the root of the current subtree.
+In the inorder list, the root splits the list into the left and right subtrees.
+Steps to Construct the Tree
+Identify the root: The first element in the preorder list is the root of the tree.
+
+Find the root in the inorder list: This helps determine the boundary between the left and right subtrees.
+
+Recursively construct the left and right subtrees:
+
+The left subtree consists of all nodes before the root in the inorder list.
+The right subtree consists of all nodes after the root in the inorder list.
+Use the corresponding elements from the preorder list for the left and right subtrees.
+Recur until the tree is fully constructed.

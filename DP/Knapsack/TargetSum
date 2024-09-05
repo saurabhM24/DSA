@@ -1,0 +1,9 @@
+https://leetcode.com/problems/target-sum/description/
+
+It is like knapsack. assign + and - to integers and find out how may ways to find the sum
+
+s1 -s2 = target;
+2s1-sum = target;
+s1 = (sum+target)/2;
+
+problem reduces to count the number of subsets with given target.

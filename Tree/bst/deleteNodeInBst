@@ -1,0 +1,7 @@
+https://leetcode.com/problems/delete-node-in-a-bst/post-solution/?submissionId=632319305
+
+There are 3 cases.
+  Delete leaf node, delte 1 child node, delete 2 child node.
+    Delete 2 nodes is reduced to delete leaf node. Successor is found and replaced with root.value. and then delete node is called on the key again from root.right
+
+    

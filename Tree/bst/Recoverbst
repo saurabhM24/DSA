@@ -1,0 +1,18 @@
+https://leetcode.com/problems/recover-binary-search-tree/
+
+
+The LeetCode problem "Recover Binary Search Tree" (Problem #99) involves recovering a Binary Search Tree (BST) where two nodes are swapped by mistake, without changing the structure of the tree. The goal is to fix the tree by swapping the values of these two nodes back.
+
+Problem Summary
+You are given the root of a binary search tree.
+Two nodes of the tree have been swapped by mistake.
+Your task is to recover the tree without changing its structure.
+Approach
+A binary search tree has the property that an in-order traversal produces a sorted sequence. If two nodes are swapped, the in-order traversal will show two points where this order is violated. The idea is to detect these two nodes during the in-order traversal and swap their values back.
+
+Key Steps:
+Perform an in-order traversal of the tree.
+During the traversal, identify two nodes that are out of order:
+The first node (first) will be the one where a previous node has a larger value than the current node.
+The second node (second) will be where the current node has a smaller value than it should.
+Swap the values of these two nodes to recover the BST.

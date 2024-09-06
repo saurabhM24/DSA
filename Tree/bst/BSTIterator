@@ -1,0 +1,7 @@
+https://leetcode.com/problems/binary-search-tree-iterator/submissions/1381166271/
+
+For inorder treaversal iterator use stack and add the root and all its left childs in stack till null.
+After poping again add all its left childs in the stack
+
+TC : O(1)
+SC : O(H) for stack

@@ -1,0 +1,3 @@
+https://leetcode.com/problems/construct-binary-search-tree-from-preorder-traversal/description/
+
+1st node is root. Then travers the remaining pre order and insert each node in bst.

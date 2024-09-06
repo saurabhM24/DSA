@@ -1,0 +1,2 @@
+https://leetcode.com/problems/kth-smallest-element-in-a-bst/description/
+Do inorder traversal as inorder gives sorted order and keep a count. If cnt == k then that's the kth smallest 

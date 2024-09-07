@@ -1,0 +1,22 @@
+https://leetcode.com/problems/longest-increasing-subsequence/
+
+
+The Longest Increasing Subsequence (LIS) problem asks for the length of the longest subsequence in a sequence where the elements are in increasing order. The recursive approach involves exploring all possible subsequences and checking if each subsequence is increasing.
+
+Problem:
+Given an array nums, find the length of the longest subsequence where the elements are in increasing order. A subsequence is derived by deleting some or no elements without changing the order of the remaining elements.
+
+Recursive Approach:
+To solve this recursively:
+
+Start at each element and try to build a subsequence by either including or excluding the current element.
+If you include the current element, move to the next one that is larger.
+If you exclude the current element, continue to check the rest of the array for possible subsequences.
+Memoization can be added to optimize the solution and avoid redundant computations.
+Recursive Formula:
+The recursive function can be defined as:
+
+LIS(i): The length of the longest increasing subsequence starting from index i.
+If nums[i] can be included in the subsequence (i.e., it's greater than the previous element), explore two options:
+Include nums[i] and move to the next index.
+Exclude nums[i] and try the next index.

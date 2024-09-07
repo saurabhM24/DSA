@@ -1,0 +1,14 @@
+https://leetcode.com/problems/largest-divisible-subset/
+
+Approach
+This problem can be solved using Dynamic Programming. The idea is to first sort the array, and then build the largest divisible subset by ensuring that for each element in the subset, the earlier elements are divisible by it.
+
+Key Steps:
+Sort the Array: Sorting helps because if a % b == 0, and a > b, then all multiples of b come after b in the sorted array, making it easier to find the divisible subset.
+
+Dynamic Programming Table: Define dp[i] as the length of the largest divisible subset that ends at index i. We also keep track of the index from where this subset was formed using a prev array.
+
+Transition: For each element nums[i], check all the previous elements nums[j] (where j < i). If nums[i] % nums[j] == 0, it means nums[i] can be appended to the subset ending at nums[j]. Update dp[i] accordingly.
+
+Tracking the Subset: Once we have the dp array filled, we need to backtrack from the element that has the largest dp[i] value to get the actual elements of the largest divisible subset.
+

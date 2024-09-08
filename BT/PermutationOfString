@@ -1,0 +1,9 @@
+https://www.geeksforgeeks.org/problems/permutations-of-a-given-string2041/1?itm_source=geeksforgeeks&itm_medium=article&itm_campaign=practice_card
+
+Approach:
+Swap characters recursively to generate permutations by fixing each character at the current position.
+Backtrack by restoring the previous state after each recursive call to explore other possibilities.
+Add permutations to a result list when the base case (end of the string) is reached.
+This approach ensures all permutations of the string are explored and added to the result.
+
+TC: O(n!)

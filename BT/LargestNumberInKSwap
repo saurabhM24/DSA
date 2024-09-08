@@ -1,0 +1,11 @@
+https://www.geeksforgeeks.org/problems/largest-number-in-k-swaps-1587115620/1
+
+Here’s the approach to solve the Largest Number in K Swaps problem in a few lines:
+
+Backtracking: Use recursion to explore all possible swaps up to K times.
+For each recursion:
+Swap the current digit with all subsequent larger digits.
+After each swap, recursively solve the problem with K-1 swaps remaining.
+Keep track of the largest number encountered.
+Prune Unnecessary Swaps: If the current digit is already the largest in its remaining range, move to the next digit without reducing K.
+Backtrack after each recursion by undoing the swap to explore other possibilities.

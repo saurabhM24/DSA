@@ -1,0 +1,28 @@
+https://leetcode.com/problems/n-queens/submissions/1386921990/
+The approach to solving the N-Queens problem typically involves backtracking:
+
+Place Queens Recursively:
+
+Start placing queens row by row. For each row, try placing a queen in every column.
+Check Validity:
+
+Before placing a queen in a column, ensure that no other queens are attacking it by checking:
+Same column
+Same diagonal (both left and right diagonals)
+Backtracking:
+
+If a valid placement is found, move to the next row.
+If no valid placement is possible in the current row, backtrack (remove the last placed queen) and try the next column in the previous row.
+Store Valid Solutions:
+
+Once all queens are placed validly on the board, store the current configuration as a solution.
+Key Components:
+Recursive function to place queens.
+Helper functions to validate placement.
+Backtrack when necessary and try other possibilities.
+
+
+
+
+
+

@@ -1,0 +1,13 @@
+https://leetcode.com/problems/word-break-ii/
+
+Backtracking with Recursion:
+
+The method recursively breaks the string s by checking each substring starting from the current index (start).
+If the substring matches a word in the dictionary (wordSet), it's added to the current list (wordList) and the recursion continues.
+Base Case:
+
+When the end of the string is reached, the words in wordList form a valid sequence, which is then joined into a sentence and added to the result list ans.
+Backtracking:
+
+After checking each valid substring, the method backtracks by removing the last word from wordList to explore other possibilities.
+StringBuilder is used to efficiently concatenate words into the final result.

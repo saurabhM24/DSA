@@ -1,0 +1,16 @@
+https://leetcode.com/problems/longest-substring-without-repeating-characters/submissions/1391023784/
+
+
+Explanation:
+Sliding Window Technique:
+
+Use two pointers i and j, where i shrinks the window when a duplicate character is found, and j expands it as we iterate through the string.
+HashSet:
+
+A HashSet is used to track characters in the current window to ensure no duplicates.
+Window Adjustment:
+
+Whenever a duplicate character is found, the left side of the window is adjusted by removing characters from the set until the duplicate is eliminated.
+Time Complexity:
+O(n): Each character is processed at most twice (once added and once removed from the set).
+This approach ensures an efficient and concise solution.

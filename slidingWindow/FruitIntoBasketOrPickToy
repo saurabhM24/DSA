@@ -1,0 +1,32 @@
+https://leetcode.com/problems/fruit-into-baskets/description/
+
+Problem Understanding:
+You're given an array fruits[] where each element represents a type of fruit.
+You have two baskets, and you want to collect the maximum number of fruits but can only carry two types of fruits at any time.
+The goal is to find the maximum number of consecutive fruits you can collect from the array while only picking two distinct types.
+Approach:
+Sliding Window Technique:
+
+Use two pointers (i for the start and j for the end) to represent a sliding window of fruits.
+The window should maintain at most two distinct types of fruits.
+Map to Track Fruit Frequencies:
+
+Use a HashMap<Integer, Integer> to store the frequency of each fruit type within the current window.
+The key is the fruit type (integer), and the value is the frequency of that fruit in the current window.
+Expand the Window:
+
+Iterate through the array with j, adding the current fruit to the map and updating its frequency.
+Shrink the Window When Needed:
+
+If the map contains more than 2 distinct types of fruits (i.e., map.size() > 2), shrink the window from the left by incrementing i.
+For each fruit removed, decrement its frequency in the map. If the frequency becomes 0, remove that fruit type from the map entirely.
+Update the Maximum:
+
+For each valid window (with at most 2 distinct fruit types), calculate the window size (j - i + 1), and update the maximum number of fruits (max) collected so far.
+Return the Result:
+
+After iterating through the array, return the maximum window size (max) found.
+Time Complexity:
+O(n): We iterate through the array once with j and adjust i as needed to shrink the window. All map operations (insertion, deletion, update) take constant time on average.
+Space Complexity:
+O(1): The space used by the map is proportional to the number of distinct fruits, which is at most 2.

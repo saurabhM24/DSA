@@ -1,0 +1,6 @@
+https://www.geeksforgeeks.org/problems/floor-in-a-sorted-array-1587115620/1
+
+Think about approach given below it may help:
+floor : end pointer after the whole execution of loop,if mid is not exist.
+ceil : start pointer after the whole execution of loop,if mid is not exist.
+

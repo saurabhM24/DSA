@@ -1,0 +1,5 @@
+https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/description/
+
+If nums[mid] > nums[high], the minimum must be in the right (unsorted) half, because the left side is sorted, so you update low = mid + 1.
+Otherwise, the minimum is in the left half, as this part is unsorted or contains the pivot, so you update high = mid.
+This way, you're always narrowing down to the unsorted half where the minimum lies.

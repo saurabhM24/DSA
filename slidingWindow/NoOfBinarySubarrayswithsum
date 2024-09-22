@@ -1,0 +1,13 @@
+https://leetcode.com/problems/binary-subarrays-with-sum/description/
+
+Your implementation of counting binary subarrays with a specific sum using the two-pointer technique is efficient. Here's a brief explanation of how it works:
+
+numSubarraysWithSum Method: This method calculates the total number of subarrays with the exact sum goal by finding the difference between the number of subarrays with sum goal and those with goal - 1. This helps in counting subarrays that exactly equal the target.
+
+numArrays Method: This helper method counts the number of subarrays that have a sum less than or equal to the given goal:
+
+It uses two pointers (i and j) to traverse the array.
+The variable sum keeps track of the current sum of the subarray from index i to j.
+If sum exceeds goal, it increments i to reduce the sum until it's less than or equal to goal.
+For each position of j, it counts all valid subarrays ending at j by adding (j - i + 1) to cnt, which counts all subarrays starting from i to j.
+This implementation is efficient with a time complexity of O(n).

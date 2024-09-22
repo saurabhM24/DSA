@@ -1,0 +1,10 @@
+https://leetcode.com/problems/search-in-rotated-sorted-array/description/
+
+Approach:
+
+Binary Search: Use binary search with two pointers (left and right).
+Check which half is sorted:
+If the left half is sorted (nums[left] <= nums[mid]), check if the target lies within that half (nums[left] <= target < nums[mid]). If yes, move right to mid - 1; otherwise, move left to mid + 1.
+If the right half is sorted (nums[mid] <= nums[right]), check if the target lies within that half (nums[mid] < target <= nums[right]). If yes, move left to mid + 1; otherwise, move right to mid - 1.
+Continue the process until the target is found or the search space is exhausted.
+Time complexity is O(log n).

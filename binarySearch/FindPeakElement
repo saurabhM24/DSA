@@ -1,0 +1,24 @@
+https://leetcode.com/problems/find-peak-element/description/
+
+Approach:
+Handle Edge Case (Single Element):
+
+If the array contains only one element, return index 0 since it's the peak.
+Binary Search:
+
+Use a binary search approach by maintaining two pointers, l (left) and r (right), to search for the peak element.
+Calculate the middle element mid as l + (r - l) / 2.
+Check Peak Condition:
+
+If nums[mid] > nums[mid - 1] and nums[mid] > nums[mid + 1], the element at index mid is a peak, and the function returns mid.
+Move Towards the Peak:
+
+If nums[mid] > nums[mid - 1], it means that the peak element could be towards the right of mid, so set l = mid + 1.
+If nums[mid] < nums[mid - 1], move towards the left side by setting r = mid - 1.
+Handle Corner Cases:
+
+If mid == 0 (first element), check if nums[mid] > nums[mid + 1]. If true, return mid; otherwise, return index 1.
+If mid == n - 1 (last element), check if nums[mid] > nums[mid - 1]. If true, return mid; otherwise, return mid - 1.
+Termination:
+
+The while loop continues until the peak element is found, returning the appropriate index.

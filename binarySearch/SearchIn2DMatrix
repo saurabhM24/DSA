@@ -1,0 +1,10 @@
+https://leetcode.com/problems/search-a-2d-matrix-ii/description/
+
+This approach works by leveraging the properties of the matrix being sorted both row-wise and column-wise:
+
+Start from the top-right corner of the matrix (i.e., matrix[0][m-1]).
+If the current element equals the target, return true.
+If the target is smaller than the current element, move left (decrement j).
+If the target is larger, move down (increment i).
+Continue until you either find the target or exhaust the matrix.
+This method runs in O(n + m) time, where n is the number of rows and m is the number of columns.

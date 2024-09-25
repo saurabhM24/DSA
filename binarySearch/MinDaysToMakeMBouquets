@@ -1,0 +1,14 @@
+https://leetcode.com/problems/minimum-number-of-days-to-make-m-bouquets/description/
+Binary Search on Days:
+
+Find the minimum and maximum bloom days from the bloomDay array. Perform a binary search between these values to find the smallest number of days required to make m bouquets.
+Feasibility Check:
+
+For each midpoint day midDay, use the isPossible function to check if it's possible to make at least m bouquets by that day. A bouquet can only be made if k consecutive flowers have bloomed by midDay.
+Update Bounds:
+
+If m bouquets can be made, reduce the search space (r = midDay - 1) to check if an earlier day also works. If not, increase the lower bound (l = midDay + 1).
+Time Complexity:
+
+Binary search over days takes O(log(max-min)) and each feasibility check takes O(n), resulting in an overall complexity of O(n log(max-min)).
+This approach efficiently finds the minimum day to create the desired number of bouquets.

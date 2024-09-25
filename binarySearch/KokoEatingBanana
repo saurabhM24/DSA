@@ -1,0 +1,15 @@
+https://leetcode.com/problems/koko-eating-bananas/description/
+
+This binary seach on asnwer convept. Find the rage of possible answers and instead of trying one by one, try by binary search.
+Approach:
+Binary Search:
+Use binary search to find the minimum eating speed k.
+The search space for k is between 1 and the maximum number of bananas in a pile (max(piles)).
+Feasibility Function:
+For each midpoint k in the binary search, check if Koko can finish all piles in h hours by calculating the total time required using time = ceil(pile / k) for each pile.
+Adjust Search Space:
+If Koko can finish within h hours, try a smaller speed by reducing the upper bound.
+If not, increase the lower bound.
+Time Complexity:
+Binary search takes O(log(max(piles))) and for each k, we check all piles, which takes O(n), making the overall complexity O(n log(max(piles))).
+This efficiently finds the minimum possible eating speed.

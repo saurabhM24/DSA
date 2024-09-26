@@ -1,0 +1,7 @@
+https://leetcode.com/problems/find-the-smallest-divisor-given-a-threshold/description/
+NOTE: Notice the input array is not sorted still we are using binary search on it. Actually we are using binary search on the range of possible answers (hence binary search on answer concept).
+
+Approach in Few Lines:
+Binary Search on Divisors: Perform binary search between 1 and the maximum element of the array to find the smallest divisor.
+Feasibility Check: For each divisor, check if the sum of the divisions (rounded up) is less than or equal to the threshold.
+Update Search Space: If the sum is within the threshold, reduce the divisor range. Otherwise, increase the divisor range.

@@ -1,0 +1,7 @@
+https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/description/
+
+Binary Search on Ship Capacity: The ship's capacity is constrained between the maximum weight in the array and the sum of all weights.
+Check Feasibility: For each capacity, check if it's possible to ship the weights within the allowed days by counting how many days it takes to load the weights given the capacity.
+Adjust Search Range: If shipping is possible within the given days, reduce the capacity range. Otherwise, increase it.
+Return Result: The smallest capacity that allows shipping within the allowed days is returned.
+This approach uses binary search combined with a feasibility check, ensuring efficient computation.

@@ -1,0 +1,15 @@
+https://leetcode.com/problems/kth-missing-positive-number/description/
+
+Approach in Few Lines:
+Binary Search: Use binary search to find the point where the number of missing positive integers (missingNums = (arr[mid] - mid - 1)) becomes greater than or equal to k.
+
+Adjust Search Space:
+
+If missing numbers at mid are greater than or equal to k, search in the left half.
+Otherwise, search in the right half.
+Return Result:
+
+If r < 0, the k-th missing number is before the first element, so return k.
+Otherwise, calculate the number of missing numbers before arr[r] and adjust the final result based on that.
+Time Complexity:
+O(log n) due to binary search on the sorted array.

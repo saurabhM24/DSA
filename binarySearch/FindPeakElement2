@@ -1,0 +1,9 @@
+https://leetcode.com/problems/find-a-peak-element-ii/description/
+
+Binary Search on Columns: Perform a binary search on the columns of the matrix to find the middle column.
+Find Max in Middle Column: For each middle column, find the row that contains the maximum element in that column.
+Peak Check: Compare the maximum element in the middle column with its left and right neighbors.
+If the maximum element is greater than both neighbors, it is a peak, return its coordinates.
+If the left neighbor is larger, move to the left half of the matrix.
+If the right neighbor is larger, move to the right half of the matrix.
+Repeat: Continue the binary search on the remaining columns until a peak is found.

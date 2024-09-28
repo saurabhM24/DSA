@@ -1,0 +1,11 @@
+https://leetcode.com/problems/median-of-two-sorted-arrays/
+
+Approach in few lines:
+Handle Edge Cases: If one of the arrays is empty, directly return the median of the other array.
+Ensure nums1 is Smaller: To simplify the binary search, ensure nums1 is always smaller or equal in length to nums2.
+Binary Search: Use binary search on nums1 to partition both arrays such that the left half contains elements smaller than or equal to those in the right half.
+Calculate Median:
+If the partition is valid (left elements are smaller than or equal to right elements across both arrays), calculate the median based on whether the total number of elements is even or odd.
+Adjust Search Range: If the partition is invalid, adjust the binary search range to find a valid partition.
+Return the Median: Once a valid partition is found, return the median based on the partitioned elements.
+This approach runs in O(log(min(n1, n2))).

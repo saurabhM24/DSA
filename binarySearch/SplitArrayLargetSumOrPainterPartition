@@ -1,0 +1,14 @@
+https://leetcode.com/problems/split-array-largest-sum/description/
+
+Find the bounds:
+max (the largest element) will be the minimum possible sum for any subarray.
+sum (the total sum of the array) will be the maximum possible sum for any subarray.
+Binary Search:
+Perform binary search between max and sum to find the minimum largest subarray sum that allows dividing the array into at most k subarrays.
+Check Feasibility:
+For each midpoint (subArrSum), use canWeDivide() to check if it's possible to split the array into k or fewer subarrays where the sum of each subarray does not exceed subArrSum.
+Adjust Search Range:
+If it's possible, update the result and try a smaller subarray sum by decreasing r.
+Otherwise, increase l to try larger subarray sums.
+Return the Result:
+The binary search will return the smallest possible largest subarray sum.

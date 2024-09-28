@@ -1,0 +1,13 @@
+https://leetcode.com/problems/magnetic-force-between-two-balls/description/
+
+Approach in few lines:
+Sort the array: Sort the positions of the elements to ensure they are in ascending order.
+Binary Search on Maximum Distance: Use binary search to find the maximum possible minimum distance between any two balls.
+Start with l = 1 (minimum possible distance) and r = position[n-1] - position[0] (maximum possible distance between the first and last positions).
+Check Feasibility: For each midpoint distance (dist), check if it's possible to place m balls with at least dist distance using a helper function canWePlace().
+If it's possible, move to larger distances (increase l).
+Otherwise, reduce the distance (decrease r).
+Return the Result: The binary search will eventually return the maximum possible minimum distance.
+Code Explanation:
+canWePlace() checks if m balls can be placed with at least dist distance between them by iterating through the sorted positions.
+This ensures we find the maximum distance that allows placing all m balls.

@@ -1,0 +1,15 @@
+https://leetcode.com/problems/jump-game-ii/description/
+
+Approach in few lines:
+Dynamic Programming with Memoization:
+Use an array t[] to store the minimum jumps needed to reach the end from each index to avoid recomputation.
+Recursive Function:
+Define a recursive function solve() that tries all possible jumps from the current index and returns the minimum jumps required to reach the last index.
+Base Cases:
+If you reach the last index, return 0 (no more jumps required).
+If you go beyond the array, return a large value (Integer.MAX_VALUE - 1) to indicate an invalid path.
+Memoization:
+If the result for the current index is already computed, return it from t[] to avoid redundant calculations.
+Minimization:
+For each valid jump, compute the minimum jumps recursively and update the result for the current index.
+This approach uses recursion with memoization to ensure an efficient solution.

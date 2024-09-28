@@ -1,0 +1,15 @@
+https://leetcode.com/problems/jump-game/
+
+Approach in few lines:
+Recursive DFS with Memoization:
+Use an array t[] to store whether reaching the last index is possible from each index to avoid recomputation.
+Base Cases:
+If you reach the last index, return true (you can reach the end).
+If you exceed the array bounds, return false (invalid move).
+Memoization:
+If a result for the current index is already computed, return it from t[] to avoid redundant checks.
+Recursive Exploration:
+For each index, explore all possible jumps (up to nums[start]), using logical OR (ans = ans || solve(...)) to check if any valid path leads to the end.
+Store and Return Result:
+Store the result (1 for true, 0 for false) and return it for future reference.
+This approach ensures efficient recursive exploration with memoization to avoid redundant calculations.

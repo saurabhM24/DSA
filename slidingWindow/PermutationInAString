@@ -1,0 +1,15 @@
+https://leetcode.com/problems/permutation-in-string/description/
+
+Here’s a concise approach to the problem of checking if one string's permutation exists as a substring in another string:
+
+Approach
+Frequency Count: Use a hashmap to count the frequency of characters in s1 (the string whose permutations we want to find).
+
+Sliding Window: Use a sliding window of size equal to s1 to traverse s2 (the target string) and maintain a frequency count of characters in the current window.
+
+Compare Frequencies: At each step, compare the frequency count of the current window in s2 with that of s1. If they match, a permutation of s1 exists in s2.
+
+Adjust Window: If the window size exceeds that of s1, move the left boundary of the window to maintain the size, updating the frequency count accordingly.
+
+Return Result: If a matching window is found during the traversal, return true. If the loop completes without finding a match, return false.
+

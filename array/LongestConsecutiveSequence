@@ -1,0 +1,14 @@
+https://leetcode.com/problems/longest-consecutive-sequence/
+
+The approach to finding the longest consecutive sequence in an array is as follows:
+
+Use a Set: Store all the numbers in a HashSet for O(1) average-time complexity on lookups.
+
+Identify Starting Points: Loop through the unique numbers and check if the number just below it (num - 1) is absent in the set. If it's absent, this number could be the start of a new sequence.
+
+Count Consecutive Numbers: From the starting number, count how many consecutive numbers (num + 1, num + 2, etc.) exist in the set.
+
+Update Maximum Length: Keep track of the maximum length of these consecutive sequences found during the iterations.
+
+Return Result: At the end, return the maximum length found.
+

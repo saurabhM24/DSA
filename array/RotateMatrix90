@@ -1,0 +1,12 @@
+https://leetcode.com/problems/rotate-image/description/
+
+The approach to rotating a square matrix by 90 degrees clockwise involves two main steps:
+
+Transpose the Matrix: Swap the elements across the main diagonal. For each element at position (i, j), swap it with the element at (j, i). This effectively flips the matrix over its diagonal.
+
+Reverse Each Row: After transposing, reverse each row of the matrix. This step transforms the transposed matrix into the final rotated state.
+
+By combining these two operations, the matrix is efficiently rotated in-place, achieving the desired transformation with O(n²) time complexity and O(1) additional space.
+
+
+

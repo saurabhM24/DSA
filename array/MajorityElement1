@@ -1,0 +1,25 @@
+https://leetcode.com/problems/majority-element/
+
+The provided code implements the Boyer-Moore Voting Algorithm to find the majority element in an array, which is the element that appears more than 
+𝑛
+/
+2
+n/2 times. Here's a brief overview of the approach:
+
+Initialization: Start with a candidate (element) and a count (cnt) set to zero.
+Iteration: Traverse the array:
+If the current number matches the candidate, increment the count.
+If it doesn't match and the count is zero, update the candidate to the current number and reset the count to one.
+If it doesn't match and the count is not zero, decrement the count.
+Result: After the loop, the candidate will be the majority element, which is returned.
+This algorithm runs in 
+𝑂
+(
+𝑛
+)
+O(n) time complexity and uses 
+𝑂
+(
+1
+)
+O(1) space, making it efficient for this problem.

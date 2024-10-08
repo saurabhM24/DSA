@@ -1,0 +1,63 @@
+Explanation:
+Shape Interface: The Shape interface declares a draw method that all shapes will implement.
+
+Concrete Classes:
+
+Circle implements the Shape interface and provides its specific implementation of the draw method.
+Rectangle does the same for rectangles.
+Shape Factory: The ShapeFactory class has a method getShape that takes a string as an argument. Depending on the input string, it creates and returns the appropriate shape object.
+
+Example Usage: In the main method, we create an instance of ShapeFactory. We then use it to create and draw different shapes (Circle and Rectangle) without needing to know the specifics of how these shapes are instantiated.
+
+This design pattern provides flexibility for extending the application by simply adding new shape classes and updating the factory, without modifying existing code.
+
+// Shape Interface
+interface Shape {
+    void draw();
+}
+
+// Concrete Class: Circle
+class Circle implements Shape {
+    @Override
+    public void draw() {
+        System.out.println("Drawing a Circle");
+    }
+}
+
+// Concrete Class: Rectangle
+class Rectangle implements Shape {
+    @Override
+    public void draw() {
+        System.out.println("Drawing a Rectangle");
+    }
+}
+
+// Shape Factory
+class ShapeFactory {
+    public Shape getShape(String shapeType) {
+        if (shapeType == null) {
+            return null;
+        }
+        if (shapeType.equalsIgnoreCase("CIRCLE")) {
+            return new Circle();
+        } else if (shapeType.equalsIgnoreCase("RECTANGLE")) {
+            return new Rectangle();
+        }
+        return null;
+    }
+}
+
+// Example Usage
+public class Main {
+    public static void main(String[] args) {
+        ShapeFactory shapeFactory = new ShapeFactory();
+
+        // Create a Circle
+        Shape circle = shapeFactory.getShape("CIRCLE");
+        circle.draw(); // Output: Drawing a Circle
+
+        // Create a Rectangle
+        Shape rectangle = shapeFactory.getShape("RECTANGLE");
+        rectangle.draw(); // Output: Drawing a Rectangle
+    }
+}

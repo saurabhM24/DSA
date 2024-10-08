@@ -1,0 +1,88 @@
+Explanation:
+Observer Interface: The Observer interface declares the update method that will be called to notify observers.
+
+Concrete Observer: The User class implements the Observer interface, providing the logic for what to do when notified.
+
+Subject: The Product class maintains a list of observers. It has methods to add or remove observers and to notify them when the product's availability changes.
+
+Notify Mechanism: The setAvailable method in the Product class checks if the product is available. If it is, it calls notifyObservers, which iterates through the list of observers and calls their update method.
+
+Example Usage: In the main method, we create a product and two users. The users subscribe to the product's availability notifications. When the product becomes available, all subscribed users are notified.
+
+This design allows users to be informed automatically about changes in product availability, demonstrating the Observer pattern's effectiveness in decoupling subjects and observers.
+
+import java.util.ArrayList;
+import java.util.List;
+
+// Observer Interface
+interface Observer {
+    void update(String productName);
+}
+
+// Concrete Observer: User
+class User implements Observer {
+    private String name;
+
+    public User(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public void update(String productName) {
+        System.out.println(name + ", the product '" + productName + "' is now available!");
+    }
+}
+
+// Subject: Product
+class Product {
+    private String name;
+    private boolean available;
+    private List<Observer> observers;
+
+    public Product(String name) {
+        this.name = name;
+        this.observers = new ArrayList<>();
+        this.available = false; // Initially not available
+    }
+
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
+        if (available) {
+            notifyObservers();
+        }
+    }
+
+    private void notifyObservers() {
+        for (Observer observer : observers) {
+            observer.update(name);
+        }
+    }
+}
+
+// Example Usage
+public class Main {
+    public static void main(String[] args) {
+        // Create a product
+        Product product = new Product("Laptop");
+
+        // Create users
+        User user1 = new User("Alice");
+        User user2 = new User("Bob");
+
+        // Users subscribe to product availability
+        product.addObserver(user1);
+        product.addObserver(user2);
+
+        // Simulate product availability
+        System.out.println("Product is now available:");
+        product.setAvailable(true);
+    }
+}

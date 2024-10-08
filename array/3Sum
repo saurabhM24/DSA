@@ -1,0 +1,27 @@
+https://leetcode.com/problems/3sum/
+
+
+The code solves the "3Sum" problem, which aims to find all unique triplets in an array that sum to zero. Here’s a concise breakdown of the approach:
+
+Sorting: First, the array is sorted to facilitate easier management of duplicates and to use the two-pointer technique.
+
+Outer Loop: Iterate through the array with an index i to fix the first element of the triplet:
+
+Skip duplicates to avoid repeated triplets.
+Two-Pointer Technique: For each fixed element, set two pointers: one (j) starting just after i and the other (k) at the end of the array:
+
+Calculate the sum of the elements at i, j, and k.
+If the sum equals zero, store the triplet, then move both pointers inward while skipping duplicates.
+If the sum is less than zero, increment j to increase the sum.
+If the sum is greater than zero, decrement k to decrease the sum.
+Result: Collect all unique triplets into a list and return it.
+
+This approach runs in 
+𝑂
+(
+𝑛
+2
+)
+O(n 
+2
+ ) time complexity due to the nested loops, and it efficiently handles duplicates.

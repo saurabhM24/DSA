@@ -1,0 +1,33 @@
+https://leetcode.com/problems/majority-element-ii/submissions/1416020854/
+
+The code implements an extension of the Boyer-Moore Voting Algorithm to find all elements that appear more than 
+𝑛/3
+n/3 times in an array. Here’s a concise approach breakdown:
+
+Candidate Selection: Use two counters (cnt1 and cnt2) and two candidates (ele1 and ele2). Traverse the array:
+
+If cnt1 is zero and the current number is not ele2, set ele1 to the current number and increment cnt1.
+If cnt2 is zero and the current number is not ele1, set ele2 to the current number and increment cnt2.
+If the current number matches either candidate, increment the corresponding count; otherwise, decrement both counts.
+Validation: After identifying potential candidates, reset the counters and count the actual occurrences of ele1 and ele2.
+
+Result Compilation: If a candidate’s count exceeds 
+𝑛
+/
+3
+n/3, add it to the result list.
+
+This approach runs in 
+𝑂
+(
+𝑛
+)
+O(n) time and uses 
+𝑂
+(
+1
+)
+O(1) space for the candidates and counts, making it efficient.
+
+
+

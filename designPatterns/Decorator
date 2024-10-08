@@ -1,0 +1,92 @@
+Explanation:
+Component Interface: The Coffee interface defines the methods getDescription and cost.
+
+Concrete Component: BasicCoffee implements the Coffee interface, providing the basic coffee functionality.
+
+Decorator Abstract Class: CoffeeDecorator serves as a base class for all decorators, holding a reference to a Coffee object.
+
+Concrete Decorators:
+
+MilkDecorator adds milk to the coffee and updates the description and cost accordingly.
+SugarDecorator adds sugar to the coffee in a similar manner.
+Example Usage: In the main method, we create a BasicCoffee object. We then decorate it with milk and sugar, demonstrating how we can dynamically add features and modify the behavior of the coffee object without changing its original code.
+
+This design allows for flexible and reusable code, where new decorators can be added easily without altering existing implementations.
+
+// Component Interface
+interface Coffee {
+    String getDescription();
+    double cost();
+}
+
+// Concrete Component: Basic Coffee
+class BasicCoffee implements Coffee {
+    @Override
+    public String getDescription() {
+        return "Basic Coffee";
+    }
+
+    @Override
+    public double cost() {
+        return 2.00; // Base price
+    }
+}
+
+// Decorator Abstract Class
+abstract class CoffeeDecorator implements Coffee {
+    protected Coffee coffee;
+
+    public CoffeeDecorator(Coffee coffee) {
+        this.coffee = coffee;
+    }
+}
+
+// Concrete Decorator: Milk
+class MilkDecorator extends CoffeeDecorator {
+    public MilkDecorator(Coffee coffee) {
+        super(coffee);
+    }
+
+    @Override
+    public String getDescription() {
+        return coffee.getDescription() + ", Milk";
+    }
+
+    @Override
+    public double cost() {
+        return coffee.cost() + 0.50; // Additional cost for milk
+    }
+}
+
+// Concrete Decorator: Sugar
+class SugarDecorator extends CoffeeDecorator {
+    public SugarDecorator(Coffee coffee) {
+        super(coffee);
+    }
+
+    @Override
+    public String getDescription() {
+        return coffee.getDescription() + ", Sugar";
+    }
+
+    @Override
+    public double cost() {
+        return coffee.cost() + 0.20; // Additional cost for sugar
+    }
+}
+
+// Example Usage
+public class Main {
+    public static void main(String[] args) {
+        Coffee coffee = new BasicCoffee();
+        System.out.println(coffee.getDescription() + " $" + coffee.cost());
+
+        // Add milk
+        coffee = new MilkDecorator(coffee);
+        System.out.println(coffee.getDescription() + " $" + coffee.cost());
+
+        // Add sugar
+        coffee = new SugarDecorator(coffee);
+        System.out.println(coffee.getDescription() + " $" + coffee.cost());
+    }
+}

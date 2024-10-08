@@ -1,0 +1,28 @@
+https://leetcode.com/problems/4sum/
+
+
+The provided code solves the "4Sum" problem, aiming to find all unique quadruplets in an array that sum to a given target. Here’s a concise approach breakdown:
+
+Sorting: The input array is sorted to facilitate efficient handling of duplicates and to enable the two-pointer technique.
+
+Outer Loop for i: Iterate through the array with index i to fix the first element of the quadruplet, skipping duplicates to avoid repeated results.
+
+Inner Loop for j: Use a nested loop with index j to fix the second element, again skipping duplicates.
+
+Two-Pointer Technique: Initialize two pointers, k (starting after j) and l (at the end of the array):
+
+Calculate the sum of the elements at indices i, j, k, and l.
+If the sum matches the target, store the quadruplet and skip duplicates for both k and l.
+If the sum is less than the target, increment k to increase the sum.
+If the sum is greater than the target, decrement l to decrease the sum.
+Result Collection: Gather all unique quadruplets into a list and return it.
+
+This algorithm runs in 
+𝑂
+(
+𝑛
+3
+)
+O(n 
+3
+ ) time complexity due to the nested loops and efficiently handles duplicates.

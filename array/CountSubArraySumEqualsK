@@ -1,0 +1,18 @@
+https://leetcode.com/problems/subarray-sum-equals-k/description/
+
+The given code solves the problem of finding the number of contiguous subarrays in an array that sum up to a given value 
+𝑘
+k. Here's a brief breakdown of the approach:
+
+HashMap Usage: It uses a HashMap to store the cumulative sums encountered so far along with their frequencies.
+Cumulative Sum: As it iterates through the array, it maintains a running total (sum).
+Check for Subarrays: For each cumulative sum, it checks if there exists a previous sum such that the difference between the current sum and this previous sum equals 
+𝑘
+k. If so, it adds the frequency of that previous sum to the count.
+Update Map: It updates the map with the current cumulative sum, incrementing its count.
+This allows for efficient computation in 
+𝑂
+(
+𝑛
+)
+O(n) time complexity.

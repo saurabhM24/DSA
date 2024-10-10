@@ -1,0 +1,17 @@
+https://leetcode.com/problems/merge-intervals/?submissionId=691502179
+
+The given code merges overlapping intervals from a 2D array. Here's a concise approach to the solution:
+
+Sort the Intervals: Sort the array of intervals based on the starting times. This helps in easily identifying overlaps.
+
+Initialize Current Interval: Start with the first interval as the current interval to compare against others.
+
+Iterate Through Intervals: Loop through the sorted intervals:
+
+If the start of the current interval overlaps with the next interval, merge them by updating the end time to the maximum end time of the two.
+If there’s no overlap, add the current interval to the result list and update the current interval to the next one.
+Final Addition: After the loop, add the last current interval to the result.
+
+Convert List to Array: Convert the list of merged intervals back to a 2D array for the final result.
+
+This method efficiently handles overlapping intervals in linear time after sorting.

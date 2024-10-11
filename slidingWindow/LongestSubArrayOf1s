@@ -1,0 +1,13 @@
+https://leetcode.com/problems/longest-subarray-of-1s-after-deleting-one-element/description/
+
+The provided code finds the longest contiguous subarray of `1`s in a binary array (where `0` can be flipped to `1` once). Here's a brief approach:
+
+1. **Two-pointer Technique**: Use two pointers, `i` and `j`, to represent the current subarray.
+2. **Count Zeros**: Maintain a count (`cnt`) of `0`s in the current window. 
+3. **Expand and Contract**: 
+   - If `nums[j]` is `1`, simply expand the window by moving `j`.
+   - If `nums[j]` is `0` and `cnt` is already `1`, increment `i` to shrink the window until we can include another `0`.
+4. **Update Maximum Length**: After each step, update the maximum length of the subarray considering the current window.
+5. **Edge Case**: Handle the scenario where the entire array consists of `1`s by returning `max - 1`.
+
+This efficient method runs in O(n) time, scanning the array once with the two pointers.

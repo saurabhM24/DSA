@@ -1,0 +1,14 @@
+https://leetcode.com/problems/max-consecutive-ones-iii/
+
+The provided code finds the longest contiguous subarray of `1`s in a binary array where up to `k` `0`s can be flipped to `1`s. Here's a concise approach:
+
+1. **Two-pointer Technique**: Utilize two pointers, `i` (start) and `j` (end), to define the current window.
+2. **Count Flips**: Maintain a counter (`cnt`) for how many `0`s have been "flipped" to `1` in the current window.
+3. **Expand the Window**: Iterate with `j`:
+   - If `nums[j]` is `1`, update the maximum length and move `j` forward.
+   - If `nums[j]` is `0`, check if you can flip it:
+     - If `cnt` is non-zero, flip the `0`, decrement `cnt`, and move `j`.
+     - If `cnt` is zero, shrink the window from the left (`i`) until you can flip the next `0`.
+4. **Update Maximum Length**: Continuously track the longest valid window size in `max`.
+
+This solution runs in O(n) time complexity, efficiently scanning the array with the two pointers.

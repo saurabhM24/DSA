@@ -1,0 +1,6 @@
+https://gitlab.com/shrayansh8/interviewcodingpractise/-/tree/main/src/LowLevelDesign/LLDElevatorDesign
+
+LOOK algorithm is used. Can be implemented using min and max heap and also the pendingRequest List.
+Implementing the LOOK algorithm for an elevator system in a low-level design (LLD) 
+involves simulating how an elevator services requests in a building based on the current direction of movement. The LOOK algorithm is an improvement over the SCAN algorithm; 
+it "looks" for requests in its current direction and reverses direction when there are no more requests in that direction.

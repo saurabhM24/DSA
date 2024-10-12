@@ -1,0 +1,77 @@
+Sure! Here’s an example of the Null Object Design Pattern implemented in Java.
+
+### Step 1: Define the Logger Interface
+
+```java
+public interface Logger {
+    void log(String message);
+}
+```
+
+### Step 2: Create Concrete Loggers
+
+```java
+public class ConsoleLogger implements Logger {
+    @Override
+    public void log(String message) {
+        System.out.println("Console: " + message);
+    }
+}
+
+public class FileLogger implements Logger {
+    @Override
+    public void log(String message) {
+        // Here, you could implement actual file writing logic
+        System.out.println("File: " + message); // Simulating file logging
+    }
+}
+```
+
+### Step 3: Create a Null Logger
+
+```java
+public class NullLogger implements Logger {
+    @Override
+    public void log(String message) {
+        // Do nothing
+    }
+}
+```
+
+### Step 4: Use the Logger
+
+```java
+public class Application {
+    private Logger logger;
+
+    public Application(Logger logger) {
+        this.logger = logger;
+    }
+
+    public void performAction() {
+        logger.log("Action performed.");
+    }
+
+    public static void main(String[] args) {
+        // Example with ConsoleLogger
+        Logger consoleLogger = new ConsoleLogger();
+        Application appWithConsoleLogger = new Application(consoleLogger);
+        appWithConsoleLogger.performAction();
+
+        // Example with NullLogger (no logging occurs)
+        Logger nullLogger = new NullLogger();
+        Application appWithNullLogger = new Application(nullLogger);
+        appWithNullLogger.performAction();
+    }
+}
+```
+
+### Explanation
+1. **Logger Interface**: Defines a `log` method that all loggers must implement.
+2. **Concrete Loggers**: `ConsoleLogger` logs messages to the console, while `FileLogger` simulates logging to a file.
+3. **NullLogger**: Implements the `Logger` interface but does nothing in the `log` method.
+4. **Application Class**: Uses the `Logger` to log messages without needing to check if the logger is null.
+
+### Benefits
+- The client code (in the `Application` class) does not need to perform null checks, making it cleaner and easier to maintain.
+- You can add new types of loggers without changing the existing code structure.

@@ -1,0 +1,142 @@
+### MyHashMap Implementation Summary
+
+**Class Definition**:
+- `MyHashMap<K, V>`: A generic HashMap implementation that supports any type of key (`K`) and value (`V`).
+
+**Key Components**:
+1. **Fields**:
+   - `Entry<K, V>[] table`: An array of entries to store key-value pairs.
+   - `int size`: The current number of entries in the map.
+   - `int capacity`: The current capacity of the table.
+   - `static final float LOAD_FACTOR`: Threshold for resizing (default is 0.75).
+
+2. **Constructor**:
+   - Initializes the map with a default capacity of 16.
+
+**Methods**:
+1. **put(K key, V value)**:
+   - Adds a key-value pair to the map.
+   - Resizes the table if the size exceeds the load factor.
+   - Handles collisions by chaining entries in the linked list format.
+
+2. **get(K key)**:
+   - Retrieves the value associated with the specified key.
+   - Returns `null` if the key is not found.
+
+3. **remove(K key)**:
+   - Removes the key-value pair from the map.
+   - Updates the linked list to bypass the removed entry.
+
+4. **resize()**:
+   - Doubles the capacity of the table when the load factor threshold is exceeded.
+   - Rehashes and redistributes existing entries into the new table.
+
+5. **indexFor(K key)**:
+   - Computes the index for a key using its hash code, ensuring even distribution in the table.
+   - Handles null keys by assigning them to index 0.
+
+**Inner Class**:
+- `Entry<K, V>`: Represents each key-value pair and includes a reference to the next entry for collision resolution.
+
+### Example Usage
+- Create a `MyHashMap<String, Integer>`.
+- Use `put`, `get`, and `remove` methods to manage key-value pairs.
+
+### Notes
+- The implementation focuses on simplicity and demonstrates fundamental HashMap functionality.
+- Collisions are handled using separate chaining (linked lists).
+- This generic approach allows flexibility in key and value types, making it versatile for various applications.
+
+import java.util.Objects;
+
+class MyHashMap<K, V> {
+    private Entry<K, V>[] table;
+    private int size;
+    private int capacity;
+    private static final float LOAD_FACTOR = 0.75f;
+
+    public MyHashMap() {
+        this.capacity = 16; // initial capacity
+        this.table = new Entry[capacity];
+        this.size = 0;
+    }
+
+    public void put(K key, V value) {
+        if (size >= capacity * LOAD_FACTOR) {
+            resize();
+        }
+        int index = indexFor(key);
+        Entry<K, V> newEntry = new Entry<>(key, value, table[index]);
+        table[index] = newEntry;
+        size++;
+    }
+
+    public V get(K key) {
+        int index = indexFor(key);
+        Entry<K, V> entry = table[index];
+        while (entry != null) {
+            if (Objects.equals(entry.key, key)) {
+                return entry.value;
+            }
+            entry = entry.next;
+        }
+        return null; // Return null if not found
+    }
+
+    public void remove(K key) {
+        int index = indexFor(key);
+        Entry<K, V> entry = table[index];
+        Entry<K, V> prev = null;
+
+        while (entry != null) {
+            if (Objects.equals(entry.key, key)) {
+                if (prev == null) {
+                    table[index] = entry.next; // Remove head
+                } else {
+                    prev.next = entry.next; // Bypass the entry
+                }
+                size--;
+                return;
+            }
+            prev = entry;
+            entry = entry.next;
+        }
+    }
+
+    private void resize() {
+        int newCapacity = capacity * 2;
+        Entry<K, V>[] newTable = new Entry[newCapacity];
+
+        for (Entry<K, V> entry : table) {
+            while (entry != null) {
+                int newIndex = indexFor(entry.key, newCapacity);
+                Entry<K, V> next = entry.next; // Save next entry
+                entry.next = newTable[newIndex]; // Insert into new table
+                newTable[newIndex] = entry;
+                entry = next; // Move to the next entry
+            }
+        }
+        table = newTable;
+        capacity = newCapacity;
+    }
+
+    private int indexFor(K key) {
+        return indexFor(key, capacity);
+    }
+
+    private int indexFor(K key, int capacity) {
+        return (key == null) ? 0 : (key.hashCode() & 0x7FFFFFFF) % capacity; // Handle null keys
+    }
+
+    private static class Entry<K, V> {
+        K key;
+        V value;
+        Entry<K, V> next; // For handling collisions
+
+        Entry(K key, V value, Entry<K, V> next) {
+            this.key = key;
+            this.value = value;
+            this.next = next;
+        }
+    }
+}

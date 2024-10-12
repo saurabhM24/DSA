@@ -4,3 +4,105 @@ Questions based on this design pattern are:
 1. Design ATM Machin
 2. Design vending machine
 3. Design Logger
+
+The Chain of Responsibility design pattern is used to decouple the sender of a request from its receivers by allowing multiple objects to handle the request without specifying the exact handler. This pattern promotes loose coupling and enhances flexibility, as you can change the chain or add new handlers without modifying the existing code.
+
+### Key Benefits:
+- **Decoupling**: The sender and receiver are loosely coupled, allowing for easier maintenance and modifications.
+- **Dynamic Handling**: You can dynamically change the request handling chain at runtime.
+- **Single Responsibility**: Each handler can focus on a specific type of request, adhering to the single responsibility principle.
+
+### Example Scenario:
+**Customer Support Ticket Handling System**
+
+In a customer support system, different types of tickets (technical issues, billing inquiries, general questions) can be handled by different departments. You can implement this using the Chain of Responsibility pattern:
+
+1. **Handler Interface**: Create an interface for handlers with a method like `handleRequest(Request request)`.
+
+2. **Concrete Handlers**:
+   - `TechnicalSupportHandler`: Handles technical issues.
+   - `BillingSupportHandler`: Handles billing inquiries.
+   - `GeneralSupportHandler`: Handles general questions.
+
+3. **Chain Setup**: Each handler has a reference to the next handler in the chain. When a request comes in, the handler checks if it can handle it; if not, it forwards the request to the next handler.
+
+### Example Code:
+```java
+// Request class
+class Request {
+    String type;
+    
+    public Request(String type) {
+        this.type = type;
+    }
+}
+
+// Handler interface
+abstract class SupportHandler {
+    protected SupportHandler nextHandler;
+    
+    public void setNextHandler(SupportHandler nextHandler) {
+        this.nextHandler = nextHandler;
+    }
+    
+    public abstract void handleRequest(Request request);
+}
+
+// Concrete handlers
+class TechnicalSupportHandler extends SupportHandler {
+    public void handleRequest(Request request) {
+        if (request.type.equals("Technical")) {
+            System.out.println("Handling technical support request.");
+        } else if (nextHandler != null) {
+            nextHandler.handleRequest(request);
+        }
+    }
+}
+
+class BillingSupportHandler extends SupportHandler {
+    public void handleRequest(Request request) {
+        if (request.type.equals("Billing")) {
+            System.out.println("Handling billing support request.");
+        } else if (nextHandler != null) {
+            nextHandler.handleRequest(request);
+        }
+    }
+}
+
+class GeneralSupportHandler extends SupportHandler {
+    public void handleRequest(Request request) {
+        if (request.type.equals("General")) {
+            System.out.println("Handling general support request.");
+        } else if (nextHandler != null) {
+            nextHandler.handleRequest(request);
+        }
+    }
+}
+
+// Client code
+public class SupportSystem {
+    public static void main(String[] args) {
+        SupportHandler techHandler = new TechnicalSupportHandler();
+        SupportHandler billingHandler = new BillingSupportHandler();
+        SupportHandler generalHandler = new GeneralSupportHandler();
+
+        techHandler.setNextHandler(billingHandler);
+        billingHandler.setNextHandler(generalHandler);
+
+        Request request1 = new Request("Technical");
+        Request request2 = new Request("Billing");
+        Request request3 = new Request("General");
+        
+        techHandler.handleRequest(request1); // Handling technical support request.
+        techHandler.handleRequest(request2); // Handling billing support request.
+        techHandler.handleRequest(request3); // Handling general support request.
+    }
+}
+```
+
+### When to Use This Pattern:
+- **Event Handling Systems**: When events can be handled by different handlers in a flexible way.
+- **Middleware Processing**: In web applications, where requests can pass through various processing stages.
+- **Logging Frameworks**: To log messages at different levels (info, warning, error) through a chain of handlers.
+
+Using the Chain of Responsibility pattern can simplify the request handling process and make your code more maintainable and extensible.

@@ -1,0 +1,85 @@
+The Adapter Pattern lets you use a class with an incompatible interface by creating a wrapper that converts its methods to match what the client needs.
+It essentially acts as a bridge, enabling seamless interaction between different interfaces.
+
+Sure! Let’s create a simple example using the Adapter Design Pattern where a weight machine returns weight in pounds, but the client wants the weight in kilograms.
+
+### Step 1: Define the Target Interface
+
+First, we define an interface that represents the expected functionality for the client.
+
+```java
+public interface WeightInKgs {
+    double getWeight();
+}
+```
+
+### Step 2: Create the Adaptee Class
+
+Next, we create a class that represents the weight machine that returns weight in pounds.
+
+```java
+public class WeightMachine {
+    public double getWeightInPounds() {
+        return 150.0; // Let's say it returns 150 pounds
+    }
+}
+```
+
+### Step 3: Create the Adapter Class
+
+Now, we create an adapter that converts the weight from pounds to kilograms.
+
+```java
+public class WeightMachineAdapter implements WeightInKgs {
+    private WeightMachine weightMachine;
+
+    public WeightMachineAdapter(WeightMachine weightMachine) {
+        this.weightMachine = weightMachine;
+    }
+
+    @Override
+    public double getWeight() {
+        // Convert pounds to kilograms (1 pound = 0.453592 kg)
+        return weightMachine.getWeightInPounds() * 0.453592;
+    }
+}
+```
+
+### Step 4: Use the Adapter
+
+Finally, we demonstrate how to use the adapter in a client.
+
+```java
+public class AdapterExample {
+    public static void main(String[] args) {
+        // Create an instance of the WeightMachine
+        WeightMachine weightMachine = new WeightMachine();
+
+        // Create an adapter for the WeightMachine
+        WeightInKgs adaptedWeightMachine = new WeightMachineAdapter(weightMachine);
+
+        // Get the weight in kilograms
+        System.out.println("Weight in Kgs: " + adaptedWeightMachine.getWeight());
+    }
+}
+```
+
+### Explanation
+
+1. **WeightInKgs Interface**: Defines the method `getWeight()` that the client expects.
+2. **WeightMachine Class (Adaptee)**: Returns weight in pounds through the `getWeightInPounds()` method.
+3. **WeightMachineAdapter Class**: Implements the `WeightInKgs` interface and adapts the `WeightMachine`. It converts the weight from pounds to kilograms in the `getWeight()` method.
+4. **AdapterExample**: Creates an instance of `WeightMachine`, wraps it with `WeightMachineAdapter`, and retrieves the weight in kilograms.
+
+### Output
+
+When you run the `AdapterExample`, it will output:
+
+```
+Weight in Kgs: 68.1816
+```
+
+### Benefits
+
+- The client can now interact with the `WeightMachine` as if it provides weight in kilograms, without modifying the existing `WeightMachine` class.
+- This demonstrates how the Adapter Pattern can be used to bridge incompatible interfaces seamlessly.

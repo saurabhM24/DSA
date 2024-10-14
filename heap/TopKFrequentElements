@@ -1,0 +1,17 @@
+https://leetcode.com/problems/top-k-frequent-elements/submissions/1422364951/
+
+### Approach to Find the k Most Frequent Elements
+
+1. **Count Frequencies**: Use a hash map to count how many times each element appears in the input array `nums`.
+
+2. **Min-Heap for Top k Elements**: Initialize a min-heap (priority queue) to store the frequencies along with their corresponding elements. Each entry in the heap is an array where the first element is the frequency and the second is the number.
+
+3. **Maintain Size k**: Iterate through the frequency map:
+   - Add each entry to the min-heap.
+   - If the heap exceeds size `k`, remove the least frequent element.
+
+4. **Extract Results**: Poll elements from the min-heap to form the result array containing the `k` most frequent elements.
+
+5. **Return Result**: Return the result array. 
+
+This approach efficiently retrieves the `k` most frequent elements using a time complexity of O(N log k), where N is the number of elements in `nums`.

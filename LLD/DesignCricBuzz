@@ -1,0 +1,13 @@
+In this problem, Observer design pattern can be used as when a Ball is balled, The score sheet of Batsman on the strike and the bowler 
+and overall innigs score board needs to be updated.
+Every player maintains the bowling and Batting score sheet. 
+
+Clases that can be created are Match which has Team a, Team B, Innings array. Then Team has List of Players. 
+Player class which has bowling and Batting score sheet.
+Bowling sheet has attrbutes like number of overs, maiden number, economy, wickets
+Batting sheet has runs, balls played, strike rate number of 4s and no. of 6s
+There will be MathcType enum like t20, oneday and the number of overs will be mentioned there.
+There will Over calls which has List of Balls. On every ball there can be 0, 1, 2, 3, 4, 6 runs.
+And according the innning, bowler player and bastmans players sheet will be updated using observer pattern.
+
+https://gitlab.com/shrayansh8/interviewcodingpractise/-/tree/main/src/LowLevelDesign/LLDCricbuzz

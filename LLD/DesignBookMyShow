@@ -1,0 +1,6 @@
+https://gitlab.com/shrayansh8/interviewcodingpractise/-/tree/main/src/LowLevelDesign/DesignBookMyShow
+
+Optimistic locking.
+Basically it uses read commited isolation strategy.
+Mysql usually maintains the version of the data row.
+In optimistic when a tracsaction t1 reads data it reads the version as well. While writing it checks the version of the data row is same. if not write is block. and user has to restart the process.

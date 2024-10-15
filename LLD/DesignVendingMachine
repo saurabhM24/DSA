@@ -1,0 +1,4 @@
+This also uses state design pattern to solve as vending machine goes through multiple states.
+Please check ATMMachine
+https://gitlab.com/shrayansh8/interviewcodingpractise/-/tree/main/src/LowLevelDesign/DesignVendingMachine
+

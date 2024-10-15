@@ -1,0 +1,12 @@
+This question basically can be solved using State design pattern.
+The machine goes thorugh different state. ANd at each state there are only specific fucntions that can be done.
+
+So a ATMState interface is created. Then every state like IDLE, PinInputState, CashWithdrawalState, CashDispenseState implements ATMState interface.
+
+Every state implements only the methods that are related to it, other methods, error out. After executing the fuctions the state can change/move
+the ATMMachine object to different state.
+
+There needs to be driver class and you have to make assumptions and run the happy path. 
+
+https://gitlab.com/shrayansh8/interviewcodingpractise/-/tree/main/src/LowLevelDesign/DesignATM
+

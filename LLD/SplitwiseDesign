@@ -1,0 +1,12 @@
+There is Simplify the balance logic. Look at it.
+We can use strategy design pattern for expense split strategy. Eg: Split by percentage, equal, unequal 
+Main classes are:
+Expense,
+ExpenseController,
+User,
+Group,
+User class will maintain a balance sheet as each user has different view. 
+The Balance sheet will have map of user and Balance. The Balance class will have moneyOwe and moneyGetBack;
+
+
+https://gitlab.com/shrayansh8/interviewcodingpractise/-/tree/main/src/LowLevelDesign/DesignSplitwise

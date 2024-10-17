@@ -1,0 +1,160 @@
+The Command Design Pattern is a behavioral design pattern that encapsulates a request as an object,
+thereby allowing for parameterization of clients with different requests, queuing of requests, and logging of the requests. It also provides support for undoable operations.
+
+Basically we create a command interface and every command implements that interface. Mostly there are 2 methods execute and undo(). Whatever is done in the execute method, the undo
+method does the opposite. The invoker (tv remote) maintains a stack of commands executed. When user clicks on undo, 
+it pop from the stack as last executed command and runs the undo method of that object.
+Note : Every command holds an object of the receiver eg: TextEditor
+Invoker -> Has Map of Commands -> Every Command has TextEditor object. 
+
+### Key Components
+
+1. **Command Interface**: This declares an interface for executing operations.
+2. **Concrete Command**: This class implements the Command interface and defines the binding between a receiver and an action.
+3. **Receiver**: This is the class that knows how to perform the actual operations associated with the command.
+4. **Invoker**: This class is responsible for initiating the command. It holds a command object and can invoke it.
+5. **Client**: The client creates a command object and associates it with a receiver.
+
+### Example Scenario
+
+Imagine a simple text editor where you can perform actions like typing text, deleting text, and undoing actions.
+
+#### 1. Command Interface
+
+```java
+public interface Command {
+    void execute();
+    void undo();
+}
+```
+
+#### 2. Concrete Commands
+
+```java
+public class TypeCommand implements Command {
+    private TextEditor textEditor;
+    private String text;
+
+    public TypeCommand(TextEditor textEditor, String text) {
+        this.textEditor = textEditor;
+        this.text = text;
+    }
+
+    @Override
+    public void execute() {
+        textEditor.type(text);
+    }
+
+    @Override
+    public void undo() {
+        textEditor.undoType(text);
+    }
+}
+
+public class DeleteCommand implements Command {
+    private TextEditor textEditor;
+    private String text;
+
+    public DeleteCommand(TextEditor textEditor, String text) {
+        this.textEditor = textEditor;
+        this.text = text;
+    }
+
+    @Override
+    public void execute() {
+        textEditor.delete(text);
+    }
+
+    @Override
+    public void undo() {
+        textEditor.undoDelete(text);
+    }
+}
+```
+
+#### 3. Receiver
+
+```java
+public class TextEditor {
+    private StringBuilder text = new StringBuilder();
+
+    public void type(String text) {
+        this.text.append(text);
+        System.out.println("Current Text: " + this.text);
+    }
+
+    public void delete(String text) {
+        int startIndex = this.text.lastIndexOf(text);
+        if (startIndex != -1) {
+            this.text.delete(startIndex, startIndex + text.length());
+            System.out.println("Current Text: " + this.text);
+        }
+    }
+
+    public void undoType(String text) {
+        delete(text);
+    }
+
+    public void undoDelete(String text) {
+        type(text);
+    }
+}
+```
+
+#### 4. Invoker
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+public class CommandInvoker {
+    private List<Command> commandHistory = new ArrayList<>();
+
+    public void executeCommand(Command command) {
+        command.execute();
+        commandHistory.add(command);
+    }
+
+    public void undoCommand() {
+        if (!commandHistory.isEmpty()) {
+            Command command = commandHistory.remove(commandHistory.size() - 1);
+            command.undo();
+        }
+    }
+}
+```
+
+#### 5. Client
+
+```java
+public class Client {
+    public static void main(String[] args) {
+        TextEditor textEditor = new TextEditor();
+        CommandInvoker invoker = new CommandInvoker();
+
+        Command typeHello = new TypeCommand(textEditor, "Hello");
+        invoker.executeCommand(typeHello); // Output: Current Text: Hello
+
+        Command typeWorld = new TypeCommand(textEditor, " World");
+        invoker.executeCommand(typeWorld); // Output: Current Text: Hello World
+
+        invoker.undoCommand(); // Undo last command
+        // Output: Current Text: Hello
+    }
+}
+```
+
+### Benefits
+
+- **Encapsulation of Requests**: Commands encapsulate all details needed for executing a request.
+- **Decoupling**: The invoker does not need to know how a request is executed, allowing for more flexible code.
+- **Support for Undoable Operations**: Each command can implement an undo method, allowing for operations to be reversed.
+- **Queuing Requests**: Commands can be queued and executed at a later time.
+
+### Use Cases
+
+- Menu operations in GUI applications.
+- Transaction systems where actions need to be undone.
+- Macro recording where sequences of operations are captured and replayed.
+
+The Command Design Pattern is a powerful way to create flexible and reusable code in scenarios where operations need to be encapsulated, tracked, and manipulated independently.

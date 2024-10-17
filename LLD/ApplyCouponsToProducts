@@ -1,0 +1,144 @@
+Decorator pattern can be used here. If you want to apply mulitple coupons on the product then decorator can be used.
+
+Yes, the **Decorator Design Pattern** can be effectively used to implement a coupon system on products in an e-commerce application.
+This pattern allows you to dynamically add behavior or responsibilities to objects without modifying their structure, making it ideal for applying various coupons and discounts.
+
+### Scenario
+
+Imagine you have a basic `Product` class that represents a product in an e-commerce system.
+You want to apply different coupons (e.g., percentage discount, fixed amount discount) to the product's price without changing the original `Product` class.
+
+### Components of the Decorator Pattern
+
+1. **Component Interface**: This defines the interface for objects that can have responsibilities added to them.
+2. **Concrete Component**: This is the original object to which new functionality can be added.
+3. **Decorator Class**: This class implements the component interface and holds a reference to a component, allowing you to add new behavior.
+
+### Implementation Steps
+
+#### 1. Component Interface
+
+```java
+public interface Product {
+    String getDescription();
+    double getPrice();
+}
+```
+
+#### 2. Concrete Component
+
+```java
+public class BasicProduct implements Product {
+    private String description;
+    private double price;
+
+    public BasicProduct(String description, double price) {
+        this.description = description;
+        this.price = price;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public double getPrice() {
+        return price;
+    }
+}
+```
+
+#### 3. Decorator Class
+
+```java
+public abstract class ProductDecorator implements Product {
+    protected Product decoratedProduct;
+
+    public ProductDecorator(Product product) {
+        this.decoratedProduct = product;
+    }
+
+    @Override
+    public String getDescription() {
+        return decoratedProduct.getDescription();
+    }
+
+    @Override
+    public double getPrice() {
+        return decoratedProduct.getPrice();
+    }
+}
+```
+
+#### 4. Concrete Decorators
+
+```java
+public class PercentageDiscountDecorator extends ProductDecorator {
+    private double discountPercentage;
+
+    public PercentageDiscountDecorator(Product product, double discountPercentage) {
+        super(product);
+        this.discountPercentage = discountPercentage;
+    }
+
+    @Override
+    public double getPrice() {
+        return decoratedProduct.getPrice() * (1 - discountPercentage / 100);
+    }
+
+    @Override
+    public String getDescription() {
+        return decoratedProduct.getDescription() + " (Discount: " + discountPercentage + "%)";
+    }
+}
+
+public class FixedAmountDiscountDecorator extends ProductDecorator {
+    private double discountAmount;
+
+    public FixedAmountDiscountDecorator(Product product, double discountAmount) {
+        super(product);
+        this.discountAmount = discountAmount;
+    }
+
+    @Override
+    public double getPrice() {
+        return Math.max(0, decoratedProduct.getPrice() - discountAmount); // Prevent negative price
+    }
+
+    @Override
+    public String getDescription() {
+        return decoratedProduct.getDescription() + " (Discount: $" + discountAmount + ")";
+    }
+}
+```
+
+#### 5. Client Code
+
+```java
+public class Client {
+    public static void main(String[] args) {
+        Product product = new BasicProduct("Laptop", 1000.00);
+        System.out.println(product.getDescription() + " costs $" + product.getPrice());
+
+        // Applying a 10% discount
+        Product discountedProduct = new PercentageDiscountDecorator(product, 10);
+        System.out.println(discountedProduct.getDescription() + " costs $" + discountedProduct.getPrice());
+
+        // Applying a fixed amount discount of $50
+        Product finalProduct = new FixedAmountDiscountDecorator(discountedProduct, 50);
+        System.out.println(finalProduct.getDescription() + " costs $" + finalProduct.getPrice());
+    }
+}
+```
+
+### Benefits of Using the Decorator Pattern
+
+1. **Flexibility**: You can mix and match different decorators to apply various discounts without modifying the base `Product` class.
+2. **Single Responsibility**: Each decorator has a single responsibility, making the code easier to understand and maintain.
+3. **Dynamic Behavior**: You can add or remove decorators at runtime, allowing for flexible coupon application.
+
+### Conclusion
+
+The Decorator Pattern is a suitable choice for applying coupons to products in an e-commerce system.
+It allows for clean, maintainable code and provides the flexibility to introduce new types of discounts without changing existing classes.

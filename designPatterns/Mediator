@@ -1,0 +1,131 @@
+The Mediator Design Pattern is a behavioral design pattern that defines an object (the mediator) that encapsulates how a set of objects interact.
+It promotes loose coupling by preventing objects from referring to each other explicitly,
+allowing their interactions to be mediated by a central object.
+This pattern is particularly useful in scenarios where you want to reduce dependencies between communicating objects.
+
+This pattern is similar to Observer and Proxy pattern but the intent here is differet. Here we are trying to refrain objects from talking to each other.
+
+Same Pattern can be used to solve online aution and airline mgmt, also in case of game development where action by the player is sent to other players.
+
+### Key Components
+
+1. **Mediator Interface**: This defines the methods for communication between colleague objects.
+2. **Concrete Mediator**: This implements the mediator interface and coordinates communication between colleague objects.
+3. **Colleague Classes**: These are the objects that interact with each other through the mediator.
+
+### Example Scenario
+
+Imagine a chat application where multiple users (colleagues) can send messages to each other through a central chat room (mediator).
+
+#### 1. Mediator Interface
+
+```java
+public interface ChatMediator {
+    void sendMessage(String message, User user);
+    void addUser(User user);
+}
+```
+
+#### 2. Concrete Mediator
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+public class ChatRoom implements ChatMediator {
+    private List<User> users;
+
+    public ChatRoom() {
+        users = new ArrayList<>();
+    }
+
+    @Override
+    public void sendMessage(String message, User user) {
+        for (User u : users) {
+            // Message should not be sent to the user sending it
+            if (u != user) {
+                u.receiveMessage(message);
+            }
+        }
+    }
+
+    @Override
+    public void addUser(User user) {
+        users.add(user);
+    }
+}
+```
+
+#### 3. Colleague Class
+
+```java
+public abstract class User {
+    protected ChatMediator mediator;
+    protected String name;
+
+    public User(ChatMediator mediator, String name) {
+        this.mediator = mediator;
+        this.name = name;
+    }
+
+    public abstract void sendMessage(String message);
+    public abstract void receiveMessage(String message);
+}
+```
+
+#### 4. Concrete Colleague Classes
+
+```java
+public class ConcreteUser extends User {
+    
+    public ConcreteUser(ChatMediator mediator, String name) {
+        super(mediator, name);
+    }
+
+    @Override
+    public void sendMessage(String message) {
+        System.out.println(name + ": Sending Message = " + message);
+        mediator.sendMessage(message, this);
+    }
+
+    @Override
+    public void receiveMessage(String message) {
+        System.out.println(name + ": Received Message = " + message);
+    }
+}
+```
+
+#### 5. Client
+
+```java
+public class Client {
+    public static void main(String[] args) {
+        ChatMediator chatRoom = new ChatRoom();
+
+        User user1 = new ConcreteUser(chatRoom, "Alice");
+        User user2 = new ConcreteUser(chatRoom, "Bob");
+        User user3 = new ConcreteUser(chatRoom, "Charlie");
+
+        chatRoom.addUser(user1);
+        chatRoom.addUser(user2);
+        chatRoom.addUser(user3);
+
+        user1.sendMessage("Hello everyone!");
+        user2.sendMessage("Hi Alice!");
+    }
+}
+```
+
+### Benefits
+
+- **Loose Coupling**: Mediator reduces the dependencies between colleague classes, making the system more flexible and maintainable.
+- **Centralized Control**: Communication between objects is centralized, which simplifies the communication logic.
+- **Easier Maintenance**: Changes in communication logic only require changes in the mediator, not in the colleagues.
+
+### Use Cases
+
+- GUI frameworks where components (buttons, text fields) need to communicate.
+- Chat applications or any system where multiple objects need to coordinate actions without knowing each other directly.
+- Any scenario where you want to reduce the complexity of direct communications between many objects.
+
+The Mediator Design Pattern is a powerful way to manage interactions between objects, promoting cleaner code and reducing dependencies.

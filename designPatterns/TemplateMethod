@@ -1,0 +1,114 @@
+Let's refine the **Template Method Design Pattern** example for payment processing,
+incorporating the specific steps of **validate**, **debit**, **credit**, and **send receipt**.
+Each payment method will implement these steps accordingly.
+
+### 1. Abstract Class
+
+```java
+public abstract class Payment {
+    // Template method
+    public final void processPayment() {
+        validate();
+        debit();
+        credit();
+        sendReceipt();
+    }
+
+    protected abstract void validate();
+    protected abstract void debit();
+    protected abstract void credit();
+
+    private void sendReceipt() {
+        System.out.println("Sending receipt to the customer.");
+    }
+}
+```
+
+### 2. Concrete Classes
+
+#### Credit Card Payment
+
+```java
+public class CreditCardPayment extends Payment {
+    @Override
+    protected void validate() {
+        System.out.println("Validating credit card details.");
+    }
+
+    @Override
+    protected void debit() {
+        System.out.println("Debiting amount from credit card.");
+    }
+
+    @Override
+    protected void credit() {
+        System.out.println("Crediting payment to the merchant's account.");
+    }
+}
+```
+
+#### PayPal Payment
+
+```java
+public class PayPalPayment extends Payment {
+    @Override
+    protected void validate() {
+        System.out.println("Validating PayPal account.");
+    }
+
+    @Override
+    protected void debit() {
+        System.out.println("Debiting amount from PayPal account.");
+    }
+
+    @Override
+    protected void credit() {
+        System.out.println("Crediting payment to the merchant's PayPal account.");
+    }
+}
+```
+
+### 3. Client Code
+
+```java
+public class Client {
+    public static void main(String[] args) {
+        Payment creditCardPayment = new CreditCardPayment();
+        creditCardPayment.processPayment();
+
+        System.out.println();
+
+        Payment paypalPayment = new PayPalPayment();
+        paypalPayment.processPayment();
+    }
+}
+```
+
+### Explanation of the Code
+
+1. **Payment Class**: This is the abstract class that defines the `processPayment()` template method,
+which outlines the steps of the payment process: **validate**, **debit**, **credit**, and **send receipt**. 
+The `sendReceipt()` method is a concrete implementation, while `validate()`, `debit()`, and `credit()` are abstract methods that subclasses must implement.
+
+2. **CreditCardPayment Class**: Implements the specific steps for processing a credit card payment:
+   - **validate()**: Validates credit card details.
+   - **debit()**: Debits the amount from the credit card.
+   - **credit()**: Credits the payment to the merchant's account.
+
+3. **PayPalPayment Class**: Similar to the `CreditCardPayment`, but implements the specific steps for PayPal payments:
+   - **validate()**: Validates the PayPal account.
+   - **debit()**: Debits the amount from the PayPal account.
+   - **credit()**: Credits the payment to the merchant's PayPal account.
+
+4. **Client**: This code creates instances of `CreditCardPayment` and `PayPalPayment` and calls the `processPayment()` method,
+demonstrating the specific behaviors of each payment method while following the same overall process.
+
+### Benefits of This Design
+
+- **Clear Structure**: The payment process is clearly defined with each step encapsulated, making it easy to understand and maintain.
+- **Extensibility**: New payment methods can be easily added by creating new subclasses without altering the existing code.
+- **Consistency**: All payment methods follow the same processing structure, ensuring a uniform approach to payment processing.
+
+### Conclusion
+
+Using the Template Method Design Pattern in this payment processing example helps create a structured and maintainable system where specific payment methods can implement their own logic while adhering to a consistent workflow.

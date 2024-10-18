@@ -1,0 +1,10 @@
+The Strangler Fig Pattern is a design pattern used in software development, particularly for migrating legacy systems to new architectures.
+It allows for a gradual transition from an old system to a new one without needing to replace the entire system at once.
+
+Key Points:
+Incremental Migration:
+
+Instead of rewriting the legacy system in one go, the strangler pattern enables developers to incrementally replace components of the old system with new services or microservices.
+Proxy or Facade:
+
+A proxy or facade is set up in front of the legacy system. New requests are routed to the new system, while requests for existing functionality are still handled by the legacy system.

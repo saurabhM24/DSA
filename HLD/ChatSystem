@@ -1,0 +1,26 @@
+There will be separate user serivce, group service with their own SQl DB
+These will be https connections. Sql db because the data is structural here.
+
+For chat we need persistent connections that is why we need to use websockets.
+
+Since there can be 50 Million DAU, we need multiple chat servers.
+But on top of it , we need a user-char server mapping service which will assign a chat server to user.
+Also this service will be used by chat servers as well to know to which chat server the user2 is connected to.
+
+user-chat server mapping service can use Redis datastore for mainting this info.
+
+Chat servers needs to store the message if the user 2 is offline. And it also needs to maintain the chat histroy. This data is huge, hence we need to NoSql data
+Discord uses Cassandra as db to store the chats.
+
+In cassandra, we can pass the use partition key in this case it can be user id, group id for group messages.
+When user2 comes online the chat server checks the cassandra for are there any msgs for user 2.
+
+The can be a presence service which will use redis to store if the user is online or offline. User will keep on sending the heartbeat to presence server.
+If heartbeat is not received by an user for 30 secs, it will mark it as offline.
+
+Data Model:
+Message
+ id, from, to, timestamp
+Group Message
+id, groupid, from, timestamp
+

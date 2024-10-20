@@ -1,0 +1,42 @@
+Yes, when designing a system like Google Drive for file storage and synchronization, the concept of sending only the changed chunks or blocks of a file (often referred to as "deltas" or "differential sync") is crucial for efficiency. Here’s how it generally works:
+
+### 1. **Chunking the File**
+
+- **File Division**: Large files are divided into smaller, manageable chunks or blocks. This can be done based on fixed sizes (e.g., 1 MB chunks) or variable sizes, depending on the implementation.
+- **Metadata Storage**: Each chunk may have associated metadata, including a unique identifier, size, and a hash for integrity checks.
+
+### 2. **Detecting Changes**
+
+- **Local Modification Detection**: When a file is modified, the client application (e.g., Google Drive app) detects these changes. This can be done through file system monitoring or manual checks.
+- **Checksum Calculation**: The application calculates checksums (e.g., MD5, SHA-256) for each chunk of the file to identify which chunks have changed.
+
+### 3. **Delta Creation**
+
+- **Comparing Chunks**: The modified file is compared to the last synced version. By calculating checksums for both the original and modified chunks, the application determines which chunks have changed.
+- **Change Identification**: Only the chunks with differing checksums are marked for upload.
+
+### 4. **Uploading Changed Chunks**
+
+- **Efficient Upload**: The client uploads only the modified chunks to the server. This minimizes bandwidth usage and speeds up the synchronization process.
+- **Order and Integrity**: Chunks may be uploaded in a specific order, and the server should verify the integrity of each chunk upon receipt.
+
+### 5. **Server-Side Handling**
+
+- **Chunk Storage**: The server stores the new or updated chunks. If a chunk already exists (i.e., it has not changed), the server can skip storing it again, further saving space.
+- **Reassembly**: When a user requests a file, the server assembles it from the stored chunks. This can be done on-the-fly or when a download request is made.
+
+### 6. **Version Control and Conflict Resolution**
+
+- **Versioning**: The system may keep multiple versions of files, allowing users to revert to previous versions if needed.
+- **Conflict Handling**: If a file is modified from multiple clients simultaneously, the server must implement conflict resolution strategies, such as merging changes or prompting the user for action.
+
+### Benefits
+
+- **Bandwidth Efficiency**: Sending only the changed chunks significantly reduces the amount of data transmitted over the network.
+- **Faster Synchronization**: Users experience quicker sync times, especially for large files with minor modifications.
+- **Storage Optimization**: The server can reduce storage redundancy by keeping only unique chunks.
+
+### Conclusion
+
+The differential sync method is a critical component in designing cloud storage solutions like Google Drive.
+By focusing on changes rather than re-uploading entire files, such systems can operate efficiently and provide a better user experience.

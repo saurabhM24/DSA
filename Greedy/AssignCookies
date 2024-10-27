@@ -1,0 +1,16 @@
+https://leetcode.com/problems/assign-cookies/description/
+
+The `findContentChildren` function uses a greedy approach to maximize the number of content children based on their greed factors and the sizes of cookies available. Here's the breakdown of the approach in a few lines:
+
+1. **Sort Arrays**: Both the greed factors of the children (`g`) and the sizes of the cookies (`s`) are sorted in ascending order. This allows us to efficiently find the smallest cookie that can satisfy each child's greed.
+
+2. **Two-Pointer Technique**: 
+   - A pointer (`j`) is used to track the cookies while iterating through each child's greed factor (`g[i]`).
+   - For each child, the algorithm checks if the current cookie (`s[j]`) can satisfy the child's greed (`g[i]`).
+   - If a cookie satisfies a child, both the child and the cookie pointers are advanced. If not, only the cookie pointer is advanced to check the next larger cookie.
+
+3. **Count Satisfied Children**: Each time a child's greed is satisfied, a counter (`cnt`) is incremented.
+
+4. **Return the Count**: Finally, the function returns the total count of content children.
+
+This greedy algorithm efficiently ensures that each child gets the smallest cookie that meets their greed requirement, maximizing the number of satisfied children.

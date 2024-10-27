@@ -1,0 +1,16 @@
+https://leetcode.com/problems/lemonade-change/
+
+The `lemonadeChange` function checks if a lemonade stand can provide change for customers paying with $5, $10, or $20 bills. Here’s a concise breakdown of the approach:
+
+1. **Initialize Counters**: Three counters (`f`, `ten`, `tw`) are initialized to track the number of $5, $10, and $20 bills received.
+
+2. **Process Each Bill**:
+   - For a **$5 bill**: Increment the $5 counter.
+   - For a **$10 bill**: Check if there is at least one $5 bill available for change. If so, decrement the $5 counter and increment the $10 counter; otherwise, return `false`.
+   - For a **$20 bill**: Check for change:
+     - Preferably use one $10 bill and one $5 bill (if available). If so, decrement both counters.
+     - If not, check if there are at least three $5 bills to give change. If yes, decrement the $5 counter by three; if neither option is available, return `false`.
+
+3. **Final Decision**: If all bills are processed without running out of change, return `true`.
+
+This greedy approach ensures that change is provided in the most efficient way possible at each step, maintaining the necessary cash flow for future transactions.

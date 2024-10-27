@@ -1,0 +1,19 @@
+https://leetcode.com/problems/insert-interval/description/
+
+The `insert` function integrates a new interval into a list of existing intervals while merging any overlapping intervals. Here’s a concise breakdown of the approach:
+
+1. **Initialize a List**: A list (`list`) is created to store the resulting intervals after the insertion and merging process.
+
+2. **Add Non-Overlapping Intervals**: 
+   - The first `while` loop iterates through the existing intervals, adding any intervals that end before the new interval starts (i.e., non-overlapping) to the list.
+
+3. **Merge Overlapping Intervals**: 
+   - The second `while` loop checks for intervals that overlap with the new interval. If an overlap is found, it updates the new interval's start and end to encompass all overlapping intervals.
+
+4. **Add the Merged Interval**: After merging, the new (or updated) interval is added to the list.
+
+5. **Add Remaining Intervals**: The final `while` loop appends any remaining intervals that start after the new interval ends.
+
+6. **Convert to Array**: Finally, the list of intervals is converted back to a 2D array format to match the expected output.
+
+This approach ensures that the new interval is seamlessly integrated into the existing set of intervals, preserving the order and merging overlaps efficiently.

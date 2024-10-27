@@ -1,0 +1,15 @@
+https://leetcode.com/problems/non-overlapping-intervals/description/
+
+The `eraseOverlapIntervals` function determines the minimum number of intervals that need to be removed to ensure that the remaining intervals do not overlap. Here's a concise breakdown of the approach:
+
+1. **Sort Intervals**: The intervals are sorted based on their ending times. This allows the algorithm to always consider the interval that finishes the earliest, making it easier to avoid overlaps.
+
+2. **Initialize Counters**: A counter (`cnt`) is initialized to track the number of non-overlapping intervals that can be selected. Variables `start` and `end` are set to the start and end of the first interval.
+
+3. **Iterate Through Intervals**:
+   - For each subsequent interval, check if its start time is greater than or equal to the `end` of the last selected interval.
+   - If so, increment the counter and update `start` and `end` to the current interval's start and end times, respectively.
+
+4. **Calculate Removals**: The final result is calculated as the total number of intervals minus the count of non-overlapping intervals (`cnt + 1`), because `cnt` counts the intervals selected after the first one.
+
+This greedy approach efficiently ensures that the maximum number of non-overlapping intervals is selected, thus minimizing the number of removals needed.

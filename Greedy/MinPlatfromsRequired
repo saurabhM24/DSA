@@ -1,0 +1,16 @@
+https://www.geeksforgeeks.org/problems/minimum-platforms-1587115620/1
+
+To solve the **Minimum Platforms** problem using the given approach:
+
+1. **Sort Arrival and Departure Times**: Sort both the arrival (`arr`) and departure (`dep`) arrays.
+
+2. **Use Two Pointers**: Initialize two pointers, `i` for arrivals and `j` for departures, as well as a counter `cnt` for active platforms.
+
+3. **Traverse with Condition**:
+   - If a train arrives (`arr[i] <= dep[j]`), increment `cnt` (indicating a platform is needed) and move the arrival pointer.
+   - If a train departs (`arr[i] > dep[j]`), decrement `cnt` (indicating a platform is freed) and move the departure pointer.
+   - Track the maximum value of `cnt` during traversal, as this will be the minimum number of platforms needed.
+
+4. **Return Maximum Platforms Needed**: The maximum `cnt` observed is the answer.
+
+This approach efficiently finds the minimum platforms by counting overlapping intervals.

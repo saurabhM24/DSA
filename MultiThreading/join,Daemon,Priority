@@ -1,0 +1,30 @@
+Here's a concise overview of join, priority, and daemon threads:
+
+### 1. Join
+- **Definition**: The `join()` method allows one thread to wait for the completion of another thread.
+- **Usage**: When a thread calls `join()` on another thread, it blocks until the specified thread has finished executing. This is useful for ensuring that a thread has completed its task before proceeding.
+- **Example**: 
+  ```python
+  thread.join()  # Waits for 'thread' to finish.
+  ```
+
+### 2. Priority
+- **Definition**: Thread priority is a mechanism that determines the order in which threads are scheduled for execution.
+- **Usage**: Threads can be assigned different priority levels, which can influence the thread scheduler's behavior. Higher priority threads may be executed before lower priority threads, though this is not guaranteed.
+- **Example**:
+  ```python
+  thread.setPriority(Thread.MAX_PRIORITY)  # Set the thread to high priority.
+  ```
+
+### 3. Daemon Thread
+- **Definition**: A daemon thread is a thread that runs in the background and does not prevent the program from exiting.
+- **Usage**: Daemon threads are typically used for tasks that run in the background (like garbage collection). When all non-daemon threads finish executing, the program exits, regardless of the state of daemon threads.
+- **Example**:
+  ```python
+  thread.setDaemon(True)  # Marks 'thread' as a daemon thread.
+  ```
+
+### Summary
+- **Join**: Waits for another thread to finish.
+- **Priority**: Determines the scheduling order of threads.
+- **Daemon Thread**: Background thread that does not block program termination.

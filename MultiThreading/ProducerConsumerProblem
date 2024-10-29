@@ -1,0 +1,94 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
+class SharedResource {
+    private final Queue<Integer> buffer;
+    private final int limit;
+
+    public SharedResource(int limit) {
+        this.buffer = new LinkedList<>();
+        this.limit = limit;
+    }
+
+    public void produce(int value) throws InterruptedException {
+        synchronized (this) {
+            while (buffer.size() == limit) {
+                wait(); // Wait if buffer is full
+            }
+            buffer.add(value);
+            System.out.println("Produced: " + value);
+            notify(); // Notify consumers
+        }
+    }
+
+    public int consume() throws InterruptedException {
+        synchronized (this) {
+            while (buffer.isEmpty()) {
+                wait(); // Wait if buffer is empty
+            }
+            int value = buffer.poll();
+            System.out.println("Consumed: " + value);
+            notify(); // Notify producers
+            return value;
+        }
+    }
+}
+
+class Producer implements Runnable {
+    private final SharedResource sharedResource;
+
+    public Producer(SharedResource sharedResource) {
+        this.sharedResource = sharedResource;
+    }
+
+    @Override
+    public void run() {
+        try {
+            for (int i = 0; i < 10; i++) {
+                sharedResource.produce(i);
+                Thread.sleep(100); // Simulate time taken to produce
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+}
+
+class Consumer implements Runnable {
+    private final SharedResource sharedResource;
+
+    public Consumer(SharedResource sharedResource) {
+        this.sharedResource = sharedResource;
+    }
+
+    @Override
+    public void run() {
+        try {
+            for (int i = 0; i < 10; i++) {
+                sharedResource.consume();
+                Thread.sleep(150); // Simulate time taken to consume
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        SharedResource sharedResource = new SharedResource(5); // Buffer size of 5
+
+        Thread producerThread = new Thread(new Producer(sharedResource));
+        Thread consumerThread = new Thread(new Consumer(sharedResource));
+
+        producerThread.start();
+        consumerThread.start();
+
+        try {
+            producerThread.join();
+            consumerThread.join();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+}

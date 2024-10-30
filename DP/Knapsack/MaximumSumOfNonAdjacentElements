@@ -1,0 +1,14 @@
+https://www.naukri.com/code360/problems/maximum-sum-of-non-adjacent-elements_843261?source=youtube&campaign=striver_dp_videos&utm_source=youtube&utm_medium=affiliate&utm_campaign=striver_dp_videos&leftPanelTabValue=SUBMISSION
+
+The `maximumNonAdjacentSum` function calculates the maximum sum of non-adjacent elements in a list. It uses a recursive approach with memoization to optimize performance:
+
+1. **Base Cases**: If the index is less than 0, return 0. If it's 0, return the first element.
+2. **Memoization Check**: If the result for the current index is already computed, return it.
+3. **Recursion**:
+   - Calculate the sum including the current element (add it to the result from the element two indices back).
+   - Calculate the sum excluding the current element (take the result from the previous index).
+4. **Store the Maximum**: Store the maximum of the two sums in the memoization array and return it.
+
+This effectively reduces overlapping subproblems by caching results.
+
+TC: O(n) bcoz for each n is only calculated once.

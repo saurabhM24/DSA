@@ -1,0 +1,18 @@
+https://www.naukri.com/code360/problems/ninja-s-training_3621003?source=youtube&campaign=striver_dp_videos&utm_source=youtube&utm_medium=affiliate&utm_campaign=striver_dp_videos&leftPanelTabValue=SUBMISSION
+
+The `ninjaTraining` function calculates the maximum points a ninja can earn over `n` days, given they can perform one of three tasks each day but cannot repeat the same task on consecutive days. The approach can be summarized as follows:
+
+1. **Dynamic Programming Table**: Initialize a 2D memoization table `t` to store results for each day and last performed task (with an additional column for "no last task").
+  
+2. **Base Case**: If all days are completed, return 0 (no points to earn).
+
+3. **Recursive Function**:
+   - Check if the result for the current day and last task is already computed (memoized).
+   - Iterate through the possible tasks for the current day (0 to 2), skipping the task that was performed the previous day.
+   - For each valid task, calculate the points earned for that task plus the maximum points from the subsequent day, storing the best result.
+
+4. **Store and Return Maximum Points**: Update the memoization table and return the maximum points obtainable.
+
+This method effectively reduces redundant calculations through memoization while ensuring compliance with the task constraints.
+
+TC: O(n)

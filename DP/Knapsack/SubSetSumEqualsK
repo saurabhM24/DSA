@@ -1,0 +1,63 @@
+https://www.naukri.com/code360/problems/subset-sum-equal-to-k_1550954?leftPanelTab=1%3Fsource%3Dyoutube&campaign=striver_dp_videos&utm_source=youtube&utm_medium=affiliate&utm_campaign=striver_dp_videos
+Certainly! The recursive dynamic programming approach for the subset sum problem involves using a helper function that explores all possibilities of including or excluding each element in the subset. Here’s how you can implement it:
+
+### Recursive DP Approach
+
+1. **Function Definition**:
+   Create a recursive function `isSubsetSum(arr, n, sum)` where:
+   - `arr` is the array of elements.
+   - `n` is the current number of elements being considered.
+   - `sum` is the target sum we are trying to achieve.
+
+2. **Base Cases**:
+   - If `sum == 0`, return `true` (an empty subset achieves a sum of 0).
+   - If `n == 0`, return `false` (no elements left and the sum isn’t zero).
+
+3. **Recursive Case**:
+   - If the last element is greater than the current sum, ignore it and recurse for the remaining elements: `isSubsetSum(arr, n-1, sum)`.
+   - Otherwise, check two cases:
+     1. Include the last element: `isSubsetSum(arr, n-1, sum - arr[n-1])`.
+     2. Exclude the last element: `isSubsetSum(arr, n-1, sum)`.
+
+4. **Memoization**:
+   To optimize, use a memoization table to store results of subproblems to avoid redundant calculations.
+
+### Example Code
+
+Here’s a sample implementation in Python:
+
+```python
+def isSubsetSum(arr, n, sum, memo):
+    # Check if result is already computed
+    if (n, sum) in memo:
+        return memo[(n, sum)]
+    
+    # Base cases
+    if sum == 0:
+        return True
+    if n == 0:
+        return False
+    
+    # If last element is greater than sum, ignore it
+    if arr[n-1] > sum:
+        memo[(n, sum)] = isSubsetSum(arr, n-1, sum, memo)
+    else:
+        # Include or exclude the last element
+        include = isSubsetSum(arr, n-1, sum - arr[n-1], memo)
+        exclude = isSubsetSum(arr, n-1, sum, memo)
+        memo[(n, sum)] = include or exclude
+    
+    return memo[(n, sum)]
+
+# Example usage
+arr = [3, 34, 4, 12, 5, 2]
+sum = 9
+n = len(arr)
+memo = {}
+result = isSubsetSum(arr, n, sum, memo)
+print(result)  # Output: True
+```
+
+### Explanation:
+- The function recursively explores including and excluding elements while maintaining the current target sum.
+- Memoization helps store results of already solved subproblems, making the solution more efficient, reducing the time complexity to \( O(n \times k) \).

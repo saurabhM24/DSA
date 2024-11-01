@@ -1,0 +1,3 @@
+https://leetcode.com/problems/delete-operation-for-two-strings/submissions/1439790334/
+
+Cal lcs of 2 strings and return (m - len) + (n - len)

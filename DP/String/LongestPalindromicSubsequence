@@ -1,0 +1,3 @@
+https://leetcode.com/problems/longest-palindromic-subsequence/description/
+
+This is similar to LCS. Just create one more string by reversing the given string. And lcs of those 2 strings is the answer

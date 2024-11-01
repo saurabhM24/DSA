@@ -1,0 +1,44 @@
+public class LongestCommonSubstring {
+
+    // Recursive function with memoization matrix
+    public static int longestCommonSubstring(String str1, String str2, int i, int j, int count, int[][] memo) {
+        // Base case: if either string is exhausted
+        if (i == 0 || j == 0) {
+            return count;
+        }
+
+        // Check if the result is already computed
+        if (memo[i][j] != -1) {
+            return memo[i][j];
+        }
+
+        // If characters match, increment the count and continue
+        if (str1.charAt(i - 1) == str2.charAt(j - 1)) {
+            count = longestCommonSubstring(str1, str2, i - 1, j - 1, count + 1, memo);
+        } else {
+            // If characters do not match, reset count and continue exploring
+            count = Math.max(longestCommonSubstring(str1, str2, i - 1, j, 0, memo), 
+                             longestCommonSubstring(str1, str2, i, j - 1, 0, memo));
+        }
+
+        // Store the result in the memoization matrix
+        memo[i][j] = count;
+        return count;
+    }
+
+    public static void main(String[] args) {
+        String str1 = "abcdxyz";
+        String str2 = "xyzabcd";
+        int m = str1.length();
+        int n = str2.length();
+        
+        // Initialize memoization matrix with -1
+        int[][] memo = new int[m + 1][n + 1];
+        for (int[] row : memo) {
+            java.util.Arrays.fill(row, -1);
+        }
+
+        int result = longestCommonSubstring(str1, str2, m, n, 0, memo);
+        System.out.println("Length of Longest Common Substring: " + result);  // Output: 4
+    }
+}

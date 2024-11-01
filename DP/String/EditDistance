@@ -1,0 +1,23 @@
+https://leetcode.com/problems/edit-distance/
+
+### Approach to Calculate Minimum Edit Distance
+
+The given code implements a solution to the Minimum Edit Distance problem using recursion and memoization. Here's a concise breakdown of the approach:
+
+1. **Problem Definition**: The goal is to transform one string (`s1`) into another (`s2`) using the minimum number of operations, which can be insertion, deletion, or replacement of characters.
+
+2. **Dynamic Programming Table**: A 2D memoization table `t` is initialized to store intermediate results, avoiding redundant calculations.
+
+3. **Base Cases**:
+   - If one string is empty, the minimum distance is the length of the other string (all insertions or deletions).
+   
+4. **Recursion**:
+   - If the last characters of both strings match, recursively solve for the remaining substrings.
+   - If they don't match, compute the minimum distance for:
+     - Replacing the character (both strings decrease by 1).
+     - Inserting a character in the first string (decrease `m` by 1).
+     - Deleting a character from the first string (decrease `n` by 1).
+
+5. **Final Calculation**: The result is stored in `t[n][m]`, which gives the minimum edit distance between `s1` and `s2`.
+
+This approach efficiently calculates the minimum edit distance using a top-down dynamic programming method with memoization to optimize performance.

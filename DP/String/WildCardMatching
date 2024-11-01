@@ -1,0 +1,28 @@
+https://leetcode.com/problems/wildcard-matching/
+
+### Approach to Pattern Matching with Wildcards
+
+The provided code implements a solution to check if a string (`s2`) matches a pattern (`s1`) that may include wildcards (`*` and `?`). Here's a concise breakdown of the approach:
+
+1. **Problem Definition**: Determine if the string `s2` matches the pattern `s1`, where:
+   - `?` can match any single character.
+   - `*` can match any sequence of characters (including an empty sequence).
+
+2. **Dynamic Programming Table**: A 2D memoization table `t` is initialized to store intermediate results to avoid redundant calculations.
+
+3. **Base Cases**:
+   - If both the pattern and the string are empty, they match.
+   - If the pattern is empty but the string is not, it returns false.
+   - If the string is empty but the pattern only contains `*`, it returns true.
+
+4. **Recursion**:
+   - If the current characters match or the current pattern character is `?`, recursively check the next characters of both strings.
+   - If the current pattern character is `*`, check two possibilities:
+     - Match the `*` with one or more characters from the string (move to the next character in the string).
+     - Treat the `*` as matching zero characters (move to the next character in the pattern).
+
+5. **Memoization**: Store the results of subproblems in the table to optimize performance.
+
+6. **Final Decision**: The result of whether the full string matches the pattern is derived from `t[n][m]`.
+
+This approach effectively utilizes dynamic programming to handle wildcard matching, ensuring that all possible matches are evaluated efficiently.

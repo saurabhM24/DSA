@@ -1,0 +1,17 @@
+https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/
+
+The given code implements a dynamic programming solution to the "Best Time to Buy and Sell Stock" problem. Here's a brief approach breakdown:
+
+1. **State Definition**: The function `solve` uses two states: `i` (the current day) and `buy` (0 if not holding a stock, 1 if holding a stock).
+
+2. **Base Case**: If we reach the end of the prices array (`i >= n`), return 0 since no profit can be made.
+
+3. **Memoization**: A 2D array `t` is used to store results of previously computed states to avoid redundant calculations.
+
+4. **Recursion Logic**:
+   - If `buy` is 0 (not holding a stock), we can either buy the stock (subtracting its price from the profit) or skip to the next day.
+   - If `buy` is 1 (holding a stock), we can either sell it (adding its price to the profit) or skip to the next day.
+
+5. **Return Value**: The function returns the maximum profit calculated from these choices.
+
+This approach efficiently computes the maximum profit using dynamic programming and memoization, ensuring each state is processed only once.

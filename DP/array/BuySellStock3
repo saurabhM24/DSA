@@ -1,0 +1,19 @@
+https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/
+
+The provided code solves the "Best Time to Buy and Sell Stock with Transaction Limit" problem using a dynamic programming approach. Here's a concise breakdown of the approach:
+
+1. **State Definition**: The function `solve` considers three parameters: `i` (current day), `allowedToBuy` (1 if we can buy, 0 if we can sell), and `cap` (number of transactions left).
+
+2. **Base Cases**:
+   - If `cap` is 0, no transactions can be made, so return 0.
+   - If `i` reaches the length of the prices array, return 0 as there are no more days to trade.
+
+3. **Memoization**: A 3D array `t` is used to cache results for the states to improve efficiency by avoiding redundant calculations.
+
+4. **Recursion Logic**:
+   - If buying is allowed (`allowedToBuy == 1`), the function can either buy the stock (subtracting the price) or skip to the next day.
+   - If selling is allowed (`allowedToBuy == 0`), it can sell the stock (adding the price and reducing the transaction count) or skip to the next day.
+
+5. **Return Value**: The function returns the maximum profit based on the choices made at each state, utilizing memoization for efficiency.
+
+This approach efficiently handles the constraints of a limited number of transactions while maximizing profit through a dynamic programming strategy.

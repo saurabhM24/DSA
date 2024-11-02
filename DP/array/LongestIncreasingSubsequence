@@ -1,0 +1,63 @@
+To find the Longest Increasing Subsequence (LIS) in Java, you can use dynamic programming. Here’s a concise implementation of the approach:
+
+### Dynamic Programming Approach
+
+1. **Initialize an Array**: Create an array `dp` where `dp[i]` will hold the length of the longest increasing subsequence that ends with `arr[i]`.
+
+2. **Fill the Array**: For each element in the input array, check all previous elements to find the longest subsequence that can be extended.
+
+3. **Return the Maximum**: The maximum value in the `dp` array will be the length of the LIS.
+
+Here's a Java implementation:
+
+```java
+class Solution {
+    public int lengthOfLIS(int[] nums) {
+        if (nums.length == 0) return 0;
+        
+        int n = nums.length;
+        int[] dp = new int[n];
+        
+        // Each element is a subsequence of length 1
+        for (int i = 0; i < n; i++) {
+            dp[i] = 1;
+        }
+
+        // Build the dp array
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+                if (nums[i] > nums[j]) {
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
+                }
+            }
+        }
+
+        // The length of the longest increasing subsequence
+        int maxLength = 0;
+        for (int length : dp) {
+            maxLength = Math.max(maxLength, length);
+        }
+
+        return maxLength;
+    }
+
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        int[] nums = {10, 9, 2, 5, 3, 7, 101, 18};
+        System.out.println("Length of Longest Increasing Subsequence: " + solution.lengthOfLIS(nums));
+    }
+}
+```
+
+### Explanation
+
+1. **Initialization**: The `dp` array is initialized to 1 because the minimum length of the increasing subsequence that can end at each element is 1 (the element itself).
+
+2. **Nested Loops**:
+   - The outer loop iterates through each element starting from the second.
+   - The inner loop checks all previous elements. If the current element is greater than a previous element, it updates the `dp` value for the current element.
+
+3. **Finding the Maximum**: Finally, the code iterates through the `dp` array to find the maximum value, which represents the length of the longest increasing subsequence.
+
+### Time Complexity
+- The time complexity is \(O(n^2)\), where \(n\) is the number of elements in the input array.

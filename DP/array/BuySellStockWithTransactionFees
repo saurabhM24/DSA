@@ -1,0 +1,17 @@
+https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/
+
+The provided code solves the "Best Time to Buy and Sell Stock with Transaction Fee" problem using a dynamic programming approach. Here's a concise overview of the approach:
+
+1. **State Definition**: The `solve` function tracks the current day (`i`), whether buying is allowed (`canBuy`), the total number of days (`n`), and the transaction fee.
+
+2. **Base Case**: If `i` reaches or exceeds the length of the prices array (`i >= n`), return 0, as no profit can be made.
+
+3. **Memoization**: A 2D array `t` is used to cache results for each state to optimize performance by avoiding redundant calculations.
+
+4. **Recursion Logic**:
+   - If buying is allowed (`canBuy == 1`), the options are to either buy the stock (subtract its price) or skip to the next day without buying.
+   - If selling is allowed (`canBuy == 0`), the options are to sell the stock (add its price minus the transaction fee) or skip to the next day without selling.
+
+5. **Return Value**: The function returns the maximum profit achievable based on the decisions made at each state, utilizing memoization for efficiency.
+
+This approach effectively accounts for the transaction fee while maximizing the profit from stock trades.

@@ -1,0 +1,19 @@
+https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/
+
+The provided code implements a dynamic programming solution for the "Best Time to Buy and Sell Stock with K Transactions" problem. Here’s a concise overview of the approach:
+
+1. **State Definition**: The `solve` function tracks the current day (`i`), whether buying is allowed (`canBuy`), the total number of days (`n`), the remaining transactions (`k`), and a memoization table (`t`).
+
+2. **Base Cases**:
+   - If `k` is 0, no transactions can be made, so return 0.
+   - If `i` equals `n`, it means we’ve processed all days, so return 0.
+
+3. **Memoization**: A 3D array `t` caches results for previously computed states to optimize performance.
+
+4. **Recursion Logic**:
+   - If buying is allowed (`canBuy == 1`), the options are to either buy the stock (subtract its price) or skip to the next day.
+   - If selling is allowed (`canBuy == 0`), the options are to sell the stock (add its price and reduce the transaction count) or skip to the next day.
+
+5. **Return Value**: The function returns the maximum profit that can be achieved based on the choices made at each state, leveraging memoization for efficiency.
+
+This approach effectively manages the constraints of a limited number of transactions while maximizing profit through dynamic programming.

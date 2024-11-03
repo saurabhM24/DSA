@@ -1,0 +1,26 @@
+https://leetcode.com/problems/largest-divisible-subset/
+Note: This is very similar to longest increasing subsequence approach.
+
+The provided code finds the largest divisible subset from an array of integers using a dynamic programming approach. Here’s a concise breakdown of the approach:
+
+1. **Sorting**: First, sort the input array `nums` to facilitate checking divisibility in a structured manner.
+
+2. **Initialization**:
+   - Create an array `count` where `count[i]` holds the size of the largest divisible subset that ends with `nums[i]`.
+   - Create a `hash` array to track the previous index in the subset for reconstructing the solution.
+
+3. **Dynamic Programming Logic**:
+   - For each element `nums[i]`, iterate through all previous elements `nums[prev]`.
+   - If `nums[i]` is divisible by `nums[prev]`, update `count[i]` and `hash[i]` to reflect that `nums[i]` can extend the subset ending with `nums[prev]`.
+
+4. **Finding the Maximum**: After populating the `count` array, find the maximum value and its index, which indicates the largest divisible subset.
+
+5. **Reconstructing the Subset**: Using the `hash` array, reconstruct the largest divisible subset by backtracking from the index of the maximum count.
+
+6. **Reversal**: Since the subset is constructed in reverse order, reverse the list before returning it.
+
+### Time Complexity
+- The time complexity is \(O(n^2)\), where \(n\) is the number of elements in the input array, due to the nested loops. 
+
+### Output
+- The method returns a list containing the elements of the largest divisible subset.

@@ -1,0 +1,44 @@
+The provided solution uses dynamic programming with memoization to solve the Matrix Chain Multiplication problem. Here's a concise approach breakdown:
+
+1. **Initialization**: A 2D array `t` is created to store the minimum multiplication costs for subproblems. It is initialized with `-1` to indicate uncomputed states.
+
+2. **Recursive Function**:
+   - The `solve` function computes the minimum cost to multiply matrices from index `i` to `j`.
+   - If `i + 1 == j`, it means only one matrix is present, so the cost is `0`.
+   - If the cost for the subproblem `(i, j)` is already computed, return the cached value.
+
+3. **Cost Calculation**:
+   - Iterate through all possible split points `k` (from `i+1` to `j-1`).
+   - For each split, calculate the cost of multiplying the left and right parts and add the cost of multiplying the resulting matrices.
+   - Update the minimum cost if the current configuration yields a lower cost.
+
+4. **Memoization**: Store the computed cost in `t[i][j]` to avoid redundant calculations.
+
+### Time Complexity
+- **O(N³)**: The solution has three nested loops: two for the range of matrices (i, j) and one for the split point (k), leading to cubic time complexity, where `N` is the number of matrices.
+
+Sure! Let's break down the time complexity of the Matrix Chain Multiplication solution in more detail:
+
+### Components of the Time Complexity
+
+1. **Outer Loop (i, j)**:
+   - The solution iterates through all pairs of indices `(i, j)` where `0 ≤ i < j < N`. 
+   - The number of valid pairs of `(i, j)` is approximately \( \frac{N(N-1)}{2} \), which simplifies to \( O(N^2) \).
+
+2. **Inner Loop (k)**:
+   - For each pair `(i, j)`, the code iterates through potential split points `k` from `i + 1` to `j - 1`. 
+   - The number of possible `k` values for each `(i, j)` is at most \( j - i - 1 \), which can be at most \( N \) in the worst case. 
+   - Therefore, this loop contributes an additional factor of \( O(N) \).
+
+### Total Time Complexity
+
+Combining these parts, the overall time complexity is:
+\[
+O(N^2) \text{ (for pairs of } (i, j)) \times O(N) \text{ (for splits } k) = O(N^3)
+\]
+
+### Space Complexity
+
+- The space complexity is \( O(N^2) \) due to the `t` matrix used for memoization, which stores the minimum multiplication costs for subproblems.
+
+In summary, the final time complexity for the algorithm is \( O(N^3) \), which arises from the nested loops iterating through possible pairs of matrix indices and their respective split points.

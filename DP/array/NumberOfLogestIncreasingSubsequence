@@ -1,0 +1,17 @@
+https://leetcode.com/problems/number-of-longest-increasing-subsequence/
+
+The provided solution implements a dynamic programming approach to find the number of longest increasing subsequences (LIS) in the array `nums`. Here's a brief explanation of the approach:
+
+1. **Initialization**: Two arrays, `dp` and `count`, are created. `dp[i]` tracks the length of the longest increasing subsequence ending at index `i`, and `count[i]` counts how many such subsequences exist.
+
+2. **Filling dp and count**:
+   - For each element, compare it with all previous elements. If the current element is greater, update `dp[i]` and `count[i]` accordingly:
+     - If a longer subsequence is found, update `dp[i]` and set `count[i]` to `count[prev]`.
+     - If an equal-length subsequence is found, increment `count[i]` by `count[prev]`.
+
+3. **Determine the maximum length**: After populating `dp`, find the maximum length of LIS.
+
+4. **Count the number of LIS**: Sum the counts of indices where `dp[i]` equals the maximum length.
+
+### Time Complexity
+- **O(n²)**: The nested loops for filling `dp` and `count` lead to a quadratic time complexity, where `n` is the length of the input array `nums`.

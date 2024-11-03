@@ -1,0 +1,23 @@
+https://leetcode.com/problems/longest-string-chain/submissions/1441637904/
+
+The provided code implements a solution to the "Longest String Chain" problem using dynamic programming. Here's a concise approach breakdown:
+
+1. **Sorting**: The `words` array is sorted by length. This allows you to build longer strings from shorter ones.
+
+2. **Dynamic Programming Array**: An array `dp` is initialized where `dp[i]` stores the length of the longest string chain that ends with `words[i]`. Each word starts with a chain length of at least 1.
+
+3. **Nested Loop for Chain Building**:
+   - The outer loop iterates over each word `words[i]`.
+   - The inner loop checks all previous words `words[j]` (where `j < i`) to see if `words[j]` can form a chain with `words[i]` using the `compare` method.
+
+4. **Comparison Logic**: The `compare` method checks if `s1` can be formed by adding exactly one character to `s2`. This is done by iterating through both strings and ensuring that skipping one character from the longer string allows it to match the shorter string.
+
+5. **Updating DP Array**: If a valid chain is found (i.e., `words[j]` can be extended to `words[i]`), update `dp[i]` to be the maximum of its current value or `dp[j] + 1`.
+
+6. **Finding Maximum Chain Length**: After processing all words, iterate through the `dp` array to find the maximum value, which represents the length of the longest string chain.
+
+### Time Complexity
+- The time complexity is \(O(n^2 \cdot m)\), where \(n\) is the number of words and \(m\) is the average length of the words, due to the nested loops and the string comparison.
+
+### Output
+- The method returns the length of the longest string chain that can be formed from the given words.

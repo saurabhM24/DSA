@@ -1,0 +1,80 @@
+https://leetcode.com/problems/minimum-cost-to-cut-a-stick/
+
+Certainly! Here’s a recursive approach to the "Minimum Cost to Cut a Stick" problem, utilizing memoization to optimize repeated calculations:
+
+### Recursive Approach with Memoization
+
+```java
+import java.util.Arrays;
+
+class Solution {
+    public int minCost(int n, int[] cuts) {
+        // Sort the cuts array
+        Arrays.sort(cuts);
+        
+        // Create a new array including boundaries (0 and n)
+        int[] allCuts = new int[cuts.length + 2];
+        allCuts[0] = 0; // Start of the stick
+        allCuts[cuts.length + 1] = n; // End of the stick
+        for (int i = 0; i < cuts.length; i++) {
+            allCuts[i + 1] = cuts[i];
+        }
+        
+        // Memoization table
+        Integer[][] memo = new Integer[allCuts.length][allCuts.length];
+        
+        // Start the recursive function
+        return solve(memo, allCuts, 0, allCuts.length - 1);
+    }
+    
+    private int solve(Integer[][] memo, int[] cuts, int left, int right) {
+        // Base case: if there are no cuts to make
+        if (left + 1 == right) {
+            return 0; // No cost if no cuts can be made
+        }
+        
+        // Check if the result is already computed
+        if (memo[left][right] != null) {
+            return memo[left][right];
+        }
+        
+        int minCost = Integer.MAX_VALUE;
+        
+        // Try cutting at each position between left and right
+        for (int k = left + 1; k < right; k++) {
+            // Cost of making the cut at position k
+            int cost = cuts[right] - cuts[left] + solve(memo, cuts, left, k) + solve(memo, cuts, k, right);
+            minCost = Math.min(minCost, cost);
+        }
+        
+        // Store the result in the memoization table
+        memo[left][right] = minCost;
+        return minCost;
+    }
+}
+```
+
+### Explanation of the Recursive Approach
+
+1. **Sorting and Preparing Cuts**:
+   - The `cuts` array is sorted, and an augmented array (`allCuts`) is created that includes the boundaries `0` and `n`.
+
+2. **Memoization Table**:
+   - An `Integer[][] memo` table is initialized to store results for previously computed subproblems.
+
+3. **Recursive Function** (`solve`):
+   - The function takes the `memo` table, the `cuts` array, and the indices `left` and `right`.
+   - **Base Case**: If `left + 1 == right`, return `0`, as no cuts are needed in that segment.
+   - **Memoization Check**: If the cost for the segment `(left, right)` has already been computed, return that value.
+   - **Cost Calculation**: Iterate through possible cut positions `k` between `left` and `right`, calculating the cost of cutting at `k`:
+     - The cost is the length of the current segment (`cuts[right] - cuts[left]`) plus the costs of the left (`solve(memo, cuts, left, k)`) and right segments (`solve(memo, cuts, k, right)`).
+   - Update the minimum cost found for the segment `(left, right)`.
+
+4. **Final Result**:
+   - The minimum cost to cut the entire stick from `0` to `n` is found by calling `solve(memo, allCuts, 0, allCuts.length - 1)`.
+
+### Time and Space Complexity
+- **Time Complexity**: \( O(m^3) \) where \( m \) is the number of cuts plus two (for the boundaries), due to the three nested loops (the recursive calls).
+- **Space Complexity**: \( O(m^2) \) due to the memoization table.
+
+This recursive approach with memoization efficiently computes the minimum cost to cut the stick by avoiding redundant calculations.

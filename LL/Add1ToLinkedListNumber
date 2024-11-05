@@ -1,0 +1,88 @@
+To add 1 to a number represented by a singly linked list using recursion, we will work with a recursive approach that processes the linked list from the least significant digit to the most significant digit. 
+
+### Recursive Approach:
+
+1. **Base Case**: If the current node is `null`, return `1` to represent adding 1 to the number.
+2. **Recursive Step**: Recursively call the function on the next node. Once we reach the end of the list (the least significant digit), start adding 1 and propagate the carry backwards.
+3. **Carry Propagation**: For each node, add the carry to its value. If the sum is `10`, set the node's value to `0` and propagate the carry (i.e., return `1` as the carry). If the sum is less than `10`, simply return `0` to signify no carry.
+4. **Handle the Final Carry**: After reaching the most significant digit, if there is a carry left (i.e., `carry == 1`), create a new node with value `1` and attach it to the list.
+
+### Detailed Steps:
+1. **Recursive Function**:
+   - Traverse to the end of the list using recursion.
+   - Add `1` starting from the least significant digit (last node).
+   - Propagate any carry backwards to the previous nodes.
+2. **Backtrack and Update**:
+   - During the backtracking phase, update each node with the carry, if necessary.
+3. **Handle New Node**: If the carry is left after the most significant digit, create a new node at the front.
+
+### Time Complexity:
+- **O(n)**, where `n` is the number of nodes, because we recursively traverse the list once.
+  
+### Space Complexity:
+- **O(n)** due to the recursion stack, as we need to traverse all `n` nodes recursively.
+
+---
+
+### Recursive Code Implementation:
+
+```java
+class Solution {
+    public ListNode addOne(ListNode head) {
+        // Call the recursive function with the head of the list
+        int carry = helper(head);
+        
+        // If there is a remaining carry, we need to add a new node
+        if (carry == 1) {
+            ListNode newNode = new ListNode(1);
+            newNode.next = head;
+            return newNode;  // New node becomes the new head
+        }
+        
+        return head;  // Return the original head if no carry is left
+    }
+
+    // Helper function to recursively add 1
+    private int helper(ListNode node) {
+        // Base case: If the node is null, return carry 1
+        if (node == null) {
+            return 1;
+        }
+
+        // Recursively call the helper function on the next node
+        int carry = helper(node.next);
+
+        // Add the carry to the current node's value
+        int sum = node.val + carry;
+        node.val = sum % 10;  // Update current node's value
+        return sum / 10;  // Return the carry (0 or 1)
+    }
+}
+```
+
+### Explanation:
+
+1. **`addOne` Function**: This function is called with the head of the list. It calls the recursive `helper` function to start the process of adding 1.
+   - If the final carry after the recursive calls is `1`, it means we need to add an additional node at the beginning of the list. A new node with value `1` is created and returned as the new head.
+   - Otherwise, the list is returned as is.
+
+2. **`helper` Function**: This recursive function works by:
+   - **Base Case**: If the node is `null`, return `1` (which represents the carry of `1` to the previous node).
+   - **Recursive Case**: It processes the current node after the recursive call on the next node. The carry from the next node is added to the current node's value. If the sum is 10 or more, the node's value is updated to `0` and a carry of `1` is returned. Otherwise, the node's value is updated and no carry is propagated.
+   
+3. **Return Carry**: The function always returns `0` or `1` as the carry, allowing it to propagate through the list.
+
+### Example:
+
+For a list representing the number `999` (i.e., `9 -> 9 -> 9`), the process would work as follows:
+
+1. First, the recursion goes all the way to the last node (least significant digit).
+2. Add 1 to `9`, making it `10`. Set the current node's value to `0` and propagate the carry `1` to the previous node.
+3. The carry is propagated back through the list, making each node `0` and carrying the `1` until we reach the most significant digit.
+4. Finally, we add a new node with value `1` at the front, making the number `1000`.
+
+### Time Complexity:
+- **O(n)**, as the recursive function needs to traverse the entire list to add 1 and propagate the carry.
+
+### Space Complexity:
+- **O(n)**, because each recursive call adds a new frame to the call stack, and the maximum depth of recursion is the number of nodes (`n`).

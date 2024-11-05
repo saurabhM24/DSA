@@ -1,0 +1,6 @@
+https://leetcode.com/problems/merge-k-sorted-lists/description/
+
+This can be done by keep on merging 2 list and return the final list. Use dummy Node.
+That does not take space but TC is a bit big
+
+Fastest approach is using priority queue.

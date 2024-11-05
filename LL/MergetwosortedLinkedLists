@@ -1,0 +1,4 @@
+https://leetcode.com/problems/merge-two-sorted-lists/description/
+
+Use Dummy node and keep on attaching to it the smaller node. 
+Return dummyNode.next;

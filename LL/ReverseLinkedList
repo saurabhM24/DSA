@@ -1,0 +1,16 @@
+https://leetcode.com/problems/reverse-linked-list/
+
+### Approach in Few Lines:
+
+1. **Initialize Pointers**: Start with three pointers: `prev` (set to `null`), `cur` (set to the head of the list), and `next` (to temporarily hold the next node).
+2. **Iterate through the List**: Traverse the list by moving `cur` from the head to the end:
+   - Temporarily store `cur.next` in `next`.
+   - Reverse the link by pointing `cur.next` to `prev`.
+   - Move `prev` to `cur` and `cur` to `next` for the next iteration.
+3. **Return New Head**: Once `cur` is `null`, `prev` will be at the new head of the reversed list.
+
+### Time Complexity:
+- **O(n)**, where `n` is the number of nodes, since we traverse the list once.
+
+### Space Complexity:
+- **O(1)**, as we're using only a constant amount of extra space (no recursion or additional data structures).

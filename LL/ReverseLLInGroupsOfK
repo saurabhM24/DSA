@@ -1,0 +1,17 @@
+https://leetcode.com/problems/reverse-nodes-in-k-group/submissions/1443703887/
+
+### Approach in Few Lines:
+
+1. **Count the Length**: Traverse the linked list to calculate its total length.
+2. **Reverse k Nodes**: For each group of `k` nodes:
+   - Reverse the nodes in place using a three-pointer approach (`prev`, `cur`, `next`).
+   - After reversing, connect the previous group's end to the new reversed group's head and the current group's tail to the next segment.
+3. **Handle Remaining Nodes**: If fewer than `k` nodes remain at the end of the list, leave them unchanged.
+4. **Return the New Head**: After processing all k-sized groups, return the modified list's head.
+
+### Time Complexity:
+- **O(n)**: We traverse the list once to count the length, and each reversal operation takes constant time for each group.
+
+### Space Complexity:
+- **O(1)**: The reversal is done in-place using constant space.
+

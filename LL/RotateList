@@ -1,0 +1,16 @@
+https://leetcode.com/problems/rotate-list/submissions/1443716087/
+
+### Approach in Few Lines:
+
+1. **Count the Length**: Traverse the list to determine its length `n`.
+2. **Handle k Greater than n**: Since rotating by `k` and `n` results in the same list, reduce `k` by `k % n`.
+3. **Edge Case**: If `k == 0` or the list is empty, return the head as no rotation is needed.
+4. **Make the List Circular**: Connect the last node's `next` to the head, making the list circular.
+5. **Find the New Tail**: Traverse to the `(n - k)`-th node and set it as the new tail.
+6. **Break the Circle**: Set the `next` of the new tail to `null` and return the new head, which will be the `(n - k)`-th node's `next`.
+
+### Time Complexity:
+- **O(n)**: We traverse the list to find its length and then again to find the new tail.
+
+### Space Complexity:
+- **O(1)**: We only use a constant amount of extra space.

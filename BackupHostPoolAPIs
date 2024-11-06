@@ -1,0 +1,258 @@
+Certainly! Below are the **CRUD operations** for managing the **Backup Host Pool** configuration, including the **addition** and **deletion of hosts** to/from the pool.
+
+### 1. **Create Backup Host Pool**
+
+This endpoint creates a new backup host pool.
+
+**POST /api/backup/host-pools**
+
+#### Request:
+```json
+{
+  "pool_name": "nas-backup-pool-1",
+  "description": "Backup host pool for NAS volumes in the West region",
+  "region": "us-west",
+  "max_hosts": 5,
+  "host_type": "VM",
+  "enabled": true
+}
+```
+
+#### Response:
+```json
+{
+  "status": "success",
+  "message": "Backup host pool created successfully.",
+  "data": {
+    "pool_id": "abc123",
+    "pool_name": "nas-backup-pool-1",
+    "description": "Backup host pool for NAS volumes in the West region",
+    "region": "us-west",
+    "max_hosts": 5,
+    "host_type": "VM",
+    "enabled": true
+  }
+}
+```
+
+---
+
+### 2. **Read Backup Host Pool Configuration**
+
+This endpoint retrieves the configuration of a specific backup host pool.
+
+**GET /api/backup/host-pools/{pool_id}**
+
+#### Request:
+No request body is needed. Just use the pool ID in the URL.
+
+Example URL:  
+`GET /api/backup/host-pools/abc123`
+
+#### Response:
+```json
+{
+  "status": "success",
+  "data": {
+    "pool_id": "abc123",
+    "pool_name": "nas-backup-pool-1",
+    "description": "Backup host pool for NAS volumes in the West region",
+    "region": "us-west",
+    "max_hosts": 5,
+    "host_type": "VM",
+    "enabled": true,
+    "hosts": [
+      {
+        "host_id": "host01-west-region",
+        "host_name": "host01-west-region",
+        "ip_address": "192.168.1.10",
+        "status": "active"
+      },
+      {
+        "host_id": "host02-west-region",
+        "host_name": "host02-west-region",
+        "ip_address": "192.168.1.11",
+        "status": "inactive"
+      }
+    ]
+  }
+}
+```
+
+---
+
+### 3. **Update Backup Host Pool Configuration**
+
+This endpoint updates the configuration of an existing backup host pool.
+
+**PUT /api/backup/host-pools/{pool_id}**
+
+#### Request:
+```json
+{
+  "pool_name": "nas-backup-pool-2",
+  "description": "Updated backup host pool for NAS volumes in the East region",
+  "region": "us-east",
+  "max_hosts": 10,
+  "host_type": "VM",
+  "enabled": false
+}
+```
+
+#### Response:
+```json
+{
+  "status": "success",
+  "message": "Backup host pool updated successfully.",
+  "data": {
+    "pool_id": "abc123",
+    "pool_name": "nas-backup-pool-2",
+    "description": "Updated backup host pool for NAS volumes in the East region",
+    "region": "us-east",
+    "max_hosts": 10,
+    "host_type": "VM",
+    "enabled": false
+  }
+}
+```
+
+---
+
+### 4. **Delete Backup Host Pool**
+
+This endpoint deletes an existing backup host pool.
+
+**DELETE /api/backup/host-pools/{pool_id}**
+
+#### Request:
+No request body is needed. Just use the pool ID in the URL.
+
+Example URL:  
+`DELETE /api/backup/host-pools/abc123`
+
+#### Response:
+```json
+{
+  "status": "success",
+  "message": "Backup host pool deleted successfully."
+}
+```
+
+---
+
+### 5. **Add Host to Backup Host Pool**
+
+This endpoint adds a new host to an existing backup host pool.
+
+**POST /api/backup/host-pools/{pool_id}/hosts**
+
+#### Request:
+```json
+{
+  "host_name": "host03-west-region",
+  "ip_address": "192.168.1.12",
+  "os_type": "Linux",
+  "cpu_cores": 8,
+  "memory_gb": 32,
+  "disk_size_gb": 500,
+  "status": "active"
+}
+```
+
+#### Response:
+```json
+{
+  "status": "success",
+  "message": "Host added to backup pool successfully.",
+  "data": {
+    "host_id": "host03-west-region",
+    "host_name": "host03-west-region",
+    "ip_address": "192.168.1.12",
+    "os_type": "Linux",
+    "cpu_cores": 8,
+    "memory_gb": 32,
+    "disk_size_gb": 500,
+    "status": "active",
+    "pool_id": "abc123"
+  }
+}
+```
+
+---
+
+### 6. **Read Hosts in a Backup Host Pool**
+
+This endpoint retrieves the list of hosts currently part of a specific backup host pool.
+
+**GET /api/backup/host-pools/{pool_id}/hosts**
+
+#### Request:
+No request body is needed. Just use the pool ID in the URL.
+
+Example URL:  
+`GET /api/backup/host-pools/abc123/hosts`
+
+#### Response:
+```json
+{
+  "status": "success",
+  "data": {
+    "pool_id": "abc123",
+    "hosts": [
+      {
+        "host_id": "host01-west-region",
+        "host_name": "host01-west-region",
+        "ip_address": "192.168.1.10",
+        "status": "active"
+      },
+      {
+        "host_id": "host02-west-region",
+        "host_name": "host02-west-region",
+        "ip_address": "192.168.1.11",
+        "status": "inactive"
+      },
+      {
+        "host_id": "host03-west-region",
+        "host_name": "host03-west-region",
+        "ip_address": "192.168.1.12",
+        "status": "active"
+      }
+    ]
+  }
+}
+```
+
+---
+
+### 7. **Delete Host from Backup Host Pool**
+
+This endpoint deletes a specific host from the backup host pool.
+
+**DELETE /api/backup/host-pools/{pool_id}/hosts/{host_id}**
+
+#### Request:
+No request body is needed. Just use the pool ID and host ID in the URL.
+
+Example URL:  
+`DELETE /api/backup/host-pools/abc123/hosts/host01-west-region`
+
+#### Response:
+```json
+{
+  "status": "success",
+  "message": "Host removed from backup pool successfully."
+}
+```
+
+---
+
+### Summary of CRUD Operations with Request and Response (Including Hosts)
+
+| Operation                          | Method   | Endpoint                                      | Request Example (Body)                                           | Response Example (Body)                                                                                                                                 |
+|------------------------------------|----------|-----------------------------------------------|------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Create Backup Host Pool**        | `POST`   | `/api/backup/host-pools`                     | `{"pool_name": "nas-backup-pool-1", "region": "us-west", "max_hosts": 5, "enabled": true}`  | `{"status": "success", "message": "Backup host pool created successfully.", "data": { "pool_id": "abc123" }}`                                        |
+| **Read Backup Host Pool**          | `GET`    | `/api/backup/host-pools/{pool_id}`           | No body, use URL like `/api/backup/host-pools/abc123`             | `{"status": "success", "data": {"pool_id": "abc123", "pool_name": "nas-backup-pool-1", "hosts": [...]}}`                                               |
+| **Update Backup Host Pool**        | `PUT`    | `/api/backup/host-pools/{pool_id}`           | `{"pool_name": "nas-backup-pool-2", "region": "us-east", "max_hosts": 10, "enabled": false}`  | `{"status": "success", "message": "Backup host pool updated successfully.", "data": { "pool_id": "abc123" }}`                                       |
+| **Delete Backup Host Pool**        | `DELETE` | `/api/backup/host-pools/{pool_id}`           | No body, use URL like `/api/backup/host-pools/abc123`             | `{"status": "success", "message": "Backup host pool deleted successfully."}`                                                                          |
+| **Add Host to Backup Pool**        | `POST`   | `/api/backup/host-pools/{pool_id}/hosts`     | `{"host_name": "host03-west-region", "ip_address": "192.168.1.12", "os_type": "Linux", "cpu_cores": 8, "memory_gb": 32}`   | `{"status": "success", "message": "Host added to backup pool successfully.", "data": { "host_id": "host03-west-region", "pool_id": "abc123" }}`     |
+| **Read Hosts in Backup Pool**      | `GET`    | `/api/backup/host-pools/{pool_id}/hosts`     | No body, use URL like `/api/backup/host-pools/abc123/hosts`       | `{"status": "success", "data": {"pool_id": "abc123", "hosts":

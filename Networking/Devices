@@ -1,0 +1,36 @@
+Sure! Here’s a concise overview of **Router** and **Switch**:
+
+---
+
+### **Router**
+- **Function**: A router connects different networks (e.g., LAN to WAN or between different subnets) and directs data packets between them based on **IP addresses**.
+  
+- **Key Features**:
+  - **Packet Routing**: Routes traffic based on **IP addresses** to different networks.
+  - **NAT (Network Address Translation)**: Allows multiple devices within a private network to share a single public IP address.
+  - **Security Features**: Includes firewall capabilities, VPN support, and traffic filtering.
+  - **Protocols Supported**: Can support **IPv4** and **IPv6**.
+  - **Advanced Routing**: Can perform **dynamic routing** using protocols like **OSPF**, **BGP**, and **EIGRP** for more efficient routing decisions.
+
+- **Example Use Case**: Connecting a home or corporate network to the Internet.
+
+---
+
+### **Switch**
+- **Function**: A switch is used to connect multiple devices within the same **local area network (LAN)** and forwards data based on **MAC addresses** at the **data link layer (Layer 2)** of the OSI model.
+
+- **Key Features**:
+  - **MAC Address Learning**: Switch learns MAC addresses and maintains a table to forward frames efficiently.
+  - **Full-Duplex Communication**: Can send and receive data simultaneously, improving network speed.
+  - **VLAN Support**: Can create **Virtual LANs (VLANs)** for network segmentation and security.
+  - **Layer 2 Device**: Operates within a single network and doesn't route between different networks.
+  - **Broadcast Domain**: Reduces collisions by segmenting the network into smaller collision domains.
+
+- **Example Use Case**: Connecting computers, printers, and other devices in a local office network.
+
+---
+
+### **Key Differences**:
+- **Router**: Operates at Layer 3 (Network Layer) and routes data between different networks (e.g., from LAN to the Internet).
+- **Switch**: Operates at Layer 2 (Data Link Layer) and forwards data within a local network based on MAC addresses.
+

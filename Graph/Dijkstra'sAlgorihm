@@ -1,0 +1,47 @@
+https://www.geeksforgeeks.org/problems/implementing-dijkstra-set-1-adjacency-matrix/1
+
+The code you provided implements **Dijkstra's Algorithm** to find the shortest distance of all vertices from a given source vertex `src` in a weighted graph.
+
+### Approach Explanation:
+1. **Initialization**:
+   - The distances to all vertices are initialized to infinity (`Integer.MAX_VALUE`), except for the source vertex which is initialized to 0.
+   - A priority queue (min-heap) is used to process the vertex with the smallest tentative distance.
+   
+2. **Processing**:
+   - The source vertex is added to the priority queue with a distance of 0.
+   - The algorithm extracts the vertex with the minimum distance from the queue, updates the tentative distances to its neighbors, and adds the neighbors back to the queue if their distance is updated (relaxation).
+
+3. **Relaxation**:
+   - For each adjacent node `adjNode`, if the current path to `adjNode` through the current node is shorter than the previously known distance, the distance is updated, and the node is reinserted into the priority queue with the updated distance.
+
+4. **Result**:
+   - Once all vertices have been processed, the `distance[]` array contains the shortest path distances from the source to all other vertices. The result is returned as an `ArrayList`.
+
+### Time Complexity:
+- **Time Complexity**: \( O((V + E) \log V) \)
+   - \( V \) is the number of vertices.
+   - \( E \) is the number of edges.
+   - The priority queue operations (`add`, `poll`) take \( O(\log V) \) time.
+   - Each edge is processed once, leading to a time complexity of \( O(E \log V) \).
+   - The initialization of the distance array takes \( O(V) \), and the loop over all edges adds an additional \( O(E) \).
+
+- **Space Complexity**: \( O(V + E) \)
+   - The `distance[]` array takes \( O(V) \) space.
+   - The priority queue and adjacency list combined take \( O(V + E) \) space.
+
+### Key Points:
+- This algorithm assumes that all edge weights are **non-negative**.
+- It uses a **priority queue (min-heap)** to efficiently extract the node with the smallest tentative distance.
+- This approach ensures that the algorithm processes nodes in increasing order of their shortest path distance, leading to the correct shortest paths for all vertices.
+
+### Example:
+If we have an adjacency list `adj` representing the graph and a source vertex `src`, the algorithm will return an `ArrayList<Integer>` containing the shortest path distances from `src` to all other nodes.
+
+For a graph with 5 vertices, the adjacency list could look like:
+
+```java
+ArrayList<ArrayList<iPair>> adj = new ArrayList<>();
+// Initialize adj with edges (e.g., adj.add(new ArrayList<iPair>())).
+```
+
+After running the `dijkstra` function, it will return the shortest path distances from the source vertex to all others.

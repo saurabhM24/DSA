@@ -1,0 +1,149 @@
+In Spring Boot, **AOP (Aspect-Oriented Programming)** is a powerful mechanism that allows you to modularize cross-cutting concerns like logging, transaction management, security, and performance monitoring. Spring AOP is implemented using the **Proxy Design Pattern** and works primarily by weaving aspects (such as methods or behaviors) into your application code at runtime.
+
+Here's a detailed explanation of how AOP works internally in Spring Boot:
+
+### 1. **What is AOP in Spring?**
+AOP allows you to separate cross-cutting concerns (concerns that affect multiple classes) from the main business logic. The main components of AOP are:
+
+- **Aspect**: A module that encapsulates cross-cutting concerns (e.g., logging, security, transaction management). An aspect is defined using `@Aspect` annotation.
+- **Join Point**: A point during the execution of a program where an aspect can be applied. In Spring AOP, join points are typically method executions.
+- **Advice**: The code to be executed at a specific join point. Common advice types include `@Before`, `@After`, `@Around`, `@AfterReturning`, and `@AfterThrowing`.
+- **Pointcut**: A predicate that specifies where an advice should be applied (i.e., it defines the conditions on which methods the advice should be applied).
+- **Target Object**: The object being proxied by AOP (the object on which the aspect is applied).
+- **Proxy**: An object created by AOP to "intercept" method calls on the target object. It adds additional behavior before, after, or around the target method execution.
+
+### 2. **How Does AOP Work Internally in Spring?**
+
+Spring AOP is based on **dynamic proxies** and uses the **Proxy Design Pattern** to wrap your beans with additional behavior at runtime. Here's a breakdown of how Spring implements AOP:
+
+#### 2.1. **Creating Proxies**
+
+- **Proxy Creation**: When you define an aspect and apply it to a bean method, Spring generates a proxy for that bean. This proxy intercepts method calls on the bean and adds the behavior defined in the aspect (e.g., logging, security checks) before or after the actual method execution.
+  - **JDK Dynamic Proxy**: If the target bean implements interfaces, Spring will create a JDK dynamic proxy, which is based on the interfaces the bean implements. The proxy will delegate method calls to the target object and execute the corresponding advice (e.g., before or after the method execution).
+  - **CGLIB Proxy**: If the bean does not implement interfaces, Spring will use CGLIB (Code Generation Library) to create a proxy that extends the target class and overrides its methods. This is done at runtime, and the proxy behaves like the original class but with added aspects.
+
+- **Aspect Weaving**: The aspects are applied during runtime (when the application is running) using the proxy mechanism. Spring's AOP framework uses an **aspect weaver** to weave aspects into the target objects. This weaving happens at the method execution join points specified by the pointcuts.
+
+#### 2.2. **Proxy Intercepting Method Calls**
+
+When a method on a proxy is called:
+- The **proxy object** intercepts the method call.
+- Depending on the type of advice (`@Before`, `@After`, `@Around`), the proxy either:
+  - Runs **before** the actual method (in case of `@Before` advice),
+  - Runs **after** the actual method (in case of `@After` advice),
+  - Runs **around** the method (in case of `@Around` advice), where it can even choose to not call the target method at all or execute it multiple times.
+
+For **`@Around` advice**, the aspect is responsible for invoking the target method and deciding whether to proceed or handle the execution differently.
+
+#### 2.3. **Applying Pointcuts**
+
+- **Pointcuts** define the conditions when the advice should be applied. The pointcut expression is used to specify the method signatures or specific join points that match the conditions.
+- You define pointcuts in a method using the `@Pointcut` annotation or inline within the advice annotations.
+
+#### 2.4. **AspectJ vs Spring AOP**
+
+- **Spring AOP**: By default, Spring AOP works only with method execution join points, and it's typically limited to **proxy-based** AOP. It uses either JDK dynamic proxies (when interfaces are involved) or CGLIB proxies (for non-interface-based beans).
+  
+- **AspectJ**: If you need more advanced AOP features (like field injection or constructor join points), you can use **AspectJ**, which provides **compile-time weaving** and **load-time weaving**. Spring Boot integrates AspectJ, but it requires an extra dependency (`spring-boot-starter-aspectj`).
+
+### 3. **An Example of AOP in Spring Boot**
+
+Here's a simple example to demonstrate how Spring Boot handles AOP:
+
+#### 3.1. **Defining an Aspect**
+
+```java
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.springframework.stereotype.Component;
+
+@Aspect
+@Component
+public class LoggingAspect {
+
+    // This advice runs before the method execution
+    @Before("execution(* com.example.demo.service.*.*(..))")  // Pointcut expression
+    public void logBefore() {
+        System.out.println("Executing method before actual method execution");
+    }
+}
+```
+
+- **@Aspect**: This annotation marks the class as an aspect.
+- **@Before**: This defines a "before" advice, which means the method in this advice will be executed before the target method is called.
+- **Pointcut Expression**: The pointcut expression `"execution(* com.example.demo.service.*.*(..))"` means the advice should run before any method in the `com.example.demo.service` package.
+
+#### 3.2. **Target Service Class**
+
+```java
+import org.springframework.stereotype.Service;
+
+@Service
+public class MyService {
+
+    public void performTask() {
+        System.out.println("Performing task");
+    }
+}
+```
+
+#### 3.3. **Spring Boot Application**
+
+```java
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class AopApplication implements CommandLineRunner {
+
+    @Autowired
+    private MyService myService;
+
+    public static void main(String[] args) {
+        SpringApplication.run(AopApplication.class, args);
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+        myService.performTask();
+    }
+}
+```
+
+### 4. **How AOP is Applied**
+
+When you run the Spring Boot application:
+- The `LoggingAspect` will intercept the method call to `myService.performTask()`.
+- The **before advice** (from `@Before`) will be executed before the `performTask()` method in the `MyService` class is called.
+- The output will be:
+  ```
+  Executing method before actual method execution
+  Performing task
+  ```
+
+### 5. **AOP Proxy Creation Process**
+
+Internally, the process works as follows:
+1. **Bean Creation**: Spring Boot creates the bean (`MyService` in this case).
+2. **Proxy Creation**: Spring creates a proxy for the `MyService` bean since it has an aspect applied. This proxy will intercept method calls.
+3. **Method Interception**: When you invoke `performTask()`, the proxy intercepts the call and applies the `@Before` advice, which executes the `logBefore()` method.
+4. **Target Method Execution**: After executing the advice, the proxy delegates the call to the original `performTask()` method.
+
+### 6. **What Happens Behind the Scenes**
+
+- **Spring AOP uses proxies**: When you use AOP in Spring Boot, methods are executed via a proxy. The proxy intercepts method calls and weaves in the defined advice (before, after, or around the target method).
+- **Dynamic Proxy**: If the target class implements an interface, Spring uses a JDK dynamic proxy (interface-based proxy).
+- **CGLIB Proxy**: If the target class does not implement any interfaces, Spring creates a proxy using CGLIB (class-based proxy).
+
+### 7. **Key Points**
+- **AOP is based on proxies**: Spring creates a proxy around the target object to apply cross-cutting concerns.
+- **Spring uses AspectJ expressions**: You can define aspects and pointcuts using AspectJ-style expressions, which Spring will use to apply the advice.
+- **Advice Types**: The most common types of advice are `@Before`, `@After`, `@AfterReturning`, `@AfterThrowing`, and `@Around`.
+
+### Conclusion
+
+- **Spring AOP** works by creating proxies around beans, which intercept method calls and apply the behavior defined by aspects (advice).
+- It leverages **dynamic proxies** (JDK or CGLIB) to apply these aspects.
+- The `@Aspect` annotation and **pointcut expressions** are key to defining and applying cross-cutting concerns in a Spring application.

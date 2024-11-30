@@ -1,0 +1,27 @@
+https://leetcode.com/problems/number-of-substrings-containing-all-three-characters/
+
+The approach to solving the **Number of Substrings Containing All Three Characters** problem can be summarized as:
+
+1. **Track Last Seen Indices**:
+   - Use an array `lastSeen` of size 3 to store the most recent indices of the characters `'a'`, `'b'`, and `'c'` in the string.
+
+2. **Sliding Window**:
+   - Iterate through the string and update the `lastSeen` array for the current character.
+
+3. **Check Valid Substrings**:
+   - For each index, if all three characters have been encountered (`lastSeen[0]`, `lastSeen[1]`, and `lastSeen[2]` are not `-1`), calculate the number of valid substrings ending at the current position.
+   - The number of valid substrings is determined by the minimum of the indices in `lastSeen` (since the substring must include the earliest of `'a'`, `'b'`, or `'c'`).
+
+4. **Count Valid Substrings**:
+   - Add the count of valid substrings to the total (`cnt`).
+
+5. **Return Total Count**:
+   - After processing the string, return `cnt` as the result.
+
+---
+
+### Complexity:
+- **Time Complexity**: \(O(n)\), as the string is traversed once.
+- **Space Complexity**: \(O(1)\), as only a constant-sized array is used.
+
+This approach efficiently calculates the number of substrings containing all three characters using sliding window and index tracking.

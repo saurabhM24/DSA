@@ -1,2 +1,4 @@
 https://leetcode.com/problems/count-number-of-nice-subarrays/description/
 
+This problem is similar to NoOfBinarySubarraysWithSum.
+Just convert the input array into, binary array by writing odd nums as 1 and even as 0.

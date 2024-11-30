@@ -1,0 +1,38 @@
+https://leetcode.com/problems/search-in-rotated-sorted-array-ii/
+NOTE: This is similar to search in rotated sorted array but with duplicates. Because of it, there can be a situation where 
+l , mid, h are same elements.
+
+
+The approach to solving the **Search in Rotated Sorted Array II** problem can be summarized as follows:
+
+---
+
+### Key Steps:
+
+1. **Binary Search with Adjustments**:
+   - Use a standard binary search approach but account for duplicates and the rotated nature of the array.
+
+2. **Handle Duplicates**:
+   - If the values at `nums[l]`, `nums[mid]`, and `nums[r]` are equal, increment `l` and decrement `r` to skip duplicates, as they make it ambiguous to decide the sorted part.
+
+3. **Identify the Sorted Half**:
+   - Check if the left half is sorted by comparing `nums[l] <= nums[mid]`.
+   - Otherwise, the right half must be sorted.
+
+4. **Target Search in Sorted Half**:
+   - If the target lies in the sorted half:
+     - Narrow the search to that half by updating `l` or `r`.
+   - Otherwise, search in the unsorted half.
+
+5. **Return Result**:
+   - If the loop exits without finding the target, return `false`.
+
+---
+
+### Complexity:
+- **Time Complexity**: Worst case \(O(n)\) due to duplicates, but typically \(O(\log n)\) in non-duplicate scenarios.
+- **Space Complexity**: \(O(1)\), as it operates in place.
+
+---
+
+This approach ensures the array's rotated and duplicate characteristics are handled efficiently, leveraging binary search principles.

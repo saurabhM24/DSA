@@ -1,0 +1,28 @@
+https://leetcode.com/problems/sliding-window-maximum/
+
+The approach for solving the **Sliding Window Maximum** problem can be summarized in a few key steps:
+
+1. **Use a Linked List (Deque-like Behavior)**:
+   - Maintain a list to store elements in decreasing order within the current sliding window.
+   - Remove smaller elements from the list's end before adding the current element (`nums[j]`) since they are no longer useful as they can't be the maximum.
+
+2. **Sliding Window Handling**:
+   - Keep adding elements into the window until its size reaches `k`.
+   - When the window size equals `k`, the maximum element (first element of the list) is added to the result.
+
+3. **Shrink the Window**:
+   - If the first element of the list is the one that’s sliding out (`nums[i]`), remove it from the list.
+
+4. **Repeat Until All Windows Are Processed**:
+   - Continue moving the window forward until the end of the array is reached.
+
+5. **Prepare the Result**:
+   - Convert the resulting list of maximums into an integer array for the final output.
+
+---
+
+### Complexity Analysis:
+- **Time Complexity**: \(O(n)\), since each element is added and removed from the list at most once.
+- **Space Complexity**: \(O(k)\), for storing at most \(k\) elements in the list at any time.
+
+This efficient approach avoids recalculating maximums from scratch for overlapping windows, leveraging the decreasing-order property of the list.

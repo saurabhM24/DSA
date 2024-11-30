@@ -1,0 +1,33 @@
+https://leetcode.com/problems/single-element-in-a-sorted-array/
+
+### Approach:
+
+1. **Binary Search on Pairs**:
+   - The problem relies on the property that all elements appear twice, except for one. Pairs of identical elements appear consecutively in the array.
+
+2. **Check Edge Cases**:
+   - If the array length is 1, return the only element.
+   - Check if the unique element is at the start or end of the array.
+
+3. **Binary Search**:
+   - Use binary search to find the unique element.
+   - For a given `mid`:
+     - If `nums[mid]` is not equal to its neighbors (`nums[mid-1]` and `nums[mid+1]`), it is the unique element.
+     - Otherwise, decide whether to move left or right:
+       - If `mid` is odd:
+         - `nums[mid] == nums[mid-1]`: Move right (`l = mid + 1`).
+         - Otherwise, move left (`r = mid - 1`).
+       - If `mid` is even:
+         - `nums[mid] == nums[mid+1]`: Move right (`l = mid + 1`).
+         - Otherwise, move left (`r = mid - 1`).
+
+4. **Return the Unique Element**:
+   - The binary search narrows down to the unique element, which is then returned.
+
+---
+
+### Complexity:
+- **Time Complexity**: \(O(\log n)\) (binary search).
+- **Space Complexity**: \(O(1)\) (in-place operations). 
+
+This approach efficiently finds the single non-duplicate element by leveraging the sorted nature of the array.

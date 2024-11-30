@@ -1,0 +1,5 @@
+https://leetcode.com/problems/subarray-sum-equals-k/
+
+This is actually solved using prefix sum instead of sliding window.
+Sliding window approach works only in case of positive integers.
+In case of -ve integers prefix sum apprach works

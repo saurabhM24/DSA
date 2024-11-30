@@ -1,0 +1,6 @@
+https://leetcode.com/problems/subarrays-with-k-different-integers/description/
+
+The approach is kind of same as no. of binaray sub arrays with sum.
+Instead of sum, calculate unique/different integers.
+Find out the no. of sub arrays with <= k unique intergers and <=k-1
+Then sub tract k num arrys from k-1 num arrays.

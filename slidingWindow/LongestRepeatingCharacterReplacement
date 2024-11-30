@@ -1,0 +1,31 @@
+https://leetcode.com/problems/longest-repeating-character-replacement/description/
+
+The approach to solving **Longest Repeating Character Replacement** can be summarized in the following steps:
+
+1. **Sliding Window**:
+   - Use two pointers, `i` (start of the window) and `j` (end of the window), to maintain a sliding window.
+
+2. **Track Character Frequencies**:
+   - Maintain a frequency array (`hash`) to count occurrences of each character in the current window.
+   - Track the `maxFreq`, which represents the most frequent character in the window.
+
+3. **Calculate Number of Changes**:
+   - Calculate `numChanges` as `(j - i + 1) - maxFreq`. This represents how many characters need to be changed to make all characters in the window the same.
+
+4. **Adjust the Window**:
+   - If `numChanges > k` (i.e., the allowed number of replacements is exceeded), shrink the window from the left (`i++`) and update the frequency array.
+
+5. **Update the Result**:
+   - Update `maxLen` to store the maximum length of a valid window (where `numChanges ≤ k`).
+
+6. **Return the Maximum Length**:
+   - Once the loop completes, `maxLen` contains the length of the longest substring where up to `k` changes are allowed.
+
+---
+
+### Optimized Notes:
+- **Recomputing `maxFreq` in the inner loop** is unnecessary since the window only changes slightly. You can track it dynamically for better performance.
+
+### Complexity:
+- **Time Complexity**: \(O(n)\), since each character is processed at most twice (once when expanding and once when contracting the window).
+- **Space Complexity**: \(O(1)\), as the frequency array is fixed at size 26.

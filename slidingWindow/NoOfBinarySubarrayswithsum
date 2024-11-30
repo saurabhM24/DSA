@@ -1,4 +1,5 @@
 https://leetcode.com/problems/binary-subarrays-with-sum/description/
+Note: This can be actually besolved using prefix sum and hash map as well. This problem is similar to count the number of arrays with sum k;
 
 Your implementation of counting binary subarrays with a specific sum using the two-pointer technique is efficient. Here's a brief explanation of how it works:
 

@@ -1,0 +1,26 @@
+https://leetcode.com/problems/maximum-points-you-can-obtain-from-cards/
+
+The approach for solving the **Maximum Score from Cards** problem can be summarized as follows:
+
+1. **Initial Left Window Sum**:
+   - Calculate the sum of the first `k` cards (`lsum`). This represents the sum if all `k` cards are taken from the beginning.
+
+2. **Sliding Window from Both Ends**:
+   - Gradually replace one card from the left window with one card from the right end:
+     - Subtract the card being removed (`cardPoints[i]`) from the left sum.
+     - Add the card being included from the right (`cardPoints[rindex]`).
+   - Track the maximum score during this process.
+
+3. **Iterate for `k` Swaps**:
+   - Move the left window inward and the right window outward until you've swapped `k` cards.
+
+4. **Return the Maximum**:
+   - Return the highest sum encountered during the sliding window process.
+
+---
+
+### Complexity Analysis:
+- **Time Complexity**: \(O(k)\), since you iterate over `k` cards to calculate sums.
+- **Space Complexity**: \(O(1)\), as only a few variables are used.
+
+This approach efficiently balances selecting cards from both ends by leveraging a sliding window and tracking the maximum score dynamically.

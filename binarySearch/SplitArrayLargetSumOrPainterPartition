@@ -1,5 +1,7 @@
 https://leetcode.com/problems/split-array-largest-sum/description/
 
+NOTE: Book allocation problem can be solved with the same approach
+
 Find the bounds:
 max (the largest element) will be the minimum possible sum for any subarray.
 sum (the total sum of the array) will be the maximum possible sum for any subarray.

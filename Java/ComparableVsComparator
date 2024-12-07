@@ -1,0 +1,158 @@
+### **`Comparable` vs `Comparator` in Java**
+
+Both `Comparable` and `Comparator` are interfaces in Java used to compare objects. They differ in their approach and use cases. Here's a detailed comparison:
+
+---
+
+### **1. `Comparable`**
+
+#### **Definition**:
+- A `Comparable` is used to define the natural ordering of objects of a class.
+- The class itself implements the `Comparable` interface.
+
+#### **Key Features**:
+- Found in the `java.lang` package.
+- Has a single method:
+  ```java
+  int compareTo(T o);
+  ```
+  - Returns:
+    - A negative number if the current object is less than `o`.
+    - Zero if they are equal.
+    - A positive number if the current object is greater than `o`.
+
+#### **When to Use**:
+- Use `Comparable` when the class has a natural ordering (e.g., sorting numbers in ascending order, strings alphabetically).
+
+#### **Implementation**:
+- The logic for comparison is written in the class itself.
+- All objects of the class will be sorted in this single defined way.
+
+#### **Example**:
+```java
+public class Student implements Comparable<Student> {
+    private String name;
+    private int age;
+
+    public Student(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    @Override
+    public int compareTo(Student other) {
+        return Integer.compare(this.age, other.age); // Sort by age
+    }
+
+    @Override
+    public String toString() {
+        return "Student{name='" + name + "', age=" + age + "}";
+    }
+}
+
+// Usage
+List<Student> students = new ArrayList<>();
+students.add(new Student("Alice", 25));
+students.add(new Student("Bob", 22));
+Collections.sort(students);
+System.out.println(students); // Sorted by age
+```
+
+---
+
+### **2. `Comparator`**
+
+#### **Definition**:
+- A `Comparator` is used to define custom orderings for objects that may not have a natural ordering or need multiple sorting criteria.
+
+#### **Key Features**:
+- Found in the `java.util` package.
+- Has a single method (functional interface in Java 8+):
+  ```java
+  int compare(T o1, T o2);
+  ```
+  - Returns:
+    - A negative number if `o1` is less than `o2`.
+    - Zero if they are equal.
+    - A positive number if `o1` is greater than `o2`.
+
+#### **When to Use**:
+- Use `Comparator` when you need to sort objects in multiple ways or when the class does not implement `Comparable`.
+
+#### **Implementation**:
+- The logic for comparison is written in a separate class or using lambda expressions.
+
+#### **Example**:
+```java
+import java.util.*;
+
+public class Student {
+    private String name;
+    private int age;
+
+    public Student(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    @Override
+    public String toString() {
+        return "Student{name='" + name + "', age=" + age + "}";
+    }
+}
+
+// Custom Comparator for sorting by name
+class NameComparator implements Comparator<Student> {
+    @Override
+    public int compare(Student s1, Student s2) {
+        return s1.getName().compareTo(s2.getName());
+    }
+}
+
+// Usage
+List<Student> students = new ArrayList<>();
+students.add(new Student("Alice", 25));
+students.add(new Student("Bob", 22));
+
+// Sort by name using Comparator
+Collections.sort(students, new NameComparator());
+System.out.println(students);
+
+// Sort by age using lambda expression
+students.sort((s1, s2) -> Integer.compare(s1.getAge(), s2.getAge()));
+System.out.println(students);
+```
+
+---
+
+### **Key Differences**
+
+| **Feature**             | **Comparable**                                     | **Comparator**                                   |
+|--------------------------|---------------------------------------------------|-------------------------------------------------|
+| **Location of Logic**    | Implemented in the class being compared.          | Implemented in a separate class or lambda.      |
+| **Method to Override**   | `compareTo(T o)`                                  | `compare(T o1, T o2)`                           |
+| **Number of Sort Orders**| Defines a single natural ordering.                | Can define multiple custom orderings.           |
+| **Usage**                | Use for natural ordering of a class.              | Use for multiple or custom orderings.           |
+| **Package**              | `java.lang`                                       | `java.util`                                     |
+| **Modification**         | Requires modifying the class to add or change logic.| No modification needed; create a new comparator.|
+
+---
+
+### **Summary**
+- Use **`Comparable`** when:
+  - The object has one "natural" way of being sorted.
+  - Sorting logic is tightly bound to the class.
+
+- Use **`Comparator`** when:
+  - The class should support multiple sorting strategies.
+  - Sorting logic needs to be external or changeable without modifying the class.
+
+Would you like to see examples combining both `Comparable` and `Comparator` for advanced use cases?

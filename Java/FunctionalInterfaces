@@ -1,0 +1,157 @@
+Java 8 introduced **functional interfaces** as part of the `java.util.function` package to enable functional programming. These interfaces have a single abstract method (SAM) and can be used as lambda expressions, method references, or anonymous inner classes.
+
+---
+
+### **Key Functional Interfaces in Java 8**
+
+#### 1. **`Predicate<T>`**
+- Represents a condition or a boolean-valued function.
+- Method:
+  ```java
+  boolean test(T t);
+  ```
+- Use case: Filtering collections based on conditions.
+- Example:
+  ```java
+  Predicate<Integer> isEven = x -> x % 2 == 0;
+  System.out.println(isEven.test(4)); // true
+  ```
+
+#### 2. **`Function<T, R>`**
+- Represents a function that takes an input of type `T` and produces a result of type `R`.
+- Method:
+  ```java
+  R apply(T t);
+  ```
+- Use case: Transforming or mapping data.
+- Example:
+  ```java
+  Function<String, Integer> lengthFunction = String::length;
+  System.out.println(lengthFunction.apply("Hello")); // 5
+  ```
+
+#### 3. **`Consumer<T>`**
+- Represents an operation that accepts a single input and returns no result (void).
+- Method:
+  ```java
+  void accept(T t);
+  ```
+- Use case: Performing operations like printing or logging.
+- Example:
+  ```java
+  Consumer<String> print = System.out::println;
+  print.accept("Hello, World!"); // Hello, World!
+  ```
+
+#### 4. **`Supplier<T>`**
+- Represents a supplier of results, does not take any input.
+- Method:
+  ```java
+  T get();
+  ```
+- Use case: Lazy initialization or providing default values.
+- Example:
+  ```java
+  Supplier<String> supplier = () -> "Hello, Supplier!";
+  System.out.println(supplier.get()); // Hello, Supplier!
+  ```
+
+#### 5. **`BiPredicate<T, U>`**
+- Represents a condition that takes two arguments and returns a boolean.
+- Method:
+  ```java
+  boolean test(T t, U u);
+  ```
+- Use case: Comparing two values.
+- Example:
+  ```java
+  BiPredicate<Integer, Integer> isGreater = (x, y) -> x > y;
+  System.out.println(isGreater.test(5, 3)); // true
+  ```
+
+#### 6. **`BiFunction<T, U, R>`**
+- Represents a function that takes two arguments and produces a result.
+- Method:
+  ```java
+  R apply(T t, U u);
+  ```
+- Use case: Combining two inputs to produce a result.
+- Example:
+  ```java
+  BiFunction<Integer, Integer, Integer> add = (a, b) -> a + b;
+  System.out.println(add.apply(3, 4)); // 7
+  ```
+
+#### 7. **`BiConsumer<T, U>`**
+- Represents an operation that takes two arguments and returns no result.
+- Method:
+  ```java
+  void accept(T t, U u);
+  ```
+- Use case: Logging or processing two inputs.
+- Example:
+  ```java
+  BiConsumer<String, Integer> printDetails = (name, age) -> System.out.println(name + " is " + age);
+  printDetails.accept("Alice", 25); // Alice is 25
+  ```
+
+#### 8. **`UnaryOperator<T>`**
+- A `Function` specialization for a single argument of the same type for input and output.
+- Method:
+  ```java
+  T apply(T t);
+  ```
+- Use case: Applying transformations like incrementing numbers.
+- Example:
+  ```java
+  UnaryOperator<Integer> increment = x -> x + 1;
+  System.out.println(increment.apply(5)); // 6
+  ```
+
+#### 9. **`BinaryOperator<T>`**
+- A `BiFunction` specialization for two arguments of the same type and returning the same type.
+- Method:
+  ```java
+  T apply(T t1, T t2);
+  ```
+- Use case: Aggregating values like summing integers.
+- Example:
+  ```java
+  BinaryOperator<Integer> sum = (a, b) -> a + b;
+  System.out.println(sum.apply(3, 4)); // 7
+  ```
+
+---
+
+### **Other Functional Interfaces**
+
+#### 10. **`ToIntFunction<T>` / `ToLongFunction<T>` / `ToDoubleFunction<T>`**
+- Converts an object of type `T` to a primitive `int`, `long`, or `double`.
+
+#### 11. **`IntPredicate`, `LongPredicate`, `DoublePredicate`**
+- Predicate specializations for primitive types.
+
+#### 12. **`IntFunction<R>`, `LongFunction<R>`, `DoubleFunction<R>`**
+- Function specializations for primitives as input.
+
+#### 13. **`IntConsumer`, `LongConsumer`, `DoubleConsumer`**
+- Consumer specializations for primitive types.
+
+#### 14. **`IntSupplier`, `LongSupplier`, `DoubleSupplier`**
+- Supplier specializations for primitive results.
+
+---
+
+### **Custom Functional Interfaces**
+You can define your own functional interfaces using the `@FunctionalInterface` annotation:
+```java
+@FunctionalInterface
+public interface MyFunctionalInterface {
+    void execute(); // Single abstract method
+}
+```
+This ensures the interface has only one abstract method.
+
+---
+
+Would you like examples of chaining these interfaces using `andThen`, `compose`, or other utilities?

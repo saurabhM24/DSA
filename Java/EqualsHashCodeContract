@@ -1,0 +1,2 @@
+2 objects with equals content should have the same hashcode.
+2 Objects with same hashcode may or may not be equal. That is collision

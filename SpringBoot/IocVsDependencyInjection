@@ -1,0 +1,114 @@
+### **Inversion of Control (IoC) vs Dependency Injection (DI)**
+
+IoC and DI are closely related concepts in software design, often used in frameworks like Spring, but they address different aspects of control and dependency management.
+
+---
+
+### **1. Inversion of Control (IoC)**
+
+**Definition**:  
+IoC is a **design principle** where the control of creating and managing objects is **inverted** from the program (application code) to a framework or container.
+Instead of the application taking charge of instantiating classes or handling their dependencies, the IoC container takes care of it.
+
+---
+
+**How IoC Works**:
+- The **control flow** is managed by the container.
+- The application provides configuration or annotations, and the container ensures the proper objects are created and wired together.
+
+**Key Points**:
+- IoC is **a broad principle**, not a specific technique.
+- It’s implemented through various techniques, including **Dependency Injection**, **Event Listeners**, or **Service Locators**.
+
+**Example (IoC)**:
+In Spring, the IoC container (like `ApplicationContext`) manages bean creation:
+```java
+@Configuration
+public class AppConfig {
+    @Bean
+    public Service myService() {
+        return new ServiceImpl();
+    }
+}
+```
+The Spring IoC container:
+- Creates the bean (`myService`).
+- Handles the lifecycle.
+- Wires dependencies automatically.
+
+---
+
+### **2. Dependency Injection (DI)**
+
+**Definition**:  
+DI is a **specific implementation of IoC** where dependencies (collaborating objects) are provided to a class rather than being created by the class itself.
+
+---
+
+**How DI Works**:
+- Dependencies are "injected" by the container.
+- Injection can be done through:
+  - **Constructor Injection**
+  - **Setter Injection**
+  - **Field Injection**
+
+**Key Points**:
+- DI is a **technique** to achieve IoC.
+- Helps make code more modular, testable, and loosely coupled.
+
+**Example (DI)**:
+```java
+@Component
+public class MyService {
+    private final Dependency dependency;
+
+    // Constructor Injection
+    @Autowired
+    public MyService(Dependency dependency) {
+        this.dependency = dependency;
+    }
+}
+```
+Here:
+- The IoC container (Spring) injects the `Dependency` instance into `MyService` at runtime.
+
+---
+
+### **Key Differences Between IoC and DI**
+
+| **Aspect**           | **Inversion of Control (IoC)**                            | **Dependency Injection (DI)**                     |
+|-----------------------|----------------------------------------------------------|--------------------------------------------------|
+| **Definition**        | A principle to invert the control of object creation.    | A technique to implement IoC by injecting dependencies. |
+| **Scope**             | Broader design principle.                                | Specific mechanism to achieve IoC.               |
+| **Focus**             | Relinquishing control of flow to the framework/container.| Providing necessary dependencies to objects.     |
+| **Implementation**    | Achieved through DI, Service Locator, or Event Listeners.| Constructor, Setter, or Field Injection.         |
+| **Example Frameworks**| Spring, Guice, etc.                                      | Spring DI, Dagger, etc.                          |
+
+---
+
+### **How They Relate**
+- IoC is the **philosophy**: “Don’t call us; we’ll call you.”  
+  (The container/framework manages the control flow.)
+- DI is a **method** to implement IoC by providing external objects to a class that needs them.
+
+---
+
+### **Illustration: A Practical Analogy**
+
+1. **Without IoC/DI (Manual Wiring)**:
+   You (the developer) are responsible for wiring all components and their dependencies manually:
+   ```java
+   Dependency dependency = new Dependency();
+   MyService service = new MyService(dependency);
+   ```
+
+2. **With IoC and DI**:
+   The Spring container handles this for you:
+   ```java
+   ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+   MyService service = context.getBean(MyService.class);
+   ```
+
+Here, IoC is the **philosophy** (the container controls object creation), and DI is the **technique** used (injecting `Dependency` into `MyService`).
+
+Would you like to dive deeper into DI techniques or IoC patterns?

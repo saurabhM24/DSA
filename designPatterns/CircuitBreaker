@@ -1,0 +1,69 @@
+The **Circuit Breaker Pattern** is a design pattern used to handle fault tolerance in distributed systems by preventing repeated attempts to call a failing service. 
+The circuit breaker typically operates in three main states:
+
+---
+
+### **1. Closed State**
+- **Description**: The circuit breaker allows requests to flow through to the dependent service.
+- **Behavior**:
+  - If the service responds successfully, the circuit remains closed.
+  - If a certain threshold of failures is reached (e.g., consecutive failures or a failure rate over a percentage), the circuit breaker transitions to the **Open** state.
+- **Key Metrics**: Tracks failure count or failure rate.
+
+---
+
+### **2. Open State**
+- **Description**: The circuit breaker stops requests from being sent to the dependent service. Instead, it immediately returns an error or fallback response.
+- **Behavior**:
+  - The breaker enters this state after detecting a threshold of failures in the **Closed** state.
+  - Requests are blocked for a specific timeout period.
+  - After the timeout, the breaker transitions to the **Half-Open** state to test if the service has recovered.
+  
+---
+
+### **3. Half-Open State**
+- **Description**: The circuit breaker allows a limited number of requests to pass through to the dependent service to test if it has recovered.
+- **Behavior**:
+  - If the test requests succeed, the circuit transitions back to the **Closed** state.
+  - If the test requests fail, the circuit transitions back to the **Open** state.
+  
+---
+
+### **State Transition Diagram**
+1. **Closed → Open**: Triggered when the failure threshold is breached.
+2. **Open → Half-Open**: After a timeout period.
+3. **Half-Open → Closed**: Triggered if test requests succeed.
+4. **Half-Open → Open**: Triggered if test requests fail.
+
+---
+
+### **State Summary**
+
+| **State**       | **Requests Behavior**                         | **Transition**                                                        |
+|------------------|-----------------------------------------------|------------------------------------------------------------------------|
+| **Closed**       | All requests pass through to the service.     | Transitions to **Open** on failure threshold breach.                  |
+| **Open**         | Requests are blocked, and fallback is used.   | Transitions to **Half-Open** after a timeout period.                  |
+| **Half-Open**    | Limited test requests pass through.           | Transitions to **Closed** on success or back to **Open** on failure.  |
+
+---
+
+### **Example Use Case**
+Suppose a microservice calls a remote payment gateway:
+
+1. **Normal Operation (Closed)**:
+   - The payment gateway is healthy, and all requests are processed successfully.
+
+2. **Failure Detected (Open)**:
+   - The gateway starts failing. After reaching the failure threshold (e.g., 5 consecutive failures), the circuit breaker moves to the **Open** state and blocks further requests.
+
+3. **Recovery Check (Half-Open)**:
+   - After a timeout, a few requests are sent to the payment gateway. If they succeed, the breaker transitions to **Closed**; otherwise, it reopens.
+
+---
+
+### **Benefits of Circuit Breaker States**
+- **Closed**: Optimizes for normal operations by allowing uninterrupted service.
+- **Open**: Protects the system from cascading failures by preventing further load on a failing service.
+- **Half-Open**: Ensures service recovery is gracefully detected.
+
+Would you like an example of how to implement this in Java with libraries like **Resilience4j**?

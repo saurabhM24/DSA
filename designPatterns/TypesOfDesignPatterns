@@ -1,0 +1,131 @@
+Here’s a categorized summary of **design patterns** for your notes:
+
+---
+
+## **Types of Design Patterns**
+Design patterns are broadly classified into three main categories: **Creational**, **Structural**, and **Behavioral**.
+
+---
+
+### **1. Creational Design Patterns**
+These patterns deal with object creation mechanisms, aiming to create objects in a way that suits the situation while hiding the instantiation logic.
+
+#### Patterns:
+1. **Singleton**  
+   Ensures a class has only one instance and provides a global point of access.  
+   Example: Database connection pool.
+   
+2. **Factory Method**  
+   Defines an interface for creating objects but lets subclasses alter the type of objects created.  
+   Example: Shape factory in a graphics application.
+
+3. **Abstract Factory**  
+   Provides an interface for creating families of related or dependent objects without specifying their concrete classes.  
+   Example: GUI toolkit for Windows and macOS.
+
+4. **Builder**  
+   Separates the construction of a complex object from its representation, allowing the same construction process to create different representations.  
+   Example: Building a car with various configurations.
+
+5. **Prototype**  
+   Creates a new object by copying an existing object (clone).  
+   Example: Duplicating objects in a game world.
+
+---
+
+### **2. Structural Design Patterns**
+These patterns focus on the composition of classes or objects to form larger structures while keeping flexibility and efficiency in mind.
+
+#### Patterns:
+1. **Adapter**  
+   Converts the interface of a class into another interface the client expects.  
+   Example: Power adapter converting different plug types.
+
+2. **Bridge**  
+   Separates an abstraction from its implementation so they can vary independently.  
+   Example: Different drawing APIs for different devices.
+
+3. **Composite**  
+   Composes objects into tree structures to represent part-whole hierarchies, allowing clients to treat individual objects and compositions uniformly.  
+   Example: File system (folders and files).
+
+4. **Decorator**  
+   Dynamically adds responsibilities to an object without modifying its structure.  
+   Example: Adding scrollbars or borders to a window.
+
+5. **Facade**  
+   Provides a simplified interface to a larger subsystem.  
+   Example: JDBC simplifies database interaction.
+
+6. **Flyweight**  
+   Reduces memory usage by sharing common data between multiple objects.  
+   Example: Sharing character glyph data in a text editor.
+
+7. **Proxy**  
+   Provides a placeholder or surrogate to control access to another object.  
+   Example: Virtual proxies for loading large images lazily.
+
+---
+
+### **3. Behavioral Design Patterns**
+These patterns are concerned with communication between objects, making interactions flexible and reusable.
+
+#### Patterns:
+1. **Chain of Responsibility**  
+   Passes a request along a chain of handlers until one handles it.  
+   Example: Logging at different levels (INFO, DEBUG, ERROR).
+
+2. **Command**  
+   Encapsulates a request as an object, allowing parameterization and queuing of requests.  
+   Example: Undo/Redo operations in an editor.
+
+3. **Interpreter**  
+   Implements a specialized language to interpret statements within a defined grammar.  
+   Example: Regular expression engines.
+
+4. **Iterator**  
+   Provides a way to access elements of a collection sequentially without exposing its internal structure.  
+   Example: Iterating over a list or set.
+
+5. **Mediator**  
+   Centralizes communication between objects to reduce dependencies.  
+   Example: Chat room managing communication between users.
+
+6. **Memento**  
+   Captures and restores an object's internal state without violating encapsulation.  
+   Example: Saving and restoring game states.
+
+7. **Observer**  
+   Defines a one-to-many dependency so when one object changes state, its dependents are notified.  
+   Example: Event listeners in GUIs.
+
+8. **State**  
+   Allows an object to change its behavior when its internal state changes.  
+   Example: A traffic light system with states like green, yellow, red.
+
+9. **Strategy**  
+   Defines a family of algorithms, encapsulates them, and makes them interchangeable.  
+   Example: Sorting algorithms (QuickSort, MergeSort).
+
+10. **Template Method**  
+    Defines the skeleton of an algorithm and lets subclasses override steps without changing its structure.  
+    Example: Abstract class defining workflow steps in a manufacturing process.
+
+11. **Visitor**  
+    Represents an operation to be performed on elements of an object structure, allowing new operations without changing the structure.  
+    Example: Operations like calculating taxes on different product types.
+
+---
+
+### **Summary Table**
+
+| **Category**      | **Design Patterns**                                                                 |
+|--------------------|-------------------------------------------------------------------------------------|
+| **Creational**     | Singleton, Factory Method, Abstract Factory, Builder, Prototype                   |
+| **Structural**     | Adapter, Bridge, Composite, Decorator, Facade, Flyweight, Proxy                   |
+| **Behavioral**     | Chain of Responsibility, Command, Interpreter, Iterator, Mediator, Memento,       |
+|                    | Observer, State, Strategy, Template Method, Visitor                               |
+
+---
+
+Would you like examples for specific patterns, or should I explain where each pattern is commonly applied in real-world scenarios?

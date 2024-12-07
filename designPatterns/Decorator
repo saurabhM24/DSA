@@ -1,50 +1,49 @@
-Explanation:
-Component Interface: The Coffee interface defines the methods getDescription and cost.
+Here’s **Approach 2** (without using an abstract class) for your notes:
 
-Concrete Component: BasicCoffee implements the Coffee interface, providing the basic coffee functionality.
+---
 
-Decorator Abstract Class: CoffeeDecorator serves as a base class for all decorators, holding a reference to a Coffee object.
+### **Decorator Design Pattern Without Abstract Class**
 
-Concrete Decorators:
+This approach directly implements the `Coffee` interface in each decorator and uses composition to wrap the decorated object.
 
-MilkDecorator adds milk to the coffee and updates the description and cost accordingly.
-SugarDecorator adds sugar to the coffee in a similar manner.
-Example Usage: In the main method, we create a BasicCoffee object. We then decorate it with milk and sugar, demonstrating how we can dynamically add features and modify the behavior of the coffee object without changing its original code.
+---
 
-This design allows for flexible and reusable code, where new decorators can be added easily without altering existing implementations.
-
-// Component Interface
-interface Coffee {
+### **1. Component Interface**
+```java
+public interface Coffee {
     String getDescription();
-    double cost();
+    double getCost();
 }
+```
 
-// Concrete Component: Basic Coffee
-class BasicCoffee implements Coffee {
+---
+
+### **2. Concrete Component**
+```java
+public class SimpleCoffee implements Coffee {
     @Override
     public String getDescription() {
-        return "Basic Coffee";
+        return "Simple Coffee";
     }
 
     @Override
-    public double cost() {
-        return 2.00; // Base price
+    public double getCost() {
+        return 50.0;
     }
 }
+```
 
-// Decorator Abstract Class
-abstract class CoffeeDecorator implements Coffee {
-    protected Coffee coffee;
+---
 
-    public CoffeeDecorator(Coffee coffee) {
-        this.coffee = coffee;
-    }
-}
+### **3. Concrete Decorators**
 
-// Concrete Decorator: Milk
-class MilkDecorator extends CoffeeDecorator {
+#### MilkDecorator
+```java
+public class MilkDecorator implements Coffee {
+    private final Coffee coffee; // The coffee being decorated
+
     public MilkDecorator(Coffee coffee) {
-        super(coffee);
+        this.coffee = coffee;
     }
 
     @Override
@@ -53,15 +52,19 @@ class MilkDecorator extends CoffeeDecorator {
     }
 
     @Override
-    public double cost() {
-        return coffee.cost() + 0.50; // Additional cost for milk
+    public double getCost() {
+        return coffee.getCost() + 10.0;
     }
 }
+```
 
-// Concrete Decorator: Sugar
-class SugarDecorator extends CoffeeDecorator {
+#### SugarDecorator
+```java
+public class SugarDecorator implements Coffee {
+    private final Coffee coffee; // The coffee being decorated
+
     public SugarDecorator(Coffee coffee) {
-        super(coffee);
+        this.coffee = coffee;
     }
 
     @Override
@@ -70,23 +73,51 @@ class SugarDecorator extends CoffeeDecorator {
     }
 
     @Override
-    public double cost() {
-        return coffee.cost() + 0.20; // Additional cost for sugar
+    public double getCost() {
+        return coffee.getCost() + 5.0;
     }
 }
+```
 
-// Example Usage
+---
+
+### **4. Usage Example**
+
+```java
 public class Main {
     public static void main(String[] args) {
-        Coffee coffee = new BasicCoffee();
-        System.out.println(coffee.getDescription() + " $" + coffee.cost());
+        // Create base coffee
+        Coffee simpleCoffee = new SimpleCoffee();
+        System.out.println(simpleCoffee.getDescription() + " = ₹" + simpleCoffee.getCost());
 
         // Add milk
-        coffee = new MilkDecorator(coffee);
-        System.out.println(coffee.getDescription() + " $" + coffee.cost());
+        Coffee milkCoffee = new MilkDecorator(simpleCoffee);
+        System.out.println(milkCoffee.getDescription() + " = ₹" + milkCoffee.getCost());
 
         // Add sugar
-        coffee = new SugarDecorator(coffee);
-        System.out.println(coffee.getDescription() + " $" + coffee.cost());
+        Coffee fancyCoffee = new SugarDecorator(milkCoffee);
+        System.out.println(fancyCoffee.getDescription() + " = ₹" + fancyCoffee.getCost());
     }
 }
+```
+
+---
+
+### **Output**
+```
+Simple Coffee = ₹50.0
+Simple Coffee, Milk = ₹60.0
+Simple Coffee, Milk, Sugar = ₹65.0
+```
+
+---
+
+### **Key Points**
+
+1. Each decorator directly implements the `Coffee` interface.
+2. Decorators are independent and can be freely combined in any order.
+3. No abstract class is required, so this design is simpler and avoids inheritance.
+
+---
+
+You can now use this simplified approach in your notes! Let me know if you’d like additional annotations or comparisons.

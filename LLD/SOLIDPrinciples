@@ -1,0 +1,285 @@
+The **SOLID principles** are a set of design principles in object-oriented programming that make software more maintainable, scalable, and robust. Coined by **Robert C. Martin (Uncle Bob)**, these principles help create better software architecture.
+
+---
+
+### **SOLID Principles Overview**
+
+1. **S** - **Single Responsibility Principle (SRP)**
+2. **O** - **Open/Closed Principle (OCP)**
+3. **L** - **Liskov Substitution Principle (LSP)**
+4. **I** - **Interface Segregation Principle (ISP)**
+5. **D** - **Dependency Inversion Principle (DIP)**
+
+---
+
+### 1. **Single Responsibility Principle (SRP)**
+
+**Definition**:  
+A class should have only one reason to change, meaning it should have only one responsibility.
+
+**Why?**  
+This reduces complexity and makes code easier to maintain.
+
+**Example Without SRP**:
+```java
+public class Invoice {
+    public void calculateTotal() {
+        // Calculate total
+    }
+
+    public void printInvoice() {
+        // Print the invoice
+    }
+
+    public void saveToDatabase() {
+        // Save invoice to the database
+    }
+}
+```
+**Issues**:  
+The class is responsible for **business logic**, **printing**, and **persistence**.
+
+**Refactored With SRP**:
+```java
+public class Invoice {
+    public void calculateTotal() {
+        // Business logic
+    }
+}
+
+public class InvoicePrinter {
+    public void print(Invoice invoice) {
+        // Printing logic
+    }
+}
+
+public class InvoiceRepository {
+    public void save(Invoice invoice) {
+        // Persistence logic
+    }
+}
+```
+
+---
+
+### 2. **Open/Closed Principle (OCP)**
+
+**Definition**:  
+A class should be open for extension but closed for modification.
+
+**Why?**  
+This avoids modifying existing code, reducing the risk of introducing bugs.
+
+**Example Without OCP**:
+```java
+public class PaymentProcessor {
+    public void process(String paymentType) {
+        if (paymentType.equals("CreditCard")) {
+            // Process credit card
+        } else if (paymentType.equals("PayPal")) {
+            // Process PayPal
+        }
+    }
+}
+```
+**Issues**:  
+Adding a new payment type requires modifying the existing code.
+
+**Refactored With OCP**:
+```java
+public interface Payment {
+    void process();
+}
+
+public class CreditCardPayment implements Payment {
+    public void process() {
+        // Process credit card
+    }
+}
+
+public class PayPalPayment implements Payment {
+    public void process() {
+        // Process PayPal
+    }
+}
+
+public class PaymentProcessor {
+    public void process(Payment payment) {
+        payment.process();
+    }
+}
+```
+
+---
+
+### 3. **Liskov Substitution Principle (LSP)**
+
+**Definition**:  
+Subtypes must be substitutable for their base types without altering the correctness of the program.
+
+**Why?**  
+This ensures that derived classes extend functionality without breaking existing code.
+
+**Example Without LSP**:
+```java
+public class Bird {
+    public void fly() {
+        System.out.println("Bird is flying");
+    }
+}
+
+public class Penguin extends Bird {
+    @Override
+    public void fly() {
+        throw new UnsupportedOperationException("Penguins can't fly");
+    }
+}
+```
+**Issues**:  
+The `Penguin` violates LSP as it cannot behave like a `Bird`.
+
+**Refactored With LSP**:
+```java
+public interface Bird {
+    void eat();
+}
+
+public interface FlyingBird extends Bird {
+    void fly();
+}
+
+public class Sparrow implements FlyingBird {
+    public void eat() {
+        System.out.println("Sparrow is eating");
+    }
+
+    public void fly() {
+        System.out.println("Sparrow is flying");
+    }
+}
+
+public class Penguin implements Bird {
+    public void eat() {
+        System.out.println("Penguin is eating");
+    }
+}
+```
+
+---
+
+### 4. **Interface Segregation Principle (ISP)**
+
+**Definition**:  
+Clients should not be forced to implement interfaces they do not use.
+
+**Why?**  
+This avoids creating bloated interfaces and keeps the code modular.
+
+**Example Without ISP**:
+```java
+public interface Worker {
+    void work();
+    void eat();
+}
+
+public class Robot implements Worker {
+    public void work() {
+        System.out.println("Robot is working");
+    }
+
+    public void eat() {
+        throw new UnsupportedOperationException("Robots don't eat");
+    }
+}
+```
+**Issues**:  
+`Robot` is forced to implement `eat()` which it doesn't need.
+
+**Refactored With ISP**:
+```java
+public interface Workable {
+    void work();
+}
+
+public interface Eatable {
+    void eat();
+}
+
+public class Human implements Workable, Eatable {
+    public void work() {
+        System.out.println("Human is working");
+    }
+
+    public void eat() {
+        System.out.println("Human is eating");
+    }
+}
+
+public class Robot implements Workable {
+    public void work() {
+        System.out.println("Robot is working");
+    }
+}
+```
+
+---
+
+### 5. **Dependency Inversion Principle (DIP)**
+
+**Definition**:  
+High-level modules should not depend on low-level modules; both should depend on abstractions. Abstractions should not depend on details; details should depend on abstractions.
+
+**Why?**  
+This decouples high-level and low-level components, making the system more flexible.
+
+**Example Without DIP**:
+```java
+public class Keyboard {
+    // Keyboard details
+}
+
+public class Computer {
+    private Keyboard keyboard;
+
+    public Computer() {
+        this.keyboard = new Keyboard();
+    }
+}
+```
+**Issues**:  
+`Computer` is tightly coupled to `Keyboard`.
+
+**Refactored With DIP**:
+```java
+public interface InputDevice {
+    void input();
+}
+
+public class Keyboard implements InputDevice {
+    public void input() {
+        System.out.println("Keyboard input");
+    }
+}
+
+public class Computer {
+    private InputDevice inputDevice;
+
+    public Computer(InputDevice inputDevice) {
+        this.inputDevice = inputDevice;
+    }
+}
+```
+
+---
+
+### **Summary**
+
+| Principle | Purpose                                                                                  | Example Use Case                     |
+|-----------|------------------------------------------------------------------------------------------|--------------------------------------|
+| **SRP**   | Keep classes focused on a single responsibility.                                         | Separate business logic and logging. |
+| **OCP**   | Allow extensions without modifying existing code.                                        | Add new payment types.               |
+| **LSP**   | Ensure derived classes can replace base classes.                                         | Handle flying vs. non-flying birds.  |
+| **ISP**   | Create specific interfaces to avoid forcing unused methods.                              | Split worker interface into roles.   |
+| **DIP**   | Decouple high-level and low-level modules through abstractions.                          | Use dependency injection.            |
+
+Would you like further examples or practical use cases for implementing these principles?

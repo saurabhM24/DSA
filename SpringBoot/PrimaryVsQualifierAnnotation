@@ -1,0 +1,152 @@
+In Spring, `@Primary` and `@Qualifier` are annotations used to resolve ambiguity when multiple beans of the same type are available for dependency injection.
+While they serve similar purposes, they work in different ways and are used in different scenarios.
+
+---
+
+### **1. `@Primary` Annotation**
+- **Definition**: Marks a bean as the default candidate for autowiring when multiple beans of the same type exist.
+- **Use Case**: Use `@Primary` when there is a clear "primary" or default implementation that should be chosen in most cases.
+- **How It Works**: 
+  - The container automatically chooses the `@Primary` bean unless overridden with `@Qualifier`.
+
+#### Example: Using `@Primary`
+```java
+@Component
+public class EmailNotificationService implements NotificationService {
+    @Override
+    public void sendNotification() {
+        System.out.println("Sending email notification");
+    }
+}
+
+@Component
+@Primary
+public class SmsNotificationService implements NotificationService {
+    @Override
+    public void sendNotification() {
+        System.out.println("Sending SMS notification");
+    }
+}
+
+@Service
+public class NotificationSender {
+    private final NotificationService notificationService;
+
+    @Autowired
+    public NotificationSender(NotificationService notificationService) {
+        this.notificationService = notificationService;
+    }
+
+    public void notifyUser() {
+        notificationService.sendNotification();
+    }
+}
+```
+
+**Output**:
+- Since `SmsNotificationService` is marked as `@Primary`, it will be autowired into `NotificationSender`.
+
+---
+
+### **2. `@Qualifier` Annotation**
+- **Definition**: Specifies exactly which bean to use when multiple beans of the same type exist, by name or qualifier.
+- **Use Case**: Use `@Qualifier` when you want fine-grained control and need to explicitly specify which bean should be injected.
+- **How It Works**:
+  - Overrides `@Primary` if specified.
+  - Typically used with the bean name or a custom qualifier value.
+
+#### Example: Using `@Qualifier`
+```java
+@Component
+public class EmailNotificationService implements NotificationService {
+    @Override
+    public void sendNotification() {
+        System.out.println("Sending email notification");
+    }
+}
+
+@Component
+public class SmsNotificationService implements NotificationService {
+    @Override
+    public void sendNotification() {
+        System.out.println("Sending SMS notification");
+    }
+}
+
+@Service
+public class NotificationSender {
+    private final NotificationService notificationService;
+
+    @Autowired
+    public NotificationSender(@Qualifier("emailNotificationService") NotificationService notificationService) {
+        this.notificationService = notificationService;
+    }
+
+    public void notifyUser() {
+        notificationService.sendNotification();
+    }
+}
+```
+
+**Output**:
+- Despite having multiple beans of type `NotificationService`, the `EmailNotificationService` is injected because it is explicitly specified using `@Qualifier`.
+
+---
+
+### **Key Differences**
+
+| **Aspect**              | **@Primary**                                     | **@Qualifier**                                |
+|--------------------------|-------------------------------------------------|-----------------------------------------------|
+| **Purpose**              | Marks a bean as the default candidate.          | Explicitly specifies which bean to inject.    |
+| **Control**              | Broad/default control over autowiring.          | Fine-grained control over autowiring.         |
+| **Overrides**            | Used unless explicitly overridden by `@Qualifier`. | Overrides `@Primary` when specified.          |
+| **Usage Context**        | When a "default" bean is sufficient in most cases. | When a specific bean is needed for injection. |
+
+---
+
+### **When to Use**
+1. **Use `@Primary`**:  
+   When there is a clear default bean for most use cases, and you want to avoid repeatedly specifying a qualifier.
+
+2. **Use `@Qualifier`**:  
+   When you need precise control over which bean to inject, especially in scenarios where multiple beans are viable candidates.
+
+---
+
+### **Combination of Both**
+You can use `@Primary` and `@Qualifier` together. `@Primary` provides the default, and `@Qualifier` allows overriding it for specific cases.
+
+#### Example:
+```java
+@Component
+@Primary
+public class SmsNotificationService implements NotificationService {
+    @Override
+    public void sendNotification() {
+        System.out.println("Sending SMS notification");
+    }
+}
+
+@Component
+public class EmailNotificationService implements NotificationService {
+    @Override
+    public void sendNotification() {
+        System.out.println("Sending email notification");
+    }
+}
+
+@Service
+public class NotificationSender {
+    @Autowired
+    @Qualifier("emailNotificationService")
+    private NotificationService notificationService;
+
+    public void notifyUser() {
+        notificationService.sendNotification();
+    }
+}
+```
+- Default: `SmsNotificationService` is the `@Primary`.
+- Exception: `NotificationSender` explicitly requests `EmailNotificationService`.
+
+Would you like to explore edge cases or advanced configurations?

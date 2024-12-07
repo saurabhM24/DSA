@@ -1,0 +1,168 @@
+### **Default and Static Methods in Java 8 Interfaces**
+
+Java 8 introduced **default** and **static** methods in interfaces to enhance their functionality.
+These features allow adding new methods to interfaces without breaking the existing implementations.
+
+---
+
+### **Default Methods**
+
+#### **Definition**:
+- A **default method** in an interface provides a default implementation.
+- Declared with the `default` keyword.
+
+#### **Why Introduced?**:
+- To allow backward compatibility when adding new methods to interfaces.
+- Without default methods, adding new methods to an interface would break all implementing classes.
+
+#### **Syntax**:
+```java
+public interface MyInterface {
+    default void show() {
+        System.out.println("Default method in interface");
+    }
+}
+```
+
+#### **Key Features**:
+1. **Optional to Override**:
+   - Implementing classes can use the default implementation or override it.
+
+2. **Multiple Default Methods**:
+   - An interface can have multiple default methods.
+
+3. **Conflict Resolution**:
+   - If a class implements multiple interfaces with the same default method, it must override it to resolve ambiguity.
+
+#### **Example**:
+```java
+public interface Vehicle {
+    default void start() {
+        System.out.println("Starting vehicle");
+    }
+}
+
+public class Car implements Vehicle {
+    // Uses the default method from Vehicle
+}
+
+// Usage
+Car car = new Car();
+car.start(); // Output: Starting vehicle
+```
+
+---
+
+### **Static Methods**
+
+#### **Definition**:
+- A **static method** in an interface belongs to the interface itself, not its implementing classes.
+- Declared with the `static` keyword.
+
+#### **Why Introduced?**:
+- To provide utility methods related to the interface.
+- Similar to static methods in classes, but tied specifically to the interface.
+
+#### **Syntax**:
+```java
+public interface MyInterface {
+    static void print() {
+        System.out.println("Static method in interface");
+    }
+}
+```
+
+#### **Key Features**:
+1. **Cannot Be Overridden**:
+   - Static methods in interfaces cannot be overridden by implementing classes.
+
+2. **Called Using Interface Name**:
+   - Accessed directly via the interface, not through an instance.
+
+#### **Example**:
+```java
+public interface MathUtils {
+    static int add(int a, int b) {
+        return a + b;
+    }
+}
+
+// Usage
+int result = MathUtils.add(3, 5); // Output: 8
+```
+
+---
+
+### **Why Were Default and Static Methods Introduced?**
+
+#### **1. Backward Compatibility**
+   - Before Java 8, any changes to an interface (e.g., adding a new method) required all implementing classes to update their code.
+   - Default methods solve this by providing a "default" behavior that implementing classes can inherit without modification.
+
+#### **2. Reduce Boilerplate Code**
+   - Common behavior across implementations can be defined once in the interface itself (via default methods).
+
+#### **3. Utility Methods**
+   - Interfaces can now directly provide helper methods (via static methods) related to their functionality, reducing dependency on separate utility classes.
+
+#### **4. Functional Programming**
+   - With the advent of functional interfaces (e.g., `Predicate`, `Function`), default methods like `and()`, `or()`, `negate()` were added to support method chaining and composability.
+
+---
+
+### **Default and Static Method Conflict Resolution**
+
+#### **Multiple Inheritance of Default Methods**
+If a class implements multiple interfaces with conflicting default methods, the implementing class must override the method.
+
+#### **Example**:
+```java
+public interface A {
+    default void display() {
+        System.out.println("Default method in A");
+    }
+}
+
+public interface B {
+    default void display() {
+        System.out.println("Default method in B");
+    }
+}
+
+public class MyClass implements A, B {
+    @Override
+    public void display() {
+        System.out.println("Overridden method in MyClass");
+    }
+}
+
+// Usage
+MyClass obj = new MyClass();
+obj.display(); // Output: Overridden method in MyClass
+```
+
+---
+
+### **Real-World Use Cases**
+
+#### **Default Methods**:
+- Providing common behavior:
+  ```java
+  public interface Logger {
+      default void log(String message) {
+          System.out.println("Logging: " + message);
+      }
+  }
+  ```
+
+#### **Static Methods**:
+- Providing utility functions:
+  ```java
+  public interface StringUtils {
+      static boolean isEmpty(String str) {
+          return str == null || str.isEmpty();
+      }
+  }
+  ```
+
+Would you like to see more practical examples or explore other Java 8 features?

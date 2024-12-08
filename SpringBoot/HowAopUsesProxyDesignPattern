@@ -1,0 +1,82 @@
+Aspect-Oriented Programming (AOP) in frameworks like Spring uses the **Proxy Design Pattern** 
+to dynamically weave cross-cutting concerns (like logging, security, or transaction management) into the main application logic. Here's how it works:
+
+---
+
+### **Proxy Design Pattern Overview**
+The **Proxy Design Pattern** involves creating a surrogate or placeholder object that controls access to another object. 
+It provides an interface identical to the real object but adds additional behavior before or after delegating the request to the actual object.
+
+---
+
+### **How AOP Uses Proxy Design Pattern**
+In AOP, the proxy object wraps the original object and adds behavior (advice) at specified join points (e.g., method calls). Here's how it happens in Spring:
+
+#### **1. Proxy Creation**
+- Spring creates a proxy object for the target bean (the object whose methods need advice).
+- Depending on the configuration, Spring can use:
+  - **JDK Dynamic Proxies** (for interfaces).
+  - **CGLIB Proxies** (for classes that don't implement interfaces).
+
+#### **2. Method Interception**
+- When a method on the proxy object is invoked:
+  - The proxy intercepts the call.
+  - Executes the **advice** (e.g., before, after, or around logic).
+  - Delegates the call to the actual target object's method if applicable.
+
+#### **3. Dynamic Behavior Addition**
+- The advice defines the additional behavior to be executed. For example:
+  - Logging the method execution details.
+  - Performing security checks.
+  - Managing transactions.
+
+---
+
+### **Example: Logging with AOP and Proxy**
+Suppose you have a method that processes orders, and you want to log method calls using AOP.
+
+1. **Target Class**:
+   ```java
+   public class OrderService {
+       public void processOrder(String orderId) {
+           System.out.println("Processing order: " + orderId);
+       }
+   }
+   ```
+
+2. **Aspect (Advice Logic)**:
+   ```java
+   @Aspect
+   public class LoggingAspect {
+       @Before("execution(* com.example.OrderService.*(..))")
+       public void logBefore(JoinPoint joinPoint) {
+           System.out.println("Before executing: " + joinPoint.getSignature().getName());
+       }
+   }
+   ```
+
+3. **Proxy in Action**:
+   - Spring creates a proxy object for `OrderService`.
+   - When `processOrder` is called:
+     - The proxy executes the `logBefore` advice first.
+     - Then it calls the original `processOrder` method.
+
+   **Execution Output**:
+   ```
+   Before executing: processOrder
+   Processing order: 12345
+   ```
+
+---
+
+### **Key Benefits of Using Proxy in AOP**
+1. **Transparency**: The client code is unaware of the proxy; it interacts with the bean as if it were the real object.
+2. **Dynamic Behavior**: Cross-cutting concerns can be added/removed dynamically without changing the target object's code.
+3. **Separation of Concerns**: Keeps business logic clean while isolating cross-cutting concerns.
+
+---
+
+### **Summary**
+- AOP uses the **Proxy Design Pattern** to intercept method calls and inject cross-cutting concerns dynamically.
+- The proxy acts as a mediator, executing advice logic before/after delegating calls to the target object.
+- Frameworks like Spring use **JDK dynamic proxies** or **CGLIB proxies** depending on whether the target implements an interface.

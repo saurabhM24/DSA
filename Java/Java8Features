@@ -1,0 +1,364 @@
+Java 8 introduced several groundbreaking features 
+that modernized the language and paved the way for functional programming. Below is a summary of the key features introduced in Java 8:
+
+---
+
+### **1. Lambda Expressions**
+- **What**: Enables writing concise and functional-style code by representing functions as objects.
+- **Syntax**: `(parameters) -> expression/body`
+- **Example**:
+  ```java
+  List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
+  names.forEach(name -> System.out.println(name));
+  ```
+- **Use Case**: Simplifies usage of functional interfaces like `Runnable`, `Comparator`, and custom ones.
+
+---
+
+### **2. Functional Interfaces**
+- **What**: Interfaces with a single abstract method (SAM) annotated with `@FunctionalInterface`.
+- **Built-in Functional Interfaces**:
+  - `Predicate<T>`: Represents a condition (e.g., `test()` method).
+  - `Function<T, R>`: Represents a function with input and output (e.g., `apply()` method).
+  - `Consumer<T>`: Represents an action (e.g., `accept()` method).
+  - `Supplier<T>`: Supplies a value (e.g., `get()` method).
+- **Example**:
+  ```java
+  Predicate<Integer> isEven = x -> x % 2 == 0;
+  System.out.println(isEven.test(4)); // true
+  ```
+
+---
+
+### **3. Stream API**
+- **What**: Provides a functional-style approach to process collections and streams of data.
+- **Key Operations**:
+  - **Intermediate**: `filter()`, `map()`, `sorted()`
+  - **Terminal**: `collect()`, `forEach()`, `reduce()`
+- **Example**:
+  ```java
+  List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+  List<Integer> evenNumbers = numbers.stream()
+                                     .filter(n -> n % 2 == 0)
+                                     .collect(Collectors.toList());
+  System.out.println(evenNumbers); // [2, 4]
+  ```
+
+---
+
+### **4. Default and Static Methods in Interfaces**
+- **What**: Allows interfaces to provide default method implementations.
+- **Default Methods**:
+  ```java
+  interface Vehicle {
+      default void start() {
+          System.out.println("Vehicle starting");
+      }
+  }
+  ```
+- **Static Methods**:
+  ```java
+  interface MathUtils {
+      static int square(int x) {
+          return x * x;
+      }
+  }
+  System.out.println(MathUtils.square(5)); // 25
+  ```
+
+---
+
+### **5. Optional Class**
+- **What**: Represents a container object that may or may not contain a non-null value.
+- **Purpose**: Avoids `NullPointerException` and provides a cleaner way to check nulls.
+- **Example**:
+  ```java
+  Optional<String> optional = Optional.ofNullable(null);
+  System.out.println(optional.orElse("Default Value")); // Default Value
+  ```
+
+---
+
+### **6. Date and Time API (java.time package)**
+- **What**: Replaces the old, flawed `Date` and `Calendar` APIs with a modern and immutable API.
+- **Key Classes**:
+  - `LocalDate`, `LocalTime`, `LocalDateTime`
+  - `ZonedDateTime`
+  - `Duration`, `Period`
+- **Example**:
+  ```java
+  LocalDate date = LocalDate.now();
+  LocalTime time = LocalTime.of(10, 30);
+  LocalDateTime dateTime = LocalDateTime.of(date, time);
+  System.out.println(dateTime); // e.g., 2024-12-06T10:30
+  ```
+
+---
+
+### **7. Nashorn JavaScript Engine**
+- **What**: Provides a lightweight, high-performance JavaScript runtime in the JVM.
+- **Example**:
+  ```java
+  ScriptEngineManager manager = new ScriptEngineManager();
+  ScriptEngine engine = manager.getEngineByName("nashorn");
+  engine.eval("print('Hello from JavaScript');");
+  ```
+
+---
+
+### **8. Base64 Encoding and Decoding**
+- **What**: Provides a built-in API for Base64 operations.
+- **Example**:
+  ```java
+  String encoded = Base64.getEncoder().encodeToString("Java8".getBytes());
+  System.out.println(encoded); // SmF2YTg=
+  System.out.println(new String(Base64.getDecoder().decode(encoded))); // Java8
+  ```
+
+---
+
+### **9. Parallel Arrays (java.util.Arrays.parallelSort)**
+- **What**: Allows sorting large arrays in parallel for better performance.
+- **Example**:
+  ```java
+  int[] numbers = {5, 3, 8, 1};
+  Arrays.parallelSort(numbers);
+  System.out.println(Arrays.toString(numbers)); // [1, 3, 5, 8]
+  ```
+
+---
+
+### **10. CompletableFuture and Concurrency Enhancements**
+- **What**: Provides an advanced and flexible way to handle asynchronous tasks.
+- **Example**:
+  ```javaJava 8 introduced several groundbreaking features that modernized the language and paved the way for functional programming. Below is a summary of the key features introduced in Java 8:
+
+---
+
+### **1. Lambda Expressions**
+- **What**: Enables writing concise and functional-style code by representing functions as objects.
+- **Syntax**: `(parameters) -> expression/body`
+- **Example**:
+  ```java
+  List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
+  names.forEach(name -> System.out.println(name));
+  ```
+- **Use Case**: Simplifies usage of functional interfaces like `Runnable`, `Comparator`, and custom ones.
+
+---
+
+### **2. Functional Interfaces**
+- **What**: Interfaces with a single abstract method (SAM) annotated with `@FunctionalInterface`.
+- **Built-in Functional Interfaces**:
+  - `Predicate<T>`: Represents a condition (e.g., `test()` method).
+  - `Function<T, R>`: Represents a function with input and output (e.g., `apply()` method).
+  - `Consumer<T>`: Represents an action (e.g., `accept()` method).
+  - `Supplier<T>`: Supplies a value (e.g., `get()` method).
+- **Example**:
+  ```java
+  Predicate<Integer> isEven = x -> x % 2 == 0;
+  System.out.println(isEven.test(4)); // true
+  ```
+
+---
+
+### **3. Stream API**
+- **What**: Provides a functional-style approach to process collections and streams of data.
+- **Key Operations**:
+  - **Intermediate**: `filter()`, `map()`, `sorted()`
+  - **Terminal**: `collect()`, `forEach()`, `reduce()`
+- **Example**:
+  ```java
+  List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+  List<Integer> evenNumbers = numbers.stream()
+                                     .filter(n -> n % 2 == 0)
+                                     .collect(Collectors.toList());
+  System.out.println(evenNumbers); // [2, 4]
+  ```
+
+---
+
+### **4. Default and Static Methods in Interfaces**
+- **What**: Allows interfaces to provide default method implementations.
+- **Default Methods**:
+  ```java
+  interface Vehicle {
+      default void start() {
+          System.out.println("Vehicle starting");
+      }
+  }
+  ```
+- **Static Methods**:
+  ```java
+  interface MathUtils {
+      static int square(int x) {
+          return x * x;
+      }
+  }
+  System.out.println(MathUtils.square(5)); // 25
+  ```
+
+---
+
+### **5. Optional Class**
+- **What**: Represents a container object that may or may not contain a non-null value.
+- **Purpose**: Avoids `NullPointerException` and provides a cleaner way to check nulls.
+- **Example**:
+  ```java
+  Optional<String> optional = Optional.ofNullable(null);
+  System.out.println(optional.orElse("Default Value")); // Default Value
+  ```
+
+---
+
+### **6. Date and Time API (java.time package)**
+- **What**: Replaces the old, flawed `Date` and `Calendar` APIs with a modern and immutable API.
+- **Key Classes**:
+  - `LocalDate`, `LocalTime`, `LocalDateTime`
+  - `ZonedDateTime`
+  - `Duration`, `Period`
+- **Example**:
+  ```java
+  LocalDate date = LocalDate.now();
+  LocalTime time = LocalTime.of(10, 30);
+  LocalDateTime dateTime = LocalDateTime.of(date, time);
+  System.out.println(dateTime); // e.g., 2024-12-06T10:30
+  ```
+
+---
+
+### **7. Nashorn JavaScript Engine**
+- **What**: Provides a lightweight, high-performance JavaScript runtime in the JVM.
+- **Example**:
+  ```java
+  ScriptEngineManager manager = new ScriptEngineManager();
+  ScriptEngine engine = manager.getEngineByName("nashorn");
+  engine.eval("print('Hello from JavaScript');");
+  ```
+
+---
+
+### **8. Base64 Encoding and Decoding**
+- **What**: Provides a built-in API for Base64 operations.
+- **Example**:
+  ```java
+  String encoded = Base64.getEncoder().encodeToString("Java8".getBytes());
+  System.out.println(encoded); // SmF2YTg=
+  System.out.println(new String(Base64.getDecoder().decode(encoded))); // Java8
+  ```
+
+---
+
+### **9. Parallel Arrays (java.util.Arrays.parallelSort)**
+- **What**: Allows sorting large arrays in parallel for better performance.
+- **Example**:
+  ```java
+  int[] numbers = {5, 3, 8, 1};
+  Arrays.parallelSort(numbers);
+  System.out.println(Arrays.toString(numbers)); // [1, 3, 5, 8]
+  ```
+
+---
+
+### **10. CompletableFuture and Concurrency Enhancements**
+- **What**: Provides an advanced and flexible way to handle asynchronous tasks.
+- **Example**:
+  ```java
+  CompletableFuture.runAsync(() -> System.out.println("Async Task"))
+                   .thenRun(() -> System.out.println("Task Completed"));
+  ```
+
+---
+
+### **11. Collectors API**
+- **What**: Offers a variety of utilities to collect results from streams.
+- **Example**:
+  ```java
+  List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
+  String result = names.stream()
+                       .collect(Collectors.joining(", "));
+  System.out.println(result); // Alice, Bob, Charlie
+  ```
+
+---
+
+### **12. Repeating Annotations**
+- **What**: Allows applying the same annotation multiple times to the same element.
+- **Example**:
+  ```java
+  @Repeatable(Schedules.class)
+  @interface Schedule {
+      String time();
+  }
+  ```
+
+---
+
+### Summary Table for Notes:
+| **Feature**            | **Description**                                           |
+|-------------------------|-----------------------------------------------------------|
+| Lambda Expressions      | Concise syntax for functional programming.               |
+| Functional Interfaces   | Interfaces with one abstract method for lambda support.  |
+| Stream API             | Functional operations on collections.                    |
+| Default/Static Methods | Methods with implementation in interfaces.              |
+| Optional Class         | Container to avoid null checks.                         |
+| Date and Time API      | Immutable, modern date/time API.                        |
+| Nashorn JS Engine      | JavaScript engine for JVM.                              |
+| Base64 API             | Built-in encoding/decoding support.                     |
+| Parallel Arrays        | Parallel sorting for performance.                       |
+| CompletableFuture      | Simplified async programming.                           |
+| Collectors API         | Utility for collecting Stream results.                  |
+| Repeating Annotations  | Allows repeated annotations.                            |
+
+---
+
+Let me know if you'd like deeper examples for any feature!
+  CompletableFuture.runAsync(() -> System.out.println("Async Task"))
+                   .thenRun(() -> System.out.println("Task Completed"));
+  ```
+
+---
+
+### **11. Collectors API**
+- **What**: Offers a variety of utilities to collect results from streams.
+- **Example**:
+  ```java
+  List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
+  String result = names.stream()
+                       .collect(Collectors.joining(", "));
+  System.out.println(result); // Alice, Bob, Charlie
+  ```
+
+---
+
+### **12. Repeating Annotations**
+- **What**: Allows applying the same annotation multiple times to the same element.
+- **Example**:
+  ```java
+  @Repeatable(Schedules.class)
+  @interface Schedule {
+      String time();
+  }
+  ```
+
+---
+
+### Summary Table for Notes:
+| **Feature**            | **Description**                                           |
+|-------------------------|-----------------------------------------------------------|
+| Lambda Expressions      | Concise syntax for functional programming.               |
+| Functional Interfaces   | Interfaces with one abstract method for lambda support.  |
+| Stream API             | Functional operations on collections.                    |
+| Default/Static Methods | Methods with implementation in interfaces.              |
+| Optional Class         | Container to avoid null checks.                         |
+| Date and Time API      | Immutable, modern date/time API.                        |
+| Nashorn JS Engine      | JavaScript engine for JVM.                              |
+| Base64 API             | Built-in encoding/decoding support.                     |
+| Parallel Arrays        | Parallel sorting for performance.                       |
+| CompletableFuture      | Simplified async programming.                           |
+| Collectors API         | Utility for collecting Stream results.                  |
+| Repeating Annotations  | Allows repeated annotations.                            |
+
+---
+
+Let me know if you'd like deeper examples for any feature!

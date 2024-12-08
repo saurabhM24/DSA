@@ -1,0 +1,104 @@
+Here’s a simple, real-world example of the **Proxy Design Pattern** to add to your notes. The example simulates an **Internet Access Control System**.
+
+---
+
+### **Problem**
+You want to control access to certain websites based on a set of rules. Instead of directly connecting to the internet,
+you introduce a proxy that decides whether access to a website is allowed or not.
+
+---
+
+### **Code Example**
+
+#### **1. Subject Interface**
+Defines the common interface for the real object and the proxy.
+```java
+public interface Internet {
+    void connectTo(String serverHost) throws Exception;
+}
+```
+
+---
+
+#### **2. Real Subject**
+Represents the actual object that performs the real action (connecting to the internet).
+```java
+public class RealInternet implements Internet {
+    @Override
+    public void connectTo(String serverHost) {
+        System.out.println("Connecting to " + serverHost);
+    }
+}
+```
+
+---
+
+#### **3. Proxy Class**
+The proxy adds additional logic to control access before delegating the request to the real object.
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+public class ProxyInternet implements Internet {
+    private Internet internet = new RealInternet(); // Proxy holds a reference to the real object.
+    private static List<String> bannedSites;
+
+    static {
+        bannedSites = new ArrayList<>();
+        bannedSites.add("abc.com");
+        bannedSites.add("xyz.com");
+    }
+
+    @Override
+    public void connectTo(String serverHost) throws Exception {
+        if (bannedSites.contains(serverHost.toLowerCase())) {
+            throw new Exception("Access Denied to " + serverHost);
+        }
+        internet.connectTo(serverHost); // Delegates the call to the real object.
+    }
+}
+```
+
+---
+
+#### **4. Client Code**
+The client interacts with the proxy, not directly with the real object.
+```java
+public class ProxyPatternDemo {
+    public static void main(String[] args) {
+        Internet internet = new ProxyInternet();
+
+        try {
+            internet.connectTo("example.com");  // Allowed
+            internet.connectTo("abc.com");     // Blocked
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+}
+```
+
+---
+
+### **Output**
+```
+Connecting to example.com
+Access Denied to abc.com
+```
+
+---
+
+### **Explanation**
+1. **RealInternet**: The class that performs the actual operation (connecting to a website).
+2. **ProxyInternet**: Adds logic to check the banned sites list before delegating the request to the real object.
+3. **Client**: Interacts only with the proxy (`ProxyInternet`), unaware of the real object's presence.
+
+---
+
+### **When to Use the Proxy Pattern**
+- **Access Control**: Restrict or control access to sensitive resources.
+- **Lazy Initialization**: Delay the creation of heavy objects until they're needed.
+- **Logging or Auditing**: Add logging behavior without modifying the real object.
+- **Remote Proxy**: Handle communication with remote objects (e.g., RMI).
+
+This example should fit well in your notes. Let me know if you’d like additional variations!

@@ -1,0 +1,276 @@
+### **Designing a Vending Machine Using the State Design Pattern**
+
+The **State Design Pattern** is ideal for implementing a vending machine because it allows the machine's behavior to change dynamically based on its current state (e.g., `NoCoin`, `HasCoin`, `Dispensing`, `OutOfStock`).
+
+---
+
+### **Step-by-Step Design**
+
+#### **1. Define the States**
+The vending machine has several possible states:
+- **NoCoinState**: The machine is idle and waiting for a coin.
+- **HasCoinState**: A coin has been inserted, and the machine is waiting for a selection.
+- **DispensingState**: The machine is dispensing the selected item.
+- **OutOfStockState**: The machine has run out of stock.
+
+---
+
+#### **2. Create a State Interface**
+```java
+public interface VendingMachineState {
+    void insertCoin();
+    void selectItem(String item);
+    void dispenseItem();
+}
+```
+
+---
+
+#### **3. Implement Concrete States**
+
+##### **NoCoinState**
+```java
+public class NoCoinState implements VendingMachineState {
+    private final VendingMachine vendingMachine;
+
+    public NoCoinState(VendingMachine vendingMachine) {
+        this.vendingMachine = vendingMachine;
+    }
+
+    @Override
+    public void insertCoin() {
+        System.out.println("Coin inserted.");
+        vendingMachine.setState(vendingMachine.getHasCoinState());
+    }
+
+    @Override
+    public void selectItem(String item) {
+        System.out.println("Insert a coin first.");
+    }
+
+    @Override
+    public void dispenseItem() {
+        System.out.println("No coin inserted. Cannot dispense item.");
+    }
+}
+```
+
+##### **HasCoinState**
+```java
+public class HasCoinState implements VendingMachineState {
+    private final VendingMachine vendingMachine;
+
+    public HasCoinState(VendingMachine vendingMachine) {
+        this.vendingMachine = vendingMachine;
+    }
+
+    @Override
+    public void insertCoin() {
+        System.out.println("Coin already inserted. Please select an item.");
+    }
+
+    @Override
+    public void selectItem(String item) {
+        if (vendingMachine.getStock(item) > 0) {
+            System.out.println("Item selected: " + item);
+            vendingMachine.setState(vendingMachine.getDispensingState());
+            vendingMachine.setSelectedItem(item);
+        } else {
+            System.out.println("Item out of stock.");
+            vendingMachine.setState(vendingMachine.getOutOfStockState());
+        }
+    }
+
+    @Override
+    public void dispenseItem() {
+        System.out.println("Select an item first.");
+    }
+}
+```
+
+##### **DispensingState**
+```java
+public class DispensingState implements VendingMachineState {
+    private final VendingMachine vendingMachine;
+
+    public DispensingState(VendingMachine vendingMachine) {
+        this.vendingMachine = vendingMachine;
+    }
+
+    @Override
+    public void insertCoin() {
+        System.out.println("Please wait. Dispensing item.");
+    }
+
+    @Override
+    public void selectItem(String item) {
+        System.out.println("Already dispensing. Cannot select another item.");
+    }
+
+    @Override
+    public void dispenseItem() {
+        String item = vendingMachine.getSelectedItem();
+        System.out.println("Dispensing: " + item);
+        vendingMachine.reduceStock(item);
+        if (vendingMachine.hasStock()) {
+            vendingMachine.setState(vendingMachine.getNoCoinState());
+        } else {
+            vendingMachine.setState(vendingMachine.getOutOfStockState());
+        }
+    }
+}
+```
+
+##### **OutOfStockState**
+```java
+public class OutOfStockState implements VendingMachineState {
+    private final VendingMachine vendingMachine;
+
+    public OutOfStockState(VendingMachine vendingMachine) {
+        this.vendingMachine = vendingMachine;
+    }
+
+    @Override
+    public void insertCoin() {
+        System.out.println("Out of stock. Cannot accept coin.");
+    }
+
+    @Override
+    public void selectItem(String item) {
+        System.out.println("Out of stock. Cannot select item.");
+    }
+
+    @Override
+    public void dispenseItem() {
+        System.out.println("Out of stock. Cannot dispense item.");
+    }
+}
+```
+
+---
+
+#### **4. Implement the Context Class**
+
+The `VendingMachine` class acts as the context and holds a reference to the current state.
+
+```java
+import java.util.HashMap;
+import java.util.Map;
+
+public class VendingMachine {
+    private VendingMachineState noCoinState;
+    private VendingMachineState hasCoinState;
+    private VendingMachineState dispensingState;
+    private VendingMachineState outOfStockState;
+
+    private VendingMachineState currentState;
+    private Map<String, Integer> stock;
+    private String selectedItem;
+
+    public VendingMachine() {
+        noCoinState = new NoCoinState(this);
+        hasCoinState = new HasCoinState(this);
+        dispensingState = new DispensingState(this);
+        outOfStockState = new OutOfStockState(this);
+
+        stock = new HashMap<>();
+        currentState = noCoinState;
+    }
+
+    public void setState(VendingMachineState state) {
+        this.currentState = state;
+    }
+
+    public void insertCoin() {
+        currentState.insertCoin();
+    }
+
+    public void selectItem(String item) {
+        currentState.selectItem(item);
+    }
+
+    public void dispenseItem() {
+        currentState.dispenseItem();
+    }
+
+    public void addStock(String item, int count) {
+        stock.put(item, stock.getOrDefault(item, 0) + count);
+    }
+
+    public int getStock(String item) {
+        return stock.getOrDefault(item, 0);
+    }
+
+    public void reduceStock(String item) {
+        stock.put(item, stock.get(item) - 1);
+    }
+
+    public boolean hasStock() {
+        return stock.values().stream().anyMatch(count -> count > 0);
+    }
+
+    public VendingMachineState getNoCoinState() {
+        return noCoinState;
+    }
+
+    public VendingMachineState getHasCoinState() {
+        return hasCoinState;
+    }
+
+    public VendingMachineState getDispensingState() {
+        return dispensingState;
+    }
+
+    public VendingMachineState getOutOfStockState() {
+        return outOfStockState;
+    }
+
+    public void setSelectedItem(String selectedItem) {
+        this.selectedItem = selectedItem;
+    }
+
+    public String getSelectedItem() {
+        return selectedItem;
+    }
+}
+```
+
+---
+
+#### **5. Usage Example**
+```java
+public class Main {
+    public static void main(String[] args) {
+        VendingMachine vendingMachine = new VendingMachine();
+
+        // Add stock
+        vendingMachine.addStock("Chips", 5);
+        vendingMachine.addStock("Soda", 2);
+
+        // Use the vending machine
+        vendingMachine.insertCoin();
+        vendingMachine.selectItem("Chips");
+        vendingMachine.dispenseItem();
+
+        vendingMachine.insertCoin();
+        vendingMachine.selectItem("Soda");
+        vendingMachine.dispenseItem();
+
+        vendingMachine.insertCoin();
+        vendingMachine.selectItem("Soda");
+        vendingMachine.dispenseItem();
+
+        vendingMachine.insertCoin();
+        vendingMachine.selectItem("Chips");
+    }
+}
+```
+
+---
+
+### **Key Advantages of the State Pattern**
+- **Extensibility:** Adding new states (e.g., `MaintenanceState`) is straightforward.
+- **Single Responsibility:** Each state handles its behavior independently.
+- **Clean Code:** Avoids complex conditional logic (e.g., nested `if-else` or `switch`).
+
+Let me know if you'd like further refinements or alternative implementations!

@@ -1,0 +1,12 @@
+### **Differences Between SOAP and REST**
+
+| **Aspect**              | **SOAP**                                              | **REST**                                    |
+|--------------------------|------------------------------------------------------|---------------------------------------------|
+| **Type**                | Protocol with strict standards.                      | Architectural style, more flexible.         |
+| **Message Format**      | Always XML.                                           | JSON, XML, HTML, etc. (JSON preferred).     |
+| **Transport Protocol**  | Works over HTTP, SMTP, TCP, etc.                     | Only HTTP.                                  |
+| **Complexity**          | Complex and heavy.                                   | Simple and lightweight.                     |
+| **Performance**         | Slower due to XML parsing and overhead.              | Faster, consumes less bandwidth.            |
+| **Security**            | Built-in WS-Security for advanced security needs.    | Relies on SSL/TLS and HTTP mechanisms.      |
+| **Statefulness**        | Supports both stateful and stateless operations.     | Stateless by design.                        |
+| **Use Case**            | Best for enterprise systems (e.g., banking).         | Best for web, mobile, and public APIs.      |

@@ -1,0 +1,123 @@
+Here’s a comprehensive list of essential Docker commands categorized for better organization. These commands can help you with image management, container operations, networking, volumes, and more.
+
+---
+
+### **1. Docker Basics**
+| **Command**                                | **Description**                                 |
+|--------------------------------------------|-------------------------------------------------|
+| `docker --version`                         | Check the installed Docker version.            |
+| `docker info`                              | Display system-wide information about Docker.  |
+| `docker help`                              | Show Docker CLI help.                          |
+
+---
+
+### **2. Working with Docker Images**
+| **Command**                                | **Description**                                 |
+|--------------------------------------------|-------------------------------------------------|
+| `docker images`                            | List all local images.                         |
+| `docker pull <image-name>`                 | Pull an image from Docker Hub.                |
+| `docker build -t <tag-name> .`             | Build an image from a Dockerfile.             |
+| `docker tag <image> <new-tag>`             | Tag an image with a new name.                 |
+| `docker rmi <image-name>`                  | Remove an image.                              |
+| `docker save -o <file.tar> <image-name>`   | Save an image to a tar file.                  |
+| `docker load -i <file.tar>`                | Load an image from a tar file.                |
+
+---
+
+### **3. Working with Containers**
+| **Command**                                | **Description**                                 |
+|--------------------------------------------|-------------------------------------------------|
+| `docker ps`                                | List running containers.                      |
+| `docker ps -a`                             | List all containers (including stopped).      |
+| `docker run <image-name>`                  | Run a container from an image.               |
+| `docker run -it <image-name>`              | Run a container interactively (e.g., terminal). |
+| `docker run -d --name <name> <image>`      | Run a container in detached mode with a name. |
+| `docker exec -it <container-id> bash`      | Access a running container’s shell.          |
+| `docker logs <container-id>`               | View logs of a container.                    |
+| `docker stop <container-id>`               | Stop a running container.                    |
+| `docker start <container-id>`              | Start a stopped container.                   |
+| `docker restart <container-id>`            | Restart a container.                         |
+| `docker rm <container-id>`                 | Remove a container.                          |
+| `docker inspect <container-id>`            | Detailed info about a container/image.       |
+| `docker cp <src> <container>:<dest>`       | Copy files from/to a container.              |
+
+---
+
+### **4. Docker Volumes**
+| **Command**                                | **Description**                                 |
+|--------------------------------------------|-------------------------------------------------|
+| `docker volume ls`                         | List all volumes.                             |
+| `docker volume create <volume-name>`       | Create a new volume.                          |
+| `docker run -v <volume>:/path <image>`     | Mount a volume to a container.               |
+| `docker volume inspect <volume-name>`      | Inspect a volume.                             |
+| `docker volume rm <volume-name>`           | Remove a volume.                              |
+| `docker volume prune`                      | Remove unused volumes.                        |
+
+---
+
+### **5. Docker Networking**
+| **Command**                                | **Description**                                 |
+|--------------------------------------------|-------------------------------------------------|
+| `docker network ls`                        | List all Docker networks.                     |
+| `docker network create <network-name>`     | Create a new network.                         |
+| `docker network inspect <network-name>`    | Inspect a network.                            |
+| `docker network connect <network> <container>` | Connect a container to a network.              |
+| `docker network disconnect <network> <container>` | Disconnect a container from a network.         |
+| `docker run --network <network-name> <image>` | Run a container in a specific network.         |
+
+---
+
+### **6. Docker Compose**
+| **Command**                                | **Description**                                 |
+|--------------------------------------------|-------------------------------------------------|
+| `docker-compose up`                        | Start all services in a `docker-compose.yml`.  |
+| `docker-compose up -d`                     | Start services in detached mode.              |
+| `docker-compose down`                      | Stop and remove all services and containers.  |
+| `docker-compose ps`                        | List all running services.                    |
+| `docker-compose logs`                      | Show logs for all services.                   |
+| `docker-compose exec <service> bash`       | Access a service container shell.             |
+
+---
+
+### **7. Docker Pruning and Cleanup**
+| **Command**                                | **Description**                                 |
+|--------------------------------------------|-------------------------------------------------|
+| `docker system df`                         | Show disk usage by Docker.                    |
+| `docker system prune`                      | Remove unused containers, networks, images, and volumes. |
+| `docker container prune`                   | Remove stopped containers.                    |
+| `docker image prune`                       | Remove unused images.                         |
+| `docker volume prune`                      | Remove unused volumes.                        |
+| `docker network prune`                     | Remove unused networks.                       |
+
+---
+
+### **8. Docker Export and Import**
+| **Command**                                | **Description**                                 |
+|--------------------------------------------|-------------------------------------------------|
+| `docker export <container-id> > file.tar`  | Export a container’s filesystem.              |
+| `docker import <file.tar> <new-image-name>`| Import a tar file as an image.                |
+
+---
+
+### **9. Advanced Commands**
+| **Command**                                | **Description**                                 |
+|--------------------------------------------|-------------------------------------------------|
+| `docker stats`                             | Monitor resource usage of containers.          |
+| `docker top <container-id>`                | Display processes running in a container.      |
+| `docker history <image>`                   | Show layers of an image.                      |
+| `docker update --cpus <n> <container-id>`  | Update resource limits for a running container.|
+| `docker rename <old-name> <new-name>`      | Rename a container.                           |
+
+---
+
+### **10. Debugging and Troubleshooting**
+| **Command**                                | **Description**                                 |
+|--------------------------------------------|-------------------------------------------------|
+| `docker events`                            | View real-time events from the Docker daemon. |
+| `docker inspect <object>`                  | Detailed low-level info on a container/image/network. |
+| `docker logs -f <container-id>`            | Follow a container’s logs.                    |
+| `docker exec -it <container-id> sh`        | Run a shell inside a container.               |
+
+---
+
+Feel free to pick and choose the commands you find most relevant to your workflow! Let me know if you’d like detailed examples for any specific command.

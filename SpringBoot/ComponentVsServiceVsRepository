@@ -1,0 +1,78 @@
+In Spring Framework, `@Component`, `@Service`, and `@Repository` are **stereotype annotations** used to mark classes as Spring-managed components. While functionally similar in terms of enabling Spring to detect and manage the classes as beans, they are used to indicate the role and purpose of the component in the application. Here's the breakdown:
+
+---
+
+### **1. `@Component`**
+- **Purpose**: General-purpose annotation to mark a class as a Spring-managed component.  
+- **Scope**: Broad, can be used for any class that needs to be a bean but doesn’t specifically belong to a particular layer.  
+- **Use Case**: Utility or helper classes, or other generic components that don't naturally fit into service, repository, or controller roles.
+
+---
+
+### **2. `@Service`**
+- **Purpose**: A specialized form of `@Component` that indicates the class contains business logic.  
+- **Scope**: Typically used in the **service layer** of the application.  
+- **Use Case**: Classes that implement business logic, handle complex operations, or coordinate between different repositories and external services.  
+- **Additional Meaning**: Conveys a semantic understanding that this class is part of the service layer, even though there’s no extra functionality over `@Component`.
+
+---
+
+### **3. `@Repository`**
+- **Purpose**: A specialized form of `@Component` that indicates the class interacts with the database.  
+- **Scope**: Specifically used in the **data access layer** (DAO or repository layer).  
+- **Use Case**: Classes that perform database operations such as queries, inserts, updates, and deletes.  
+- **Additional Functionality**:
+  - Spring automatically translates database-related exceptions (like `SQLException`) into **Spring's DataAccessException** hierarchy when this annotation is used.
+
+---
+
+### **Key Differences**
+
+| **Aspect**             | **@Component**            | **@Service**            | **@Repository**        |
+|-------------------------|---------------------------|--------------------------|-------------------------|
+| **Role**               | Generic component         | Service/business logic   | Data access layer       |
+| **Layer of Usage**     | Any layer                 | Service layer            | Repository/DAO layer    |
+| **Extra Functionality**| None                      | None                     | Exception translation   |
+| **Semantic Meaning**   | Broad, generic purpose    | Represents business logic| Represents database logic|
+
+---
+
+### **Example Usage**
+
+#### **1. `@Component`**
+```java
+@Component
+public class UtilityHelper {
+    public String formatDate(String date) {
+        // Utility logic
+        return "Formatted: " + date;
+    }
+}
+```
+
+#### **2. `@Service`**
+```java
+@Service
+public class UserService {
+    @Autowired
+    private UserRepository userRepository;
+
+    public User getUserById(Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
+}
+```
+
+#### **3. `@Repository`**
+```java
+@Repository
+public interface UserRepository extends JpaRepository<User, Long> {
+    // Database operations (e.g., findByName)
+}
+```
+
+---
+
+### **Conclusion**
+All three annotations serve as markers for Spring to manage beans,
+but they help organize and provide clarity about the component's role within the application. Use them appropriately to adhere to clean architecture principles.

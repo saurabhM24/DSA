@@ -1,0 +1,18 @@
+https://leetcode.com/problems/permutation-sequence/submissions/1484580664/
+
+Here’s the concise approach to solve the problem:
+
+1. **Generate Factorial**: Compute \((n-1)!\) and initialize a list `nums` with numbers from 1 to \(n\). This represents the elements available for permutations.
+
+2. **Adjust \(k\)**: Convert \(k\) to 0-based indexing by subtracting 1.
+
+3. **Build the Permutation**:
+   - Find the correct element for each position using \(k / fact\).
+   - Append the selected element to the result and remove it from the list.
+   - Update \(k = k \% fact\) and \(fact = fact / \text{remaining elements}\).
+
+4. **Stop Condition**: When the list is empty, all positions are filled, and the result is complete.
+
+5. **Return Result**: Return the constructed string.
+
+This approach efficiently constructs the \(k\)-th permutation in \(O(n^2)\) due to the repeated removal of elements from the list.

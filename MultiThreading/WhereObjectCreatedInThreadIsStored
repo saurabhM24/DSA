@@ -1,0 +1,61 @@
+When a thread creates a new object inside a function it is executing,
+the memory location where the object is stored depends on the type of memory used in the Java memory model. Here's how it works:
+
+---
+
+### **1. Stack Memory**
+- **What is stored:** 
+  - Local variables and references to objects created inside a method (but not the objects themselves).
+- **Thread Affinity:** 
+  - Each thread has its own stack. Therefore, stack memory is thread-confined and not shared.
+- **Where objects are stored:**
+  - If the function creates an object, the **reference** to that object is stored in the thread's stack memory.
+
+### **2. Heap Memory**
+- **What is stored:** 
+  - All objects created using the `new` keyword are allocated in the heap memory, regardless of where the creation occurs (inside or outside the function).
+- **Thread Affinity:** 
+  - Heap memory is shared among all threads.
+- **When a new object is created:**
+  - The object itself is stored in the heap memory.
+  - The reference to that object is stored in the thread's stack.
+
+---
+
+### **Example**
+```java
+public void run() {
+    MyObject obj = new MyObject(); // Creates a new object
+}
+```
+
+1. **Object Reference:**
+   - The reference `obj` is stored in the thread's stack memory.
+
+2. **Actual Object:**
+   - The `MyObject` instance is stored in the heap memory.
+
+---
+
+### **Thread Safety**
+- **Objects on the Heap:**
+  - These can be accessed by other threads if a reference to the object is shared, potentially leading to thread-safety issues.
+- **References on the Stack:**
+  - These are thread-confined and cannot be accessed by other threads.
+
+---
+
+### **Why Store Objects on the Heap?**
+1. **Lifespan:** 
+   - Objects in the heap remain accessible as long as there are references pointing to them, even after the function exits.
+   - Stack memory, on the other hand, is cleared when the function call ends.
+
+2. **Shared Access:** 
+   - Objects on the heap can be shared across threads, enabling inter-thread communication.
+
+---
+
+### **Key Takeaways**
+- The object itself is stored in the heap memory.
+- The reference to the object is stored in the thread’s stack memory.
+- Stack memory is private to the thread, while heap memory is shared.

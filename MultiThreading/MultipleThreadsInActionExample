@@ -1,0 +1,126 @@
+Yes, you can execute the tasks to find the maximum, minimum, and average of an integer array in parallel because these operations are independent of each other and do not share intermediate results. By leveraging multithreading, you can potentially improve performance, especially for large arrays on multi-core systems.
+
+Here’s how you can achieve this in Java:
+
+---
+
+### **Implementation Using Threads**
+
+```java
+import java.util.Arrays;
+
+public class ParallelArrayOperations {
+    public static void main(String[] args) {
+        int[] arr = {3, 7, 2, 8, 4, 10, 6};
+
+        // Threads for max, min, and average
+        Thread maxThread = new Thread(() -> {
+            int max = Arrays.stream(arr).max().orElseThrow();
+            System.out.println("Max: " + max);
+        });
+
+        Thread minThread = new Thread(() -> {
+            int min = Arrays.stream(arr).min().orElseThrow();
+            System.out.println("Min: " + min);
+        });
+
+        Thread avgThread = new Thread(() -> {
+            double avg = Arrays.stream(arr).average().orElseThrow();
+            System.out.println("Average: " + avg);
+        });
+
+        // Start the threads
+        maxThread.start();
+        minThread.start();
+        avgThread.start();
+
+        // Wait for all threads to complete
+        try {
+            maxThread.join();
+            minThread.join();
+            avgThread.join();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+}
+```
+
+---
+
+### **Key Concepts**
+
+1. **Independence of Operations:**
+   - Finding the maximum, minimum, and average does not depend on intermediate results or modifications to the array.
+   - Therefore, these operations can safely be executed in parallel.
+
+2. **Multithreading:**
+   - Each task runs in its own thread. The main thread waits for all tasks to complete using `join()`.
+
+3. **`Arrays.stream` for Simplicity:**
+   - The `Stream` API simplifies operations like finding the max, min, and average.
+
+---
+
+### **Performance Considerations**
+- **When Parallelism Helps:**
+  - Parallel execution is beneficial for large arrays or in systems with multiple CPU cores.
+  - For small arrays, the overhead of creating and managing threads might outweigh the performance benefits.
+
+- **Thread Management:**
+  - Creating multiple threads directly is fine for simple cases, but for larger and more complex applications, using a thread pool or an `ExecutorService` is more efficient.
+
+---
+
+### **Implementation Using ExecutorService**
+
+```java
+import java.util.Arrays;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+public class ParallelArrayOperations {
+    public static void main(String[] args) {
+        int[] arr = {3, 7, 2, 8, 4, 10, 6};
+        ExecutorService executor = Executors.newFixedThreadPool(3);
+
+        Callable<Integer> maxTask = () -> Arrays.stream(arr).max().orElseThrow();
+        Callable<Integer> minTask = () -> Arrays.stream(arr).min().orElseThrow();
+        Callable<Double> avgTask = () -> Arrays.stream(arr).average().orElseThrow();
+
+        try {
+            Future<Integer> maxFuture = executor.submit(maxTask);
+            Future<Integer> minFuture = executor.submit(minTask);
+            Future<Double> avgFuture = executor.submit(avgTask);
+
+            System.out.println("Max: " + maxFuture.get());
+            System.out.println("Min: " + minFuture.get());
+            System.out.println("Average: " + avgFuture.get());
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        } finally {
+            executor.shutdown();
+        }
+    }
+}
+```
+
+---
+
+### **Output**
+For an array `{3, 7, 2, 8, 4, 10, 6}`, the output would be:
+```
+Max: 10
+Min: 2
+Average: 5.714285714285714
+```
+
+---
+
+### **Summary**
+- You can safely run these tasks in parallel as they are independent.
+- Use multithreading (`Thread` or `ExecutorService`) for performance gains on large arrays.
+- For small arrays, sequential computation might be more efficient due to reduced overhead.

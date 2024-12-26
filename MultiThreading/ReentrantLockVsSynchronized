@@ -1,0 +1,148 @@
+### **What is a Reentrant Lock?**
+A **Reentrant Lock** is a lock from the `java.util.concurrent.locks` package that provides more advanced locking capabilities compared to the traditional `synchronized` keyword. It is called "reentrant" because the thread holding the lock can reacquire it without getting blocked.
+
+#### **Key Features**
+1. **Explicit Locking:**
+   - Unlike `synchronized`, ReentrantLock provides explicit lock management with `lock()` and `unlock()` methods.
+   
+2. **Fairness:**
+   - Allows for fairness (optional) by granting the lock to the longest-waiting thread (`new ReentrantLock(true)`).
+
+3. **Interruptible Lock Acquisition:**
+   - Threads trying to acquire the lock can be interrupted using `lockInterruptibly()`.
+
+4. **Timed Lock Acquisition:**
+   - Threads can attempt to acquire a lock within a specified timeout using `tryLock(long timeout, TimeUnit unit)`.
+
+5. **Condition Variables:**
+   - Supports multiple condition variables for finer-grained thread coordination using `newCondition()`.
+
+6. **Reentrant:**
+   - A thread holding the lock can acquire it again without deadlocking.
+
+---
+
+### **Use Cases for Reentrant Lock**
+1. **Fine-Grained Control:**
+   - When you need finer control over thread synchronization, such as interruptible or timed locking.
+
+2. **Fairness:**
+   - When thread scheduling fairness is important (e.g., ensuring FIFO order for lock acquisition).
+
+3. **Multiple Condition Variables:**
+   - When you need multiple condition variables to coordinate different threads with specific conditions.
+
+4. **Interruptible Lock Acquisition:**
+   - When a thread needs to respond to interrupts while waiting for a lock.
+
+5. **Deadlock Prevention:**
+   - By allowing timeout for lock acquisition, `tryLock()` can help avoid deadlocks.
+
+---
+
+### **Why Was Reentrant Lock Introduced?**
+The `synchronized` block/keyword in Java is simpler and works well for most scenarios, but it has certain limitations:
+
+| Feature                          | `synchronized`             | `ReentrantLock`             |
+|-----------------------------------|----------------------------|-----------------------------|
+| **Explicit Locking**              | Implicit                   | Explicit (`lock()`/`unlock()`) |
+| **Fairness**                      | No fairness                | Optional fairness           |
+| **Interruptible Lock Acquisition**| Not possible               | Possible with `lockInterruptibly()` |
+| **Timeout Lock Acquisition**      | Not possible               | Possible with `tryLock()`   |
+| **Condition Variables**           | Single monitor condition   | Multiple conditions with `Condition` |
+| **Reentrancy**                    | Supported                  | Supported                   |
+
+---
+
+### **Examples**
+
+#### **1. Basic Reentrant Lock Usage**
+```java
+import java.util.concurrent.locks.ReentrantLock;
+
+public class ReentrantLockExample {
+    private final ReentrantLock lock = new ReentrantLock();
+
+    public void criticalSection() {
+        lock.lock(); // Acquire the lock
+        try {
+            System.out.println(Thread.currentThread().getName() + " is in the critical section.");
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        } finally {
+            lock.unlock(); // Release the lock
+        }
+    }
+
+    public static void main(String[] args) {
+        ReentrantLockExample example = new ReentrantLockExample();
+
+        Runnable task = example::criticalSection;
+
+        Thread t1 = new Thread(task, "Thread 1");
+        Thread t2 = new Thread(task, "Thread 2");
+
+        t1.start();
+        t2.start();
+    }
+}
+```
+
+#### **2. Timed Lock Acquisition**
+```java
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
+
+public class TimedLockExample {
+    private final ReentrantLock lock = new ReentrantLock();
+
+    public void tryLockExample() {
+        try {
+            if (lock.tryLock(2, TimeUnit.SECONDS)) {
+                try {
+                    System.out.println(Thread.currentThread().getName() + " acquired the lock.");
+                    Thread.sleep(3000);
+                } finally {
+                    lock.unlock();
+                }
+            } else {
+                System.out.println(Thread.currentThread().getName() + " couldn't acquire the lock.");
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    public static void main(String[] args) {
+        TimedLockExample example = new TimedLockExample();
+
+        Thread t1 = new Thread(example::tryLockExample, "Thread 1");
+        Thread t2 = new Thread(example::tryLockExample, "Thread 2");
+
+        t1.start();
+        t2.start();
+    }
+}
+```
+
+---
+
+### **Advantages of Reentrant Lock**
+1. **Fine Control Over Locking:**
+   - Enables more sophisticated thread coordination compared to `synchronized`.
+
+2. **Fairness Policy:**
+   - Ensures fair access to threads in contention.
+
+3. **Interruptible and Timed Locking:**
+   - Offers better handling of blocking operations and deadlock avoidance.
+
+4. **Multiple Condition Variables:**
+   - Provides flexibility to handle complex wait/notify scenarios.
+
+---
+
+### **When to Use Reentrant Lock**
+- Use `ReentrantLock` when you need advanced locking features or when `synchronized` is not sufficient.
+- For simpler synchronization needs, `synchronized` is preferred because it is easier to use and less error-prone.

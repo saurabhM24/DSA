@@ -1,0 +1,130 @@
+### **Compare and Swap (CAS)**
+
+---
+
+#### **Definition**
+Compare and Swap (CAS) is a low-level atomic operation used in concurrent programming to achieve thread-safe synchronization without using locks. It ensures that a value is updated only if it matches an expected value, providing the foundation for many non-blocking algorithms.
+
+---
+
+#### **How CAS Works**
+1. **Compare**:
+   - Check if the current value in memory matches an expected value.
+2. **Swap**:
+   - If they match, update the memory with a new value.
+   - If not, the operation fails, and the thread may retry.
+
+---
+
+#### **CAS in Java**
+The `compareAndSet` method, found in classes like `AtomicInteger` (from `java.util.concurrent.atomic`), provides CAS functionality.
+
+**Method Signature**:
+```java
+boolean compareAndSet(int expectedValue, int newValue);
+```
+
+- **`expectedValue`**: The value you think the variable currently holds.
+- **`newValue`**: The value you want to set if `expectedValue` matches.
+- **Returns**: `true` if the update is successful, `false` otherwise.
+
+---
+
+#### **Advantages of CAS**
+1. **Non-Blocking**:
+   - Threads don’t get blocked, improving throughput in multi-threaded applications.
+2. **Performance**:
+   - Avoids the overhead of acquiring and releasing locks.
+3. **Deadlock-Free**:
+   - Since no locks are used, CAS prevents deadlocks.
+
+---
+
+#### **Disadvantages of CAS**
+1. **Busy-Waiting**:
+   - Threads retrying the operation in a loop may lead to high CPU usage.
+2. **ABA Problem**:
+   - If a variable changes from `A → B → A`, CAS may incorrectly detect no change.
+   - **Solution**: Use version numbers or tools like `StampedLock` to handle ABA.
+3. **Complexity**:
+   - Writing non-blocking algorithms using CAS is more complex than using traditional locks.
+
+---
+
+#### **Example of CAS**
+
+```java
+import java.util.concurrent.atomic.AtomicInteger;
+
+public class CompareAndSwapExample {
+    public static void main(String[] args) {
+        AtomicInteger atomicCounter = new AtomicInteger(0);
+
+        // Attempt to update value from 0 to 1
+        boolean isUpdated = atomicCounter.compareAndSet(0, 1);
+        System.out.println("Updated: " + isUpdated + ", Current Value: " + atomicCounter.get());
+
+        // Attempt to update value from 0 to 2 (this will fail)
+        isUpdated = atomicCounter.compareAndSet(0, 2);
+        System.out.println("Updated: " + isUpdated + ", Current Value: " + atomicCounter.get());
+
+        // Successful update from 1 to 2
+        isUpdated = atomicCounter.compareAndSet(1, 2);
+        System.out.println("Updated: " + isUpdated + ", Current Value: " + atomicCounter.get());
+    }
+}
+```
+
+**Output**:
+```
+Updated: true, Current Value: 1
+Updated: false, Current Value: 1
+Updated: true, Current Value: 2
+```
+
+---
+
+#### **CAS and Visibility Guarantee**
+1. **Memory Barriers**:
+   - CAS relies on low-level atomic instructions that include memory barriers to ensure proper visibility across threads.
+   - Memory barriers ensure no reordering of reads and writes occurs around the CAS operation.
+
+2. **Volatile Variables**:
+   - CAS operations in Java (like `compareAndSet`) operate on variables marked as `volatile`, ensuring that changes are immediately visible to other threads.
+
+3. **Happens-Before Relationship**:
+   - A successful CAS establishes a happens-before relationship:
+     - All writes made before the CAS are visible to other threads reading the updated value.
+
+---
+
+#### **Use Cases**
+1. **Atomic Counters**:
+   - Increment or decrement counters in a thread-safe, lock-free manner.
+2. **Lock-Free Data Structures**:
+   - Implement stacks, queues, or other concurrent collections.
+3. **Spin Locks**:
+   - Useful for implementing basic locking mechanisms in certain scenarios.
+4. **Optimistic Concurrency Control**:
+   - Works well when conflicts are rare.
+
+---
+
+#### **Key Points**
+1. **Definition**: CAS is an atomic operation that updates a value if and only if it matches an expected value.
+2. **API**: `compareAndSet(expectedValue, newValue)`
+3. **Advantages**: Non-blocking, deadlock-free, and performant.
+4. **Disadvantages**: Can lead to busy-waiting, suffers from the ABA problem, and is complex to implement.
+5. **Visibility**: CAS ensures visibility of changes across threads due to memory barriers and volatile semantics.
+
+---
+
+### **Additional Notes**
+- **ABA Problem**:
+   - Use versioned values (like `AtomicStampedReference`) to avoid this issue.
+- **Retry Mechanism**:
+   - For contention-heavy scenarios, consider backoff strategies to reduce busy-waiting.
+
+---
+
+This concise summary should fit well into your notes. Let me know if you'd like to elaborate on any part!

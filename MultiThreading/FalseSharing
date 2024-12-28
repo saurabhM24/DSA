@@ -1,0 +1,111 @@
+### **What is False Sharing?**
+**False sharing** is a performance issue in multithreaded applications that occurs when multiple threads on different CPU cores inadvertently compete for access to the same cache line, even though they are working on unrelated data. This results in unnecessary cache invalidations, increasing memory latency and degrading performance.
+
+---
+
+### **Understanding the Problem**
+1. **CPU Caches and Cache Lines**:
+   - Modern CPUs use **caches** to store frequently accessed data for faster access.
+   - A **cache line** is the smallest unit of memory that can be stored in a CPU cache, typically 64 bytes.
+   - When a thread accesses a variable, the entire cache line containing that variable is loaded into the cache.
+
+2. **Scenario Leading to False Sharing**:
+   - Multiple threads modify variables that are:
+     - On the **same cache line**.
+     - But logically **independent** of each other.
+   - Even though the variables are unrelated, the cache line must be invalidated and updated across all cores when any thread modifies its variable. This causes **unnecessary cache coherence traffic**.
+
+---
+
+### **Example of False Sharing**
+Here’s a simple example in Java:
+
+```java
+public class FalseSharingExample {
+    public static volatile long var1 = 0;
+    public static volatile long var2 = 0;
+
+    public static void main(String[] args) {
+        Thread t1 = new Thread(() -> {
+            for (int i = 0; i < 1_000_000; i++) {
+                var1++;
+            }
+        });
+
+        Thread t2 = new Thread(() -> {
+            for (int i = 0; i < 1_000_000; i++) {
+                var2++;
+            }
+        });
+
+        t1.start();
+        t2.start();
+    }
+}
+```
+
+In this example:
+- `var1` and `var2` are **likely stored on the same cache line**.
+- Threads `t1` and `t2` continuously invalidate and reload the cache line, even though they are working on separate variables.
+
+---
+
+### **Impact of False Sharing**
+1. **Cache Invalidation**:
+   - When one thread modifies its variable, the cache line is invalidated in other cores, forcing them to reload it from memory.
+2. **Reduced Performance**:
+   - The contention increases memory latency and slows down execution.
+3. **Wasted Resources**:
+   - The CPU spends time on cache coherence instead of useful computation.
+
+---
+
+### **How to Avoid False Sharing**
+1. **Padding**:
+   - Add padding (unused variables) around the shared data to ensure each variable resides in a separate cache line.
+   - Example in Java:
+     ```java
+     public class NoFalseSharing {
+         public static class PaddedLong {
+             public long value = 0;
+             public long p1, p2, p3, p4, p5, p6; // Padding
+         }
+
+         public static PaddedLong var1 = new PaddedLong();
+         public static PaddedLong var2 = new PaddedLong();
+     }
+     ```
+
+2. **Use `@Contended` Annotation** (Java 8+):
+   - The `@sun.misc.Contended` annotation can be used to avoid false sharing. It instructs the JVM to place the annotated variable on a separate cache line.
+   - Enable the JVM option `-XX:-RestrictContended`.
+   - Example:
+     ```java
+     import sun.misc.Contended;
+
+     public class ContendedExample {
+         @Contended
+         public volatile long var1;
+
+         @Contended
+         public volatile long var2;
+     }
+     ```
+
+3. **Data Structure Design**:
+   - Rearrange the data layout so that frequently modified variables accessed by different threads are in separate cache lines.
+
+4. **Use High-Level Concurrency Tools**:
+   - Use classes from `java.util.concurrent` that are optimized to avoid such issues.
+
+---
+
+### **Key Takeaways**
+- **False sharing** is an unintended performance problem caused by multiple threads modifying unrelated data that resides on the same cache line.
+- It leads to increased cache coherence traffic and degraded performance.
+- You can mitigate it by:
+  - Using **padding**.
+  - Leveraging **`@Contended`**.
+  - Designing your data structures carefully.
+
+Would you like a practical benchmark example to measure the impact of false sharing?

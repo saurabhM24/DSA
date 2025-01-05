@@ -1,0 +1,82 @@
+When `counter.notifyAll()` is called within a synchronized block in Java, 
+the following sequence of events occurs, and understanding how the code flow works is critical to correctly handling thread synchronization.
+
+### Key Points to Understand
+
+1. **Releasing Waiting Threads**:
+   - `notifyAll()` wakes up all threads that are waiting on the `counter` object's monitor.
+   - These threads are moved from the "waiting" state to the "runnable" state. However, they do not execute immediately.
+
+2. **Current Thread Continues**:
+   - The current thread (the one calling `notifyAll()`) continues execution of the synchronized block and holds the lock on the `counter` object.
+   - The subsequent five print statements will execute uninterrupted because no other thread can enter the synchronized block until the current thread exits it.
+
+3. **Exiting the Synchronized Block**:
+   - Once the synchronized block is exited, the current thread releases the lock on the `counter` object.
+   - Only then can the threads in the "runnable" state attempt to acquire the lock.
+
+4. **Thread Scheduling**:
+   - Once the lock is released, the waiting threads (now runnable) will compete to reacquire the lock.
+   - The JVM's thread scheduler decides which thread will get the lock next. This decision depends on the JVM's implementation and is not deterministic.
+
+### Example Code to Illustrate
+```java
+public class NotifyExample {
+    private static final Object counter = new Object();
+
+    public static void main(String[] args) {
+        Thread waitingThread = new Thread(() -> {
+            synchronized (counter) {
+                try {
+                    System.out.println("Waiting thread: Waiting for notification...");
+                    counter.wait();
+                    System.out.println("Waiting thread: Notified and resumed.");
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        });
+
+        waitingThread.start();
+
+        try {
+            Thread.sleep(1000); // Ensure waitingThread enters waiting state.
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        synchronized (counter) {
+            System.out.println("Main thread: Calling notifyAll...");
+            counter.notifyAll();
+            System.out.println("Main thread: Continuing execution...");
+            System.out.println("Main thread: Doing work...");
+            System.out.println("Main thread: Finishing up...");
+        }
+    }
+}
+```
+
+### Output:
+```
+Waiting thread: Waiting for notification...
+Main thread: Calling notifyAll...
+Main thread: Continuing execution...
+Main thread: Doing work...
+Main thread: Finishing up...
+Waiting thread: Notified and resumed.
+```
+
+### What Happens Internally After `notifyAll()`:
+1. **The Waiting Threads**:
+   - All threads waiting on `counter.wait()` are moved to the runnable state but remain blocked because the lock is still held by the current thread.
+   
+2. **Execution Continues in Current Thread**:
+   - The current thread completes all statements within the synchronized block before releasing the lock.
+
+3. **Lock Release**:
+   - Once the current thread exits the synchronized block, the lock on the `counter` object is released.
+
+4. **Thread Competition**:
+   - The waiting threads now compete to acquire the lock. Only one thread can successfully acquire it and continue execution.
+
+This flow ensures the current thread finishes its critical section without interruption, while other threads waiting for the monitor can proceed only after the lock is released.

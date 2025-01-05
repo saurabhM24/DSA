@@ -1,0 +1,108 @@
+The behavior of `wait()` is different from `notifyAll()` in how it interacts with the synchronization mechanism. Here's a detailed explanation:
+
+---
+
+### **What Happens When `wait()` is Called?**
+
+1. **Thread Goes to the Waiting State:**
+   - When a thread calls `wait()` on an object (e.g., `counter.wait()`), it immediately **releases the lock on that object**.
+   - The thread moves to the **waiting state** and waits until it is notified via `notify()` or `notifyAll()`.
+
+2. **Other Threads Can Acquire the Lock:**
+   - Since the lock is released, other threads waiting to enter the synchronized block on the same object can now acquire the lock and proceed with their execution.
+
+3. **Thread Resumes When Notified:**
+   - When the waiting thread is notified (via `notify()` or `notifyAll()`), it moves to the **runnable state** but does not immediately resume execution.
+   - The thread must reacquire the lock on the object before it can continue from where it left off.
+
+4. **Code After `wait()`:**
+   - After the waiting thread reacquires the lock, it resumes execution from the line immediately after the `wait()` call.
+
+---
+
+### **Code Flow After `wait()`**
+
+Here’s an example to understand the flow better:
+
+#### Example Code:
+```java
+public class WaitNotifyExample {
+    private static final Object counter = new Object();
+
+    public static void main(String[] args) {
+        Thread waitingThread = new Thread(() -> {
+            synchronized (counter) {
+                try {
+                    System.out.println("Waiting thread: Waiting...");
+                    counter.wait(); // Releases the lock and waits
+                    System.out.println("Waiting thread: Resumed after notification!");
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        });
+
+        waitingThread.start();
+
+        try {
+            Thread.sleep(1000); // Allow waitingThread to enter waiting state
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        synchronized (counter) {
+            System.out.println("Main thread: Notifying...");
+            counter.notify(); // Notify the waiting thread
+            System.out.println("Main thread: Continuing work...");
+        }
+    }
+```
+
+#### Output:
+```
+Waiting thread: Waiting...
+Main thread: Notifying...
+Main thread: Continuing work...
+Waiting thread: Resumed after notification!
+```
+
+---
+
+### **Steps in the Code Flow:**
+
+1. **`waitingThread` Starts:**
+   - Acquires the lock on `counter` and enters the synchronized block.
+   - Calls `counter.wait()`, releasing the lock and moving to the waiting state.
+
+2. **Main Thread Executes:**
+   - Acquires the lock on `counter` and enters the synchronized block.
+   - Calls `notify()`, moving `waitingThread` from the waiting state to the runnable state.
+   - Releases the lock after completing its synchronized block.
+
+3. **`waitingThread` Resumes:**
+   - Reacquires the lock on `counter`.
+   - Continues execution from the line after `counter.wait()`.
+
+---
+
+### **Key Differences Between `wait()` and `notifyAll()`:**
+
+| Feature                  | `wait()`                                           | `notifyAll()`                                   |
+|--------------------------|----------------------------------------------------|------------------------------------------------|
+| **Effect on Current Thread** | Causes the current thread to release the lock and wait. | Wakes up all threads waiting on the same lock. |
+| **Effect on Other Threads**  | Other threads can acquire the lock after `wait()`. | The current thread continues until it releases the lock. |
+| **Thread State**           | Moves the current thread to the waiting state.   | Moves all waiting threads to the runnable state. |
+| **Resume Execution**       | A thread resumes only after being notified and reacquiring the lock. | Waiting threads resume based on lock availability. |
+
+---
+
+### **Code Flow After `wait()` (Summary):**
+
+1. The thread releases the lock on the monitor object.
+2. It moves to the waiting state.
+3. It waits to be notified (via `notify()` or `notifyAll()`).
+4. When notified, it moves to the runnable state.
+5. It reacquires the lock when available.
+6. Resumes execution from the line after the `wait()` call.
+
+This ensures a thread pauses its execution and allows other threads to proceed, creating a synchronization mechanism for inter-thread communication.

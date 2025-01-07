@@ -1,0 +1,90 @@
+### TCP/IP Model (Transmission Control Protocol/Internet Protocol)
+
+The TCP/IP model is a conceptual framework for understanding network communication. It consists of **four layers**, each handling specific aspects of data transmission.
+
+---
+
+### 1. **Application Layer**
+   - **Purpose**: Provides network services to applications and handles high-level protocols.
+   - **Key Protocols**:
+     - **HTTP/HTTPS**: Web browsing.
+     - **FTP**: File transfer.
+     - **SMTP**: Email.
+     - **DNS**: Domain name resolution.
+   - **Data Format**: Application data.
+   - **Functionality**:
+     - Interacts directly with end-user applications.
+     - Encodes/decodes messages for services like web browsing or email.
+
+---
+
+### 2. **Transport Layer**
+   - **Purpose**: Ensures reliable data transmission and handles end-to-end communication.
+   - **Key Protocols**:
+     - **TCP** (Transmission Control Protocol): Reliable, connection-oriented communication.
+     - **UDP** (User Datagram Protocol): Fast, connectionless communication.
+   - **Data Format**: Segments.
+   - **Functionality**:
+     - Splits large data into smaller segments.
+     - Handles error detection and retransmission.
+     - Manages flow control and session establishment.
+
+---
+
+### 3. **Internet Layer**
+   - **Purpose**: Handles addressing, routing, and delivering data packets between networks.
+   - **Key Protocols**:
+     - **IP** (Internet Protocol): Logical addressing and routing.
+     - **ICMP** (Internet Control Message Protocol): Error reporting (e.g., ping).
+     - **ARP** (Address Resolution Protocol): Maps IP addresses to MAC addresses.
+   - **Data Format**: Packets.
+   - **Functionality**:
+     - Assigns source and destination IP addresses.
+     - Determines the best path for data delivery across networks.
+
+---
+
+### 4. **Network Access Layer** (Link Layer)
+   - **Purpose**: Manages the physical transmission of data over network hardware.
+   - **Key Protocols**:
+     - **Ethernet**: Wired connections.
+     - **Wi-Fi**: Wireless connections.
+     - **PPP** (Point-to-Point Protocol): Direct connections.
+   - **Data Format**: Frames.
+   - **Functionality**:
+     - Adds physical addresses (MAC) for local delivery.
+     - Handles the actual transmission of bits over the medium.
+
+---
+
+### Data Flow Through Layers:
+1. **Sender Side**:
+   - Application layer generates data (e.g., HTTP request).
+   - Transport layer segments and adds port numbers.
+   - Internet layer adds IP addresses.
+   - Network Access layer frames data with MAC addresses and transmits it.
+2. **Receiver Side**:
+   - The process is reversed, with each layer stripping its respective header and passing data upward.
+
+---
+
+### Comparison with OSI Model:
+| OSI Model (7 Layers)          | TCP/IP Model (4 Layers) |
+|-------------------------------|-------------------------|
+| Application, Presentation, Session | Application Layer      |
+| Transport                     | Transport Layer        |
+| Network                       | Internet Layer         |
+| Data Link, Physical           | Network Access Layer   |
+
+---
+
+### Advantages of TCP/IP:
+- **Standardized**: Backbone of the internet.
+- **Scalable**: Supports large, complex networks.
+- **Interoperable**: Works across different hardware and platforms.
+
+### Disadvantages:
+- **Complex**: Requires technical expertise.
+- **Security**: Vulnerable to certain types of attacks without additional protocols.
+
+The TCP/IP model is widely adopted for its simplicity and effectiveness in modern networking.

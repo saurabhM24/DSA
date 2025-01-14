@@ -1,0 +1,97 @@
+Here’s a concise summary of everything we discussed about DynamoDB, structured for easy addition to your notes:
+
+---
+
+### **DynamoDB Overview**
+- **Type:** Fully managed NoSQL database by AWS.
+- **Data Model:** Key-value and document-based.
+- **Key Features:**
+  - **Schema-less:** Each item can have different attributes.
+  - **Primary Key:** Combination of a partition key (mandatory) and an optional sort key.
+  - **Automatic Scaling:** Scales horizontally by splitting data across partitions.
+  - **Global Tables:** Replicates data across regions for low-latency global access.
+  - **Event-Driven:** Integrates with AWS services like Lambda, SQS, and SNS.
+
+---
+
+### **Core Concepts**
+1. **Partition Key:**
+   - Determines which partition an item is stored in.
+   - Must be unique for each item (if no sort key is used).
+
+2. **Sort Key:**
+   - Used with a partition key for composite primary keys.
+   - Enables querying and sorting items within the same partition.
+
+3. **Partitions:**
+   - Logical storage units that DynamoDB manages automatically.
+   - A partition holds data up to **10 GB** and provides **3,000 RCU** and **1,000 WCU**.
+   - Data is distributed across multiple partitions for scalability.
+
+4. **Indexes:**
+   - **Global Secondary Index (GSI):** Allows querying on attributes other than the primary key.
+   - **Local Secondary Index (LSI):** Allows querying with the same partition key but different sort keys.
+
+---
+
+### **How DynamoDB Handles Data**
+- Data for multiple customers can reside on the same SSD, separated by encryption and unique partition keys.
+- Items are stored in partitions, and each partition is managed by AWS for storage, scaling, and availability.
+- AWS handles dynamic allocation of storage and hardware resources based on usage patterns.
+
+---
+
+### **Key Differences from SQL**
+| **Aspect**                | **DynamoDB (NoSQL)**                                  | **SQL Database**                     |
+|---------------------------|------------------------------------------------------|--------------------------------------|
+| **Schema**                | Schema-less; flexible attributes per item.           | Fixed schema for all rows.           |
+| **Data Relationships**    | Denormalized; no foreign keys or joins.              | Normalized; supports joins.          |
+| **Querying**              | Limited to primary key, GSIs, and LSIs.              | Complex queries, joins, subqueries.  |
+| **Scalability**           | Horizontally scalable (auto-partitioning).           | Vertically scalable (manual scaling).|
+
+---
+
+### **Real-World Use Cases**
+1. **E-Commerce:** Product catalog, order history, customer profiles.
+2. **Social Media:** User profiles, posts, and follower relationships.
+3. **Gaming:** Player stats, leaderboards, game sessions.
+4. **IoT:** Time-series data from sensors.
+5. **Banking:** Transaction history and account details.
+6. **Media Streaming:** User activity logs and watch history.
+7. **Event Storage:** Logs and application events.
+
+---
+
+### **Advantages**
+- Low latency and high throughput for real-time applications.
+- Automatically scalable to handle unpredictable workloads.
+- Global replication for low-latency access worldwide.
+- Flexible schema to accommodate evolving data needs.
+
+---
+
+### **Limitations**
+- No support for complex joins or relational queries.
+- Requires careful design of partition keys and indexes for efficient querying.
+- Higher cost for ACID transactions compared to relational databases.
+
+---
+
+### **Example: Product Catalog**
+#### Table Schema:
+- **Partition Key:** `ProductID`
+- **Attributes:** `Name`, `Category`, `Price`, `Stock`, `Description`, `Tags`
+
+#### Sample Data:
+| ProductID | Category    | Name               | Price  | Stock | Description              |
+|-----------|-------------|--------------------|--------|-------|--------------------------|
+| P12345    | Electronics | Bluetooth Speaker  | 2999   | 50    | Portable wireless speaker.|
+
+#### Queries:
+1. Fetch product by ID: Query by `ProductID`.
+2. Fetch products in a category: Use a **GSI** with `Category` as the partition key.
+3. Fetch products below a certain price: Use a scan with filter expression.
+
+---
+
+This summary should fit nicely into your notes for quick revision. Let me know if you'd like any specific point expanded!

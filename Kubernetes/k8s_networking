@@ -1,0 +1,20 @@
+In Kubernetes, the **Kubernetes networking model** is responsible for assigning IP addresses to service components. Here's how it works:
+
+1. **Pod IP Addresses**:
+   - Each **Pod** in a Kubernetes cluster gets its own unique IP address from the **Kubernetes network**. The network is set up by the **network plugin** (such as Calico, Flannel, or Cilium) that your cluster uses.
+   - The Kubernetes control plane ensures that Pods across different nodes can communicate with each other using their IP addresses.
+
+2. **Service IP Addresses**:
+   - Kubernetes also manages **Services**, which are abstractions that expose a set of Pods to clients.
+   - A **ClusterIP** (the default type of service) is automatically assigned to a Kubernetes **Service** when it's created. This is a virtual IP address that is internal to the cluster and can be used by clients to reach the service, regardless of where the Pods for that service are running.
+   - The assignment of the ClusterIP is done by the **kube-apiserver**, which assigns a static IP from a pre-defined IP range for services.
+
+3. **DNS Resolution**:
+   - Kubernetes also provides **DNS** (usually via CoreDNS) to resolve service names to IP addresses. For example, if you have a service called `my-service`, Kubernetes can resolve `my-service.default.svc.cluster.local` to the appropriate IP address for that service.
+
+### To summarize:
+- **Pods** get IPs from the Kubernetes network, managed by the network plugin.
+- **Services** get IPs (ClusterIPs) from a pool of addresses defined in the Kubernetes configuration, typically managed by the kube-apiserver.
+- DNS is used to map service names to their assigned IP addresses, providing ease of discovery within the cluster.
+
+Let me know if you need more details on any of these!

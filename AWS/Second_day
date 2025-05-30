@@ -1,0 +1,31 @@
+EBS volumes vs Instance store
+IOPS and size setups. How to configure based on scenaio. Give examples.
+
+
+AWS S3:
+Max 10k buckets per aws account
+A bucket can have unlimited number of objects in it.
+
+Route 53:
+What is Hosted zone, name servers?
+
+s3 storGE CLASSES:
+s3-standard IA
+s3-std one zone IA
+
+s3 Glacier- archived storage(inactive data)
+
+Advance Networking:
+1. VPC endpoints
+2. VPC Peering
+3. VPC Transit Gateway.
+
+AWS regions are also connected with cables.
+
+
+Edge Service:
+There are 36 cities where there are AWS regions.
+There are sround 500 big cities accross the world.
+So for other cities kind of small data center have been built -> that is nothing but edge location.
+
+AWS WAF and Shield:

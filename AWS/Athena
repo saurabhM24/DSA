@@ -1,0 +1,109 @@
+
+### AWS Athena Notes
+
+**What is Athena?**
+
+* AWS Athena is a **serverless SQL query service**.
+* Allows querying **data directly from S3** using **standard ANSI SQL**.
+* No infrastructure or servers to manage.
+
+**Engine**: Built on **Presto** (also known as Trino).
+
+**Billing**:
+
+* **Pay per query** model: \$5 per TB of data scanned.
+* Optimize cost by compressing data and using columnar formats (Parquet/ORC).
+
+---
+
+**Key Features**:
+
+* Fully managed, serverless
+* Uses **Glue Data Catalog** for schema and metadata
+* Supports many formats: JSON, CSV, TSV, Avro, Parquet, ORC
+* Supports **partitions** to reduce scan size
+* Works with **federated connectors** (e.g., Redshift, RDS, DynamoDB)
+
+---
+
+**Basic Flow**:
+
+1. Store raw data (JSON, CSV, Parquet) in **S3**.
+2. Define table in Athena with schema pointing to S3 location.
+3. Run SQL queries on the data (no ETL or DB required).
+4. Results stored in S3, viewable in console or via APIs.
+
+---
+
+**Example Log File (JSON lines)**:
+Each line is a JSON object in `s3://my-bucket/logs/2025/06/25/logs.json`
+
+```
+{"timestamp": "2025-06-25T10:00:00Z", "user_id": "u1", "url": "/home"}
+{"timestamp": "2025-06-25T10:01:00Z", "user_id": "u2", "url": "/product/123"}
+```
+
+---
+
+**Create Table in Athena**:
+
+```sql
+CREATE EXTERNAL TABLE weblogs (
+  timestamp string,
+  user_id string,
+  url string
+)
+ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
+LOCATION 's3://my-bucket/logs/2025/06/25/';
+```
+
+---
+
+**Run Query**:
+
+```sql
+SELECT url, COUNT(*) AS visit_count
+FROM weblogs
+GROUP BY url
+ORDER BY visit_count DESC;
+```
+
+---
+
+**Partitioned Table Example**:
+S3 path: `s3://my-bucket/logs/year=2025/month=06/day=25/logs.json`
+
+```sql
+CREATE EXTERNAL TABLE weblogs_partitioned (
+  timestamp string,
+  user_id string,
+  url string
+)
+PARTITIONED BY (year string, month string, day string)
+ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
+LOCATION 's3://my-bucket/logs/';
+```
+
+**Load partitions**:
+
+```sql
+MSCK REPAIR TABLE weblogs_partitioned;
+```
+
+**Query with partitions**:
+
+```sql
+SELECT url, COUNT(*) 
+FROM weblogs_partitioned 
+WHERE year='2025' AND month='06' AND day='25'
+GROUP BY url;
+```
+
+---
+
+**Performance Tips**:
+
+* Use columnar formats (Parquet, ORC) → reduces scan size
+* Partition your data (e.g., by date)
+* Avoid `SELECT *` — only fetch needed columns
+* Compress files (e.g., GZIP, Snappy)

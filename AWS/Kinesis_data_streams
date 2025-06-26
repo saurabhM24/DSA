@@ -1,0 +1,251 @@
+Here's a complete GitHub-friendly **Kinesis Notes** document, including:
+
+1. 📚 Conceptual understanding
+2. 🧠 Throughput per shard
+3. 🧪 Multiple consumer types
+4. ✅ Java producer and consumer examples
+
+---
+
+## 🔁 **AWS Kinesis Data Streams – Complete Notes**
+
+---
+
+### 📘 **Overview**
+
+**Amazon Kinesis Data Streams (KDS)** is a real-time, durable, and scalable stream processing service. You can continuously collect and process data (logs, events, telemetry, etc.) from multiple producers and consume it in real-time.
+
+---
+
+### 📦 **Shard-Level Throughput Limits**
+
+| Operation           | Per Shard Limit                     |
+| ------------------- | ----------------------------------- |
+| **Write**           | 1 MB/sec OR 1,000 records/sec       |
+| **Read (Standard)** | 2 MB/sec + 5 GetRecords/sec         |
+| **Read (EFO)**      | 2 MB/sec **per consumer per shard** |
+
+---
+
+### 🔍 **Write & Read Behavior**
+
+* **Producers** write data using `PutRecord` or `PutRecords`.
+* **Consumers** read using `GetRecords` (standard) or `SubscribeToShard` (EFO).
+* Shards distribute and store the records for **24 hours (default)**, extendable to **7 days**.
+
+---
+
+### 🧠 **Consumer Types**
+
+#### 1. **Shared Throughput Consumer (Standard)**
+
+* All apps share the 2 MB/sec per shard.
+* KCL (Kinesis Client Library) uses **DynamoDB for lease coordination**.
+* Only **one consumer per shard per app instance**.
+
+#### 2. **Enhanced Fan-Out Consumer (EFO)**
+
+* Each registered consumer gets **dedicated throughput** (2 MB/sec/shard).
+* Supports **low latency** and **no read contention**.
+* Uses `SubscribeToShard` internally.
+
+---
+
+### 🔗 **Multiple Applications Consuming from the Same Shard**
+
+You can have **multiple independent consumer applications**, each with its own KCL worker:
+
+```text
+             ┌──────────────┐
+             │  Producer    │
+             └─────┬────────┘
+                   │
+        ┌──────────▼──────────┐
+        │   Kinesis Stream    │
+        │ (e.g., 2 shards)    │
+        └─────┬────────┬──────┘
+              │        │
+    ┌─────────▼─┐    ┌─▼──────────┐
+    │ App1 KCL  │    │ App2 KCL   │   ← both independently consuming
+    └───────────┘    └────────────┘
+```
+
+Each app:
+
+* Reads from Kinesis
+* Has its own DynamoDB lease table
+* Works independently
+
+---
+
+## 💻 **Java Example: Kinesis Producer & Consumer**
+
+### 🔧 Prerequisites:
+
+* Java 11+
+* Maven
+* AWS credentials configured
+* AWS SDK v2
+
+---
+
+### 📝 Maven `pom.xml`
+
+```xml
+<dependencies>
+  <!-- AWS SDK v2 -->
+  <dependency>
+    <groupId>software.amazon.awssdk</groupId>
+    <artifactId>kinesis</artifactId>
+    <version>2.25.0</version>
+  </dependency>
+  <dependency>
+    <groupId>software.amazon.awssdk</groupId>
+    <artifactId>regions</artifactId>
+    <version>2.25.0</version>
+  </dependency>
+  <dependency>
+    <groupId>software.amazon.kinesis</groupId>
+    <artifactId>amazon-kinesis-client</artifactId>
+    <version>2.5.0</version>
+  </dependency>
+</dependencies>
+```
+
+---
+
+### ✅ Kinesis Producer – Java
+
+```java
+import software.amazon.awssdk.services.kinesis.KinesisClient;
+import software.amazon.awssdk.services.kinesis.model.*;
+
+import java.nio.ByteBuffer;
+import java.util.UUID;
+
+public class KinesisProducer {
+    public static void main(String[] args) {
+        String streamName = "my-stream";
+        KinesisClient kinesisClient = KinesisClient.create();
+
+        for (int i = 0; i < 10; i++) {
+            String partitionKey = UUID.randomUUID().toString();
+            String data = "event-" + i;
+
+            PutRecordRequest request = PutRecordRequest.builder()
+                    .partitionKey(partitionKey)
+                    .streamName(streamName)
+                    .data(ByteBuffer.wrap(data.getBytes()))
+                    .build();
+
+            kinesisClient.putRecord(request);
+            System.out.println("Sent: " + data);
+        }
+
+        kinesisClient.close();
+    }
+}
+```
+
+---
+
+### ✅ Kinesis Consumer – Java (Using KCL)
+
+```java
+import software.amazon.kinesis.processor.*;
+import software.amazon.kinesis.retrieval.polling.PollingConfig;
+import software.amazon.kinesis.common.*;
+import software.amazon.kinesis.coordinator.Scheduler;
+import java.util.concurrent.Executors;
+
+public class KinesisConsumerApp {
+    public static void main(String[] args) {
+        ConfigsBuilder configs = new ConfigsBuilder(
+            "my-stream",
+            "my-app-1",  // Change for different apps
+            DefaultCredentialsProvider.create(),
+            "consumer-worker-1",
+            new SampleRecordProcessorFactory()
+        );
+
+        Scheduler scheduler = new Scheduler(
+            configs.checkpointConfig(),
+            configs.coordinatorConfig(),
+            configs.leaseManagementConfig(),
+            configs.lifecycleConfig(),
+            configs.metricsConfig(),
+            configs.processorConfig(),
+            configs.retrievalConfig()
+        );
+
+        Executors.newSingleThreadExecutor().submit(scheduler);
+    }
+}
+```
+
+---
+
+### 🎯 Sample Record Processor
+
+```java
+import software.amazon.kinesis.processor.ShardRecordProcessor;
+import software.amazon.kinesis.processor.ShardRecordProcessorFactory;
+import software.amazon.kinesis.lifecycle.events.*;
+import software.amazon.kinesis.retrieval.KinesisClientRecord;
+
+import java.nio.charset.StandardCharsets;
+
+public class SampleRecordProcessorFactory implements ShardRecordProcessorFactory {
+    @Override
+    public ShardRecordProcessor shardRecordProcessor() {
+        return new SampleRecordProcessor();
+    }
+}
+
+class SampleRecordProcessor implements ShardRecordProcessor {
+    @Override
+    public void initialize(InitializationInput input) {
+        System.out.println("Initializing: " + input.shardId());
+    }
+
+    @Override
+    public void processRecords(ProcessRecordsInput input) {
+        for (KinesisClientRecord record : input.records()) {
+            String data = StandardCharsets.UTF_8.decode(record.data()).toString();
+            System.out.println("Consumed: " + data);
+        }
+    }
+
+    @Override
+    public void leaseLost(LeaseLostInput input) {}
+    @Override
+    public void shardEnded(ShardEndedInput input) {}
+    @Override
+    public void shutdownRequested(ShutdownRequestedInput input) {}
+}
+```
+
+---
+
+## 🧪 Run Multiple Consumers
+
+To simulate **multiple apps consuming the same stream**:
+
+1. Change the `application name` in `ConfigsBuilder` for each app:
+
+   ```java
+   new ConfigsBuilder("my-stream", "my-app-2", ...)
+   ```
+2. Start both apps. Each creates its own lease table in DynamoDB and independently reads the stream.
+
+---
+
+## 📌 Notes
+
+* **1 Shard = 1 MB/s write, 2 MB/s read**
+* Use **KCL** for production-grade, checkpointed, load-balanced consumers.
+* Use **EFO** for high-throughput, low-latency, multiple-consumer scenarios.
+
+---
+
+Let me know if you want this exported as `.md`, zipped Java project, or deployed using Spring Boot!

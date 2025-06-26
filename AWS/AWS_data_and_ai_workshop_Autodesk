@@ -1,0 +1,82 @@
+---
+
+## 🐬 **Amazon Aurora vs Aurora Serverless vs Aurora Limitless (DSQL)**
+
+### 🔹 1. **Amazon Aurora (Provisioned)**
+
+| Feature               | Description                                                                     |
+| --------------------- | ------------------------------------------------------------------------------- |
+| **Architecture**      | High-performance, MySQL- and PostgreSQL-compatible relational DB.               |
+| **Replication**       | Maintains **6 copies** of data across **3 Availability Zones** (2 per AZ).      |
+| **Failover**          | Automatic failover to a read replica (in seconds).                              |
+| **Write Scaling**     | Only **one write instance** allowed per cluster (limits write throughput).      |
+| **Read Scaling**      | Add up to **15 read replicas** to scale reads.                                  |
+| **Cluster Endpoint**  | Points to **writer** node by default; reader endpoint for load balancing reads. |
+| **Backups & Storage** | Continuous backups to S3, and auto-scaling storage up to 128 TiB.               |
+| **Use Case**          | Best for consistent workloads where predictable performance is required.        |
+
+---
+
+### 🔹 2. **Amazon Aurora Serverless v2**
+
+| Feature          | Description                                                                               |
+| ---------------- | ----------------------------------------------------------------------------------------- |
+| **Scaling**      | **Instant, fine-grained auto-scaling** (based on Aurora Capacity Units – ACUs).           |
+| **Architecture** | Same storage engine as Aurora Provisioned, but with **serverless compute**.               |
+| **Concurrency**  | Limited by max ACU (writes still go through a single writer node).                        |
+| **Cold Starts**  | v2 has **no cold starts**, unlike v1.                                                     |
+| **Failover**     | Automatic; scales across AZs but still single writer.                                     |
+| **Billing**      | Pay-per-use model based on consumed ACUs.                                                 |
+| **Use Case**     | Ideal for **variable workloads**, development/testing environments, or infrequent spikes. |
+
+---
+
+### 🔹 3. **Amazon Aurora Limitless / Aurora DSQL (Distributed SQL)**
+
+| Feature                 | Description                                                                                                          |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| **Sharding**            | Automatically **shards data** internally based on **primary key hash**.                                              |
+| **Write Scaling**       | Supports **horizontal write scaling** across multiple shards.                                                        |
+| **Architecture**        | Serverless, distributed, **transactionally consistent** (ACID).                                                      |
+| **Concurrency Control** | Uses **Pessimistic concurrency control** (ensures lock safety).                                                      |
+| **Co-located Tables**   | Tables like `customer` and `order` can be **co-located in the same shard** for efficiency.                           |
+| **Shard Awareness**     | Optimally designed queries **hit only the required shards**; poorly chosen shard key results in **performance hit**. |
+| **Aurora DSQL**         | New SQL experience (like DynamoDB):                                                                                  |
+
+* No VPC/subnet config
+* Optimistic concurrency control
+* You provide table name, Aurora manages infra
+* Aurora maintains **shard map** internally
+* **Single endpoint** for querying
+  |
+  \| **Use Case** | Best for **hyper-scale apps** with very high write throughput needs or globally distributed apps. |
+
+---
+
+### 📌 Key Differences Summary
+
+| Feature                 | Aurora (Provisioned) | Aurora Serverless v2       | Aurora DSQL (Limitless)                |
+| ----------------------- | -------------------- | -------------------------- | -------------------------------------- |
+| **Write Scalability**   | Single writer        | Single writer (scales ACU) | **Horizontally scalable writes**       |
+| **Auto Scaling**        | No                   | **Yes (ACU-based)**        | Yes (internally managed)               |
+| **Sharding**            | No                   | No                         | **Yes (by primary key)**               |
+| **Concurrency Control** | MVCC                 | MVCC                       | **Pessimistic / Optimistic**           |
+| **Cold Start**          | No                   | No in v2                   | N/A                                    |
+| **Cost Model**          | Fixed instance       | Pay-per-use (ACU)          | Pay-per-use (serverless + distributed) |
+| **Setup Complexity**    | Medium               | Easy                       | Easiest (infra abstracted)             |
+| **Target Use Case**     | Predictable workload | Spiky/variable load        | Ultra-scale, globally distributed apps |
+
+---
+
+### 💡 Notes:
+
+* Choose a **good shard key** in Limitless DSQL; wrong key can lead to **scatter-gather** across shards.
+* Aurora Limitless is best when:
+
+  * You need write scaling beyond a single writer.
+  * You want a **fully-managed sharded SQL experience**.
+* Aurora Serverless v2 suits apps with **spiky workloads** or **cost-sensitive development environments**.
+* Use **Aurora Provisioned** when:
+
+  * You want **predictable performance**.
+  * You're okay managing instance sizes and capacity.

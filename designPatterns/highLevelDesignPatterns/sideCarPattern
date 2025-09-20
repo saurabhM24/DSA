@@ -1,0 +1,101 @@
+YT link: https://www.youtube.com/watch?v=ruYvRL7c0OM
+
+## Sidecar Pattern — Notes
+
+### What is the Sidecar Pattern
+
+* A **sidecar** is a helper/co-pilot component that runs alongside a main application component (in the same deployment unit, e.g., a Pod in Kubernetes or same VM/container setup).
+* It extends or enhances the main component’s behavior but is loosely coupled.
+* Common in microservices / cloud native architecture.
+
+---
+
+### Why Use Sidecar
+
+* **Separation of concerns**: offload cross-cutting functionality (logging, monitoring, configuration, security) to the sidecar rather than embedding into app.
+* **Reusability**: same sidecar logic can be used with many services.
+* **Independent lifecycle**: sidecar can be updated/restarted without touching the main app.
+* **Operational control**: helps with adding side features (e.g. retries, proxies) without changing app code.
+
+---
+
+### Common Use Cases
+
+* Proxy / API gateway (e.g. envoy, istio) sidecars for traffic control, routing, resilience.
+* Logging / observability (collect metrics, send logs).
+* Configuration / secrets delivery.
+* Security: authentication, authorization, TLS termination.
+* Caching or local storage of configs.
+
+---
+
+### Basic Structure (Example Template)
+
+```
++----------------------+       +----------------------+
+| Main Application     |       | Sidecar Service      |
+| (Business Logic)     | <---> | (Helper / Proxy /    |
+|                      |       | Logging / etc.)      |
++----------------------+       +----------------------+
+             \                      /
+              \-- Shared resources --/
+                   (filesystem, network, IPC)
+```
+
+* They share the same environment, possibly same network namespace (localhost), volume mounts, etc.
+
+---
+
+### Key Characteristics
+
+| Feature              | Description                                             |
+| -------------------- | ------------------------------------------------------- |
+| **Co-located**       | Deployed in same unit (pod/container side by side)      |
+| **Shared resources** | Often share file system, network, IPC for communication |
+| **Independent**      | Sidecar can be managed/restarted separately             |
+| **Enhancement-only** | Not replacing main app, but augmenting it               |
+
+---
+
+### Pros
+
+* Avoids modifying existing app code for cross-cutting concerns.
+* Easier to integrate common capabilities (metrics, logging, security).
+* Flexibility to add or remove sidecar without major app rewrite.
+* Simplifies scaling for the auxiliary concerns.
+
+---
+
+### Cons / Trade-offs
+
+* Increased complexity in deployment and orchestration.
+* Resource overhead: sidecar consumes CPU, memory.
+* More moving parts to monitor and manage.
+* If sidecar fails, might degrade or break the main app’s behavior.
+
+---
+
+### Example from the Video (you should fill in these with concrete details)
+
+* What main service was used?
+* What sidecar was used (proxy, logging agent, etc.)?
+* How were they deployed together (Kubernetes, containers)?
+* How did the sidecar communicate with the main app (shared localhost port, HTTP proxy, file sharing)?
+* What benefits were demonstrated (latency reduction, better observability, security)?
+* Any pitfalls the video mentioned (e.g. startup ordering, failure handling)?
+
+---
+
+### When to Use vs When Not To
+
+**Use Sidecar When:**
+
+* You want to introduce a cross-cutting concern uniformly across many services.
+* You need to keep core app code clean/unmodified.
+* You have enough infrastructure/ops capability to manage extra components.
+
+**Avoid Sidecar When:**
+
+* Overhead isn’t justified (simple app, minimal cross-cutting concerns).
+* Resource constrained environment.
+* If sidecar introduces single point of failure.

@@ -1,0 +1,164 @@
+# URL Shortener – System Design
+
+---
+
+## Feature Requirements
+
+* Generate a **short, unique URL** for any given long URL.
+* Redirect users from short URL → original long URL.
+* Provide **fast reads** (lookup performance critical).
+* Support **billions of URLs** with scalability.
+* Allow **custom expiration** (optional).
+* Handle **custom aliasing** (optional).
+
+---
+
+## Non-Feature Requirements
+
+* **High availability**: System must be fault tolerant.
+* **Low latency**: Sub-millisecond lookup times.
+* **Scalability**: Horizontal scaling for DB, cache, services.
+* **Consistency**: Strong consistency required for short code → long URL mapping.
+* **Durability**: Mappings must persist in case of node failures.
+* **Security**: Prevent abuse with rate limiting & spam detection.
+
+### Back-of-the-Envelope Calculations
+
+Assume service at internet scale.
+
+1. **Traffic Volume**
+
+   * 500M new short URLs per year ≈ ~16 URLs/sec.
+   * Reads are 100× writes → ~1600 lookups/sec average.
+   * Peak traffic ~10× average → ~16k reads/sec.
+
+2. **Storage**
+
+   * Each record ~500 bytes (short_code + long_url + metadata).
+   * For 500M records/year → 500M × 500 bytes = **250 GB/year**.
+   * 5 years → ~1.25 TB (easily handled with sharding).
+
+3. **Cache**
+
+   * Hot URLs (top 20%) may serve 80% of requests.
+   * Redis cluster with ~100 GB RAM can store ~200M entries.
+   * Redis lookup latency ~0.5–1 ms.
+
+4. **DB**
+
+   * Shard MySQL into 50 shards → each holds ~10M records/year.
+   * Each shard stores ~5 GB/year of data → manageable.
+
+5. **ID Space**
+
+   * Base62 with length 7 gives `62^7 ≈ 3.5 trillion` possible short codes.
+   * Enough to last decades.
+
+---
+
+## Algorithm / Logic
+
+### Base62 Encoding
+
+We want to convert a numeric ID into a short string.
+Base62 uses:
+
+```
+Digits: 0–9 (10 chars)
+Lowercase: a–z (26 chars)
+Uppercase: A–Z (26 chars)
+Total = 62 symbols
+```
+
+### Unique ID Generation
+
+* Maintain a **global counter** (auto-increment in DB, or distributed ID generator).
+* Each new URL increments the counter → produces a unique integer ID.
+* Convert that integer into a **Base62 string**.
+
+### Base62 Conversion Example
+
+1. Suppose counter = `125`.
+2. Divide by 62 repeatedly and map remainders:
+
+   * 125 ÷ 62 = 2 remainder 1 → "1"
+   * 2 ÷ 62 = 0 remainder 2 → "2"
+3. Reverse remainders → `"21"`.
+4. Final short code = `"21"`.
+
+### Pseudocode
+
+```python
+# Base62 character set
+chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+def encode_base62(num: int) -> str:
+    if num == 0:
+        return chars[0]
+    encoded = []
+    while num > 0:
+        num, rem = divmod(num, 62)
+        encoded.append(chars[rem])
+    return "".join(reversed(encoded))
+
+# Example usage:
+# input: 125
+# output: "21"
+```
+
+---
+
+## Overall Design
+
+### Flow
+
+**Create Short URL**
+
+1. Writer → **Load Balancer** → **URL Assignment Service**.
+2. Service fetches **unique ID** from counter / ID generator.
+3. Encodes ID → **Base62 short code**.
+4. Saves mapping in **MySQL**.
+5. Stores in **Redis cache** for fast reads.
+
+**Resolve Short URL**
+
+1. Reader → **Load Balancer** → **URL Read Service**.
+2. Service checks **Redis cache**:
+
+   * If found → redirect immediately.
+   * If not found → fetch from **MySQL**, update cache, then redirect.
+
+---
+
+### Mermaid Diagram
+
+```mermaid
+flowchart LR
+    subgraph WriterFlow[Write Flow]
+        W[Writer] --> LB1[Load Balancer]
+        LB1 --> UAS[URL Assignment Service]
+        UAS --> IDGen[Unique ID Generator]
+        IDGen --> Base62[Base62 Encoder]
+        Base62 --> DB1[(MySQL Shard A-L)]
+        Base62 --> DB2[(MySQL Shard M-Z)]
+        Base62 --> Cache[Redis Cache]
+    end
+
+    subgraph ReaderFlow[Read Flow]
+        R[Reader] --> LB2[Load Balancer]
+        LB2 --> URS[URL Read Service]
+        URS --> Cache
+        URS --> DB1
+        URS --> DB2
+    end
+```
+
+---
+
+## Future Enhancements
+
+* Support **custom aliases** (`/mybrand123`).
+* Add **expiry & one-time use** links.
+* Add **analytics pipeline** via Kafka (click count, geo, device info).
+* Use **consistent hashing** instead of range-based DB sharding.
+* Apply **CDN edge caching** for faster redirects.

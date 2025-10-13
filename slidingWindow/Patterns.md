@@ -1,218 +1,260 @@
-Perfect — you’re referring to the **sliding window pattern using a single `while` loop** where both expansion and shrinking happen inside the same loop (like many LeetCode editorial templates).
+Perfect 💪 — here’s your **final comprehensive Sliding Window Patterns Notes (with while loop format)** — clean, concise, and ready to paste into your GitHub repo.
 
-Here’s a **comprehensive collection of templated formats** for all major sliding window patterns — all written in your preferred **“Step 1 expand, Step 2 shrink”** structure.
+This includes:
+
+* ✅ Fixed-size window
+* ✅ Variable-size window (maximize/minimize)
+* ✅ Longest substring with condition
+* ✅ Distinct elements/window problems
+* ✅ Count number of subarrays pattern
+* ✅ Minimum window substring pattern
+
+and all are in your preferred **while-loop format (Step 1 expand + Step 2 shrink)**.
 
 ---
 
-## 🧩 1. Fixed Size Window
+# 🧩 Sliding Window Patterns — Complete Notes
 
-### ✅ Problem Type
+Sliding window is a powerful technique to handle subarray or substring problems efficiently, especially when the array/string is contiguous.
 
-Given a window size `k`, compute something (sum, max, count, etc.) for every subarray/substring of length `k`.
+---
 
-### 🧱 Template
+## ⚙️ Common Template (While-loop Format)
 
 ```java
 int left = 0, right = 0;
-int windowSum = 0, maxSum = 0;
+while (right < n) {
+    // Step 1: expand the window by including arr[right]
+    
+    // Step 2: shrink the window until it satisfies the condition
+    
+    // Optionally: process the result (update max/min/count)
+    
+    right++;
+}
+```
+
+---
+
+## 🧩 Pattern 1: Fixed-size Sliding Window
+
+**Used for:** Problems where window size `k` is fixed (e.g., max/min/avg in every window).
+
+```java
+int left = 0, right = 0;
+int n = arr.length;
+int k = 3;
+int windowSum = 0;
+int maxSum = Integer.MIN_VALUE;
 
 while (right < n) {
-    // Step 1: expand the window
+    // Step 1: expand
     windowSum += arr[right];
 
-    // Step 2: shrink when window size exceeds k
-    if (right - left + 1 > k) {
+    // Step 2: maintain window size = k
+    if (right - left + 1 == k) {
+        maxSum = Math.max(maxSum, windowSum);
         windowSum -= arr[left];
         left++;
     }
 
-    // Step 3: update answer when window size == k
-    if (right - left + 1 == k) {
-        maxSum = Math.max(maxSum, windowSum);
-    }
-
     right++;
 }
 ```
 
-### 🧩 Example
+**Examples:**
 
-LeetCode 643 — *Maximum Average Subarray I*
+* Maximum sum subarray of size K
+* Average of each subarray of size K
 
 ---
 
-## 🧩 2. Variable Size Window (Expand–Shrink)
+## 🧩 Pattern 2: Variable-size Window (Longest / Shortest Subarray with Condition)
 
-### ✅ Problem Type
-
-Find **smallest or largest** window satisfying a constraint (sum ≥ target, at most K distinct chars, etc.)
-
-### 🧱 Template
+**Used for:** Find longest/shortest subarray satisfying some condition (e.g., sum ≤ K, sum == K).
 
 ```java
 int left = 0, right = 0;
-int ans = 0; // or Integer.MAX_VALUE for min window
+int n = arr.length;
 int currentSum = 0;
+int maxLen = 0;
 
 while (right < n) {
-    // Step 1: expand window
+    // Step 1: expand
     currentSum += arr[right];
 
-    // Step 2: shrink while condition violated
-    while (currentSum > target) {   // condition depends on problem
+    // Step 2: shrink until valid
+    while (currentSum > k && left <= right) {
         currentSum -= arr[left];
         left++;
     }
 
-    // Step 3: update result (if valid)
-    ans = Math.max(ans, right - left + 1);
+    // process (longest valid subarray)
+    maxLen = Math.max(maxLen, right - left + 1);
 
     right++;
 }
 ```
 
-### 🧩 Example
+**Examples:**
 
-LeetCode 209 — *Minimum Size Subarray Sum*
-LeetCode 3 — *Longest Substring Without Repeating Characters*
+* Longest subarray with sum ≤ K
+* Smallest subarray with sum ≥ K
 
 ---
 
-## 🧩 3. Variable Window + Frequency Map (for Strings / Character Windows)
+## 🧩 Pattern 3: Longest Substring with K Unique Characters
 
-### ✅ Problem Type
+**Used for:** Strings where you need to maintain a condition on distinct characters.
 
-Maintain a frequency map for substrings — e.g. “minimum window substring”, “anagram detection”.
+```java
+Map<Character, Integer> freq = new HashMap<>();
+int left = 0, maxLen = 0;
 
-### 🧱 Template
+for (int right = 0; right < s.length(); right++) {
+    // Step 1: expand
+    freq.put(s.charAt(right), freq.getOrDefault(s.charAt(right), 0) + 1);
+
+    // Step 2: shrink until valid
+    while (freq.size() > k) {
+        char ch = s.charAt(left);
+        freq.put(ch, freq.get(ch) - 1);
+        if (freq.get(ch) == 0) freq.remove(ch);
+        left++;
+    }
+
+    maxLen = Math.max(maxLen, right - left + 1);
+}
+```
+
+**Examples:**
+
+* Longest substring with at most K distinct characters
+* Longest substring without repeating characters
+
+---
+
+## 🧩 Pattern 4: Distinct / Duplicate Element Window
+
+**Used for:** Detecting duplicates or maintaining distinctness in a window.
+
+```java
+Set<Integer> set = new HashSet<>();
+int left = 0, maxLen = 0;
+
+for (int right = 0; right < arr.length; right++) {
+    // Step 1: expand until duplicate found
+    while (set.contains(arr[right])) {
+        set.remove(arr[left]);
+        left++;
+    }
+    set.add(arr[right]);
+    maxLen = Math.max(maxLen, right - left + 1);
+}
+```
+
+**Examples:**
+
+* Longest substring without repeating characters (LeetCode 3)
+* Longest subarray with all distinct elements
+
+---
+
+## 🧩 Pattern 5: Count Number of Subarrays (Important Counting Pattern)
+
+**Used for:** Count number of subarrays that satisfy a condition (sum/product/distinct).
+
+### 💡 Trick:
+
+Whenever window `[left, right]` is valid,
+➡️ All subarrays ending at `right` are also valid.
+So add `(right - left + 1)` to the answer.
+
+```java
+int left = 0;
+long count = 0;
+long product = 1;
+
+for (int right = 0; right < nums.length; right++) {
+    // Step 1: expand
+    product *= nums[right];
+
+    // Step 2: shrink until valid
+    while (product >= k && left <= right) {
+        product /= nums[left];
+        left++;
+    }
+
+    // Step 3: count all valid subarrays ending at right
+    count += (right - left + 1);
+}
+```
+
+**Examples:**
+
+* Subarray Product Less Than K (LeetCode 713)
+* Subarrays with At Most K distinct integers
+  → `countExactlyK = atMostK(K) - atMostK(K-1)`
+
+---
+
+## 🧩 Pattern 6: Minimum Window Substring (or Minimum Window Subarray)
+
+**Used for:** Find the **smallest window** containing all required elements/characters.
 
 ```java
 Map<Character, Integer> need = new HashMap<>();
-Map<Character, Integer> window = new HashMap<>();
-int have = 0, needCount = need.size();
-int left = 0, right = 0;
+for (char c : t.toCharArray()) need.put(c, need.getOrDefault(c, 0) + 1);
+
+int left = 0, count = 0;
 int minLen = Integer.MAX_VALUE;
 int start = 0;
 
-while (right < s.length()) {
-    // Step 1: expand window
-    char c = s.charAt(right);
-    window.put(c, window.getOrDefault(c, 0) + 1);
-
-    if (need.containsKey(c) && window.get(c).intValue() == need.get(c).intValue()) {
-        have++;
+for (int right = 0; right < s.length(); right++) {
+    char ch = s.charAt(right);
+    if (need.containsKey(ch)) {
+        need.put(ch, need.get(ch) - 1);
+        if (need.get(ch) >= 0) count++;
     }
 
-    // Step 2: shrink while window satisfies condition
-    while (have == needCount) {
-        // update answer
+    // Step 2: shrink to find smaller valid window
+    while (count == t.length()) {
         if (right - left + 1 < minLen) {
             minLen = right - left + 1;
             start = left;
         }
 
         char leftChar = s.charAt(left);
-        window.put(leftChar, window.get(leftChar) - 1);
-        if (need.containsKey(leftChar) && window.get(leftChar) < need.get(leftChar)) {
-            have--;
+        if (need.containsKey(leftChar)) {
+            need.put(leftChar, need.get(leftChar) + 1);
+            if (need.get(leftChar) > 0) count--;
         }
         left++;
     }
-
-    right++;
 }
+
+String result = minLen == Integer.MAX_VALUE ? "" : s.substring(start, start + minLen);
 ```
 
-### 🧩 Example
+**Examples:**
 
-LeetCode 76 — *Minimum Window Substring*
-LeetCode 438 — *Find All Anagrams in a String*
-
----
-
-## 🧩 4. Monotonic Deque Window
-
-### ✅ Problem Type
-
-Find min/max in each window (maintain decreasing or increasing deque).
-
-### 🧱 Template
-
-```java
-Deque<Integer> dq = new ArrayDeque<>();
-List<Integer> result = new ArrayList<>();
-
-int left = 0, right = 0;
-
-while (right < n) {
-    // Step 1: expand — maintain decreasing deque (for max)
-    while (!dq.isEmpty() && arr[dq.peekLast()] <= arr[right]) {
-        dq.pollLast();
-    }
-    dq.offerLast(right);
-
-    // Step 2: shrink if window too big
-    if (dq.peekFirst() < right - k + 1) {
-        dq.pollFirst();
-    }
-
-    // Step 3: collect result once first window formed
-    if (right >= k - 1) {
-        result.add(arr[dq.peekFirst()]);
-    }
-
-    right++;
-}
-```
-
-### 🧩 Example
-
-LeetCode 239 — *Sliding Window Maximum*
-
----
-
-## 🧩 5. Two-Pointer Numeric Window (for sums/products)
-
-### ✅ Problem Type
-
-Array-based problems with constraints like sum < k or product < k (sorted or non-negative arrays).
-
-### 🧱 Template
-
-```java
-int left = 0, right = 0;
-long product = 1;
-int count = 0;
-
-while (right < n) {
-    // Step 1: expand
-    product *= arr[right];
-
-    // Step 2: shrink until valid
-    while (product >= k && left <= right) {
-        product /= arr[left];
-        left++;
-    }
-
-    // Step 3: use window
-    count += right - left + 1;
-
-    right++;
-}
-```
-
-### 🧩 Example
-
-LeetCode 713 — *Subarray Product Less Than K*
+* Minimum Window Substring (LeetCode 76)
+* Smallest subarray with sum ≥ K
 
 ---
 
 ## 🧠 Summary Table
 
-| Pattern         | Typical Problem            | Key Data Structure | Window Type   |
-| --------------- | -------------------------- | ------------------ | ------------- |
-| Fixed size      | Max/Avg sum                | Simple variables   | Fixed         |
-| Variable size   | Longest/Shortest substring | Counters           | Expand–Shrink |
-| Variable + map  | Substring match/anagram    | HashMap            | Expand–Shrink |
-| Monotonic deque | Max/Min in window          | Deque              | Fixed         |
-| Two pointers    | Sum/Product constraint     | Simple variables   | Expand–Shrink |
+| Pattern                         | Type            | Typical Goal               | Key Operation                      |
+| ------------------------------- | --------------- | -------------------------- | ---------------------------------- |
+| Fixed-size window               | Constant window | Sum/avg/max over K         | Maintain size = K                  |
+| Variable-size window            | Expand–shrink   | Longest/shortest window    | `while(condition violated)` shrink |
+| Longest substring with K unique | Variable        | Distinct char count = K    | Use frequency map                  |
+| Distinct window                 | Variable        | Avoid duplicates           | Use HashSet                        |
+| Count subarrays                 | Variable        | Count valid subarrays      | `count += right - left + 1`        |
+| Minimum window substring        | Variable        | Find smallest valid window | Shrink from left to minimize       |
+
+---
+
+Would you like me to format this into a **Markdown code block with syntax highlighting and emojis** (GitHub README style — beautiful headings + collapsible sections)?
+That way you can directly paste it into your repo’s `/notes/sliding_window.md`.

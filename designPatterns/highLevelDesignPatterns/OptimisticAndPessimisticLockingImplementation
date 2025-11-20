@@ -1,0 +1,92 @@
+Optimistic Locking:
+
+Optimistic locking is a concurrency control strategy that assumes conflicts between users are rare. Instead of locking resources immediately (like traditional pessimistic locking), it allows multiple users to read the same data simultaneously and checks for conflicts only when a user attempts to write changes back to the database [1]. 
+In a scenario like Ticketmaster, where multiple people might try to book the same ticket, optimistic locking works as follows:
+1. Data Structure Enhancement
+First, the database table (e.g., Tickets) needs an extra column to track changes, typically a version number or a timestamp [1]. 
+TicketID
+EventID
+SeatNumber
+Status
+Version
+101	50	A1	Available	1
+2. The Booking Process
+Here is the step-by-step implementation when a user tries to book a ticket:
+A. Read the Data (User 1 & User 2)
+Both User 1 and User 2 read the same ticket data from the database. Each gets a copy of the current version number. 
+User 1 reads: TicketID 101, Status Available, Version 1
+User 2 reads: TicketID 101, Status Available, Version 1 
+B. Business Logic Execution
+Both users proceed with their booking process (entering payment details, etc.). At this stage, no database lock is held, so neither user is blocking the other. 
+C. Attempt to Write (User 1 Wins)
+User 1 completes their details first and attempts to book the ticket. The application sends an UPDATE command to the database that includes the version number it initially read: 
+sql
+UPDATE Tickets
+SET Status = 'Pending', Version = 2
+WHERE TicketID = 101 AND Version = 1;
+Use code with caution.
+
+The database executes this query. Because the WHERE clause condition (Version = 1) is met, the update is successful. The database confirms that one row was updated, and the ticket is now marked as Pending, with its Version incremented to 2 [1]. 
+D. Conflict Detection (User 2 Fails)
+A moment later, User 2 attempts to book the same ticket. Their application sends a similar UPDATE command, also specifying the version it initially read (which was 1): 
+sql
+UPDATE Tickets
+SET Status = 'Pending', Version = 2
+WHERE TicketID = 101 AND Version = 1;
+Use code with caution.
+
+The database executes this query. This time, the WHERE clause condition (Version = 1) is not met because the current version is now 2. The database reports that zero rows were updated [1]. 
+3. Handling the Conflict
+The application code checks the result of the UPDATE operation: 
+User 1's application: Sees that 1 row was updated and confirms the booking was successful.
+User 2's application: Sees that 0 rows were updated. This indicates a conflict (another user already modified the data). User 2's application then displays an error message, such as: "Sorry, this ticket has just been booked by someone else. Please select another seat." [1] 
+Summary
+Optimistic locking avoids locking the database for the entire transaction time, leading to better scalability and performance. It relies on a version check at the point of writing to ensure that the data has not been modified by someone else since it was first read 
+
+
+Pessimistic Locking:
+
+In contrast to optimistic locking, pessimistic locking assumes that conflicts will happen frequently and aims to prevent them by acquiring an exclusive lock on the resource as soon as it is accessed. This prevents any other user from modifying the data until the first user explicitly releases the lock. 
+Here is how pessimistic locking would handle the same Ticketmaster scenario:
+1. The Booking Process (Pessimistic Locking)
+A. Acquire Lock and Read Data (User 1)
+When User 1 selects a ticket, their application immediately locks the corresponding row in the database. This is typically done using a database-specific syntax like SELECT ... FOR UPDATE. 
+sql
+-- User 1 executes this query and acquires an exclusive lock
+SELECT * FROM Tickets WHERE TicketID = 101 FOR UPDATE;
+Use code with caution.
+
+Once the lock is acquired, User 1 reads the data: TicketID 101, Status Available. No other transaction can update or often even read this row until User 1's transaction ends. 
+B. Blocked Attempt (User 2)
+Simultaneously, User 2 attempts to select the same ticket. 
+sql
+-- User 2 executes this query and is immediately blocked (made to wait)
+SELECT * FROM Tickets WHERE TicketID = 101 FOR UPDATE;
+Use code with caution.
+
+User 2's transaction is now paused at this exact line of code. The database forces User 2 to wait until User 1's lock is released. 
+C. Business Logic and Write (User 1)
+User 1 proceeds with the booking process. The application already holds the lock, so it knows the data is safe to modify. 
+User 1's application updates the ticket status and commits the transaction: 
+sql
+UPDATE Tickets SET Status = 'Pending' WHERE TicketID = 101;
+
+COMMIT; -- Releases the lock
+Use code with caution.
+
+As soon as User 1 commits the transaction, the lock on TicketID 101 is released.
+D. User 2 Proceeds and Fails
+The moment the lock is released, User 2's blocked query unpauses and runs immediately. It successfully reads the data, but the Status is now Pending. 
+User 2's application code would then check the status:
+It sees the ticket is no longer Available.
+It immediately informs User 2: "Sorry, this ticket is no longer available." 
+Summary of Pessimistic Locking
+Feature
+ 
+Description
+Assumption	Data conflicts are frequent.
+Locking Mechanism	Locks data upon initial read (SELECT FOR UPDATE).
+User Experience	Users are forced to wait (queries block) until the lock is released.
+Conflict Handling	Conflicts are prevented by serializing access.
+Performance	Can lead to performance bottlenecks and deadlocks in high-traffic, concurrent systems (like Ticketmaster).
+Pessimistic locking is typically used in environments where data integrity is paramount and contention is high, but it generally offers less scalability than optimistic locking for systems requiring high throughput like an e-commerce platform. 

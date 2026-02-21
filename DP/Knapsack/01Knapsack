@@ -1,42 +1,32 @@
-import java.util.HashMap;
-
-public class Knapsack {
-
-    // Recursive function with memoization
-    public static int knapsack(int[] weights, int[] values, int capacity, int n, HashMap<String, Integer> memo) {
-        // Base case: no items or no capacity
-        if (n == 0 || capacity == 0) {
-            return 0;
+class Solution 
+{ 
+    //Function to return max value that can be put in knapsack of capacity W.
+    static int knapSack(int W, int wt[], int val[], int n) 
+    { 
+        int t[][] = new int[n+1][W+1];
+        for (int i = 0; i < n+1; i++) {
+            for (int j = 0; j < W + 1; j++)
+                t[i][j] = -1;
         }
-
-        // Check if the result is already computed
-        String key = n + "-" + capacity;
-        if (memo.containsKey(key)) {
-            return memo.get(key);
-        }
-
-        // If the weight of the current item is more than the capacity, skip it
-        if (weights[n - 1] > capacity) {
-            memo.put(key, knapsack(weights, values, capacity, n - 1, memo));
-        } else {
-            // Include the current item or exclude it
-            int include = values[n - 1] + knapsack(weights, values, capacity - weights[n - 1], n - 1, memo);
-            int exclude = knapsack(weights, values, capacity, n - 1, memo);
-            memo.put(key, Math.max(include, exclude));
-        }
-
-        return memo.get(key);
+        
+        return solve(wt, val, W, n, t); 
     }
-
-    public static void main(String[] args) {
-        int[] weights = {1, 2, 3};
-        int[] values = {10, 15, 40};
-        int capacity = 6;
-        int n = weights.length;
+    
+    static int solve(int wt[], int val[], int W, int n, int t[][]) {
+        if (n == 0 || W == 0)
+            return 0;
         
-        HashMap<String, Integer> memo = new HashMap<>();
-        int result = knapsack(weights, values, capacity, n, memo);
+        if (t[n][W] != -1)
+            return t[n][W];
+            
+        if (wt[n-1] > W) {
+            t[n][W] = solve(wt, val, W, n-1, t);
+        }
+        else {
+            t[n][W] =  Math.max(val[n-1] + solve(wt, val, W-wt[n-1], n-1, t),
+                solve(wt, val, W, n-1, t));
+        }
         
-        System.out.println("Maximum value in Knapsack: " + result);  // Output: 55
+        return t[n][W];
     }
 }

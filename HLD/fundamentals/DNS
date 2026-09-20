@@ -26,3 +26,20 @@ A **Name Server** (often represented by the **NS** record) is a specialized web 
 
 * **Role**: It acts as the "authoritative bookkeeper" or "phonebook holder" for your domain.
 * **How it works**: When a device or browser asks where to find a website (e.g., `youtube.com`), it queries the assigned Name Server (e.g., `ns1.google.com`) to get the actual IP address or relevant DNS records.
+
+## 🧠 How CDNs Differentiate Static (Cached) vs. Dynamic Data
+
+CDNs evaluate requests using three primary criteria:
+
+1. **HTTP Headers (Cache-Control)**:
+   - `public, max-age=3600`: CDN caches the resource locally.
+   - `no-store, private`: CDN bypasses cache and forwards to origin.
+
+2. **HTTP Method & Request Headers**:
+   - `GET` / `HEAD`: Eligible for cache lookups.
+   - `POST` / `PUT` / `DELETE`: Bypasses cache entirely.
+   - `Authorization` / `Cookie` headers signal user-specific dynamic state.
+
+3. **URL Pattern Rules**:
+   - Cache rules defined for extensions (`.png`, `.js`, `.css`, `.mp4`).
+   - Bypass rules defined for paths (`/api/*`, `/auth/*`, `/checkout`).

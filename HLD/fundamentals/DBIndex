@@ -1,0 +1,29 @@
+Purpose: An index is a specialized data structure maintained alongside a database table to significantly accelerate data retrieval operations.
+The Problem: Without an index, the database must perform a full table scan, which requires checking every single row, resulting in linear time complexity O(N).
+The Solution: An index acts like the index at the back of a textbook, allowing the database to jump directly to the relevant data, reducing lookup time to logarithmic complexity O(log N).
+Types of Indexes
+
+B-Tree: The standard and most versatile index type, highly effective for both exact matches and range-based queries (e.g., greater than, less than, between).
+Hash Index: Optimized specifically for high-speed, exact equality lookups.
+GIN (Generalized Inverted Index): Designed for complex data types like full-text search and array columns.
+GIST (Generalized Search Tree): Used for advanced, non-standard data types such as geospatial coordinates.
+The Index Write Penalty
+
+The Trade-off: While indexes dramatically speed up read queries, they impose a cost on write operations (INSERT, UPDATE, DELETE).
+Performance Impact: Every modification to the table must also be applied to all associated indexes. As a general rule, each additional index adds roughly 10%–30% overhead to write operations.
+Strategy by Workload:
+Read-Heavy (e.g., Social Media): Optimize for speed by creating comprehensive indexes.
+Write-Heavy (e.g., Logging): Use minimal or no indexes to prevent performance bottlenecks.
+Balanced (e.g., Chat Systems): Implement moderate, selective indexing on critical paths.
+Best Practices
+
+What to Index:
+Columns used in WHERE clauses for filtering.
+Columns used in JOIN conditions.
+Columns used in ORDER BY clauses for sorting.
+Frequently accessed primary or secondary lookup keys.
+What NOT to Index:
+Columns rarely used in queries.
+Columns with very low cardinality (e.g., booleans with only true/false).
+Tables that are exclusively write-heavy.
+Verification: Use the EXPLAIN ANALYZE command to determine if your query is utilizing an index (Index Scan) or performing a full table read (Sequential Scan).

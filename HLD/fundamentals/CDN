@@ -31,3 +31,11 @@
 ## 7. When to Use a CDN
 * **Mandatory:** Global media platforms and apps serving heavy static assets.
 * **Optional/Not Necessary:** Internal applications, single-region deployments, or systems serving primarily dynamic, non-cacheable data.
+
+CDN Cost Optimization: Instagram Case Study
+At massive scales, CDNs serve as a vital financial tool for infrastructure cost reduction rather than just a latency performance strategy.
+
+Scale Context: Instagram generates roughly 600 petabytes of monthly data egress.
+Standard Origin Pricing: Without a CDN, serving this volume directly from an origin server at standard cloud egress rates of $0.09 per GB results in a monthly cost of approximately $54 million.
+Negotiated CDN Pricing: By utilizing a CDN with enterprise-level negotiated pricing—estimated at $0.02 per GB—the monthly cost is reduced to $12 million.
+Financial Impact: This architecture provides a monthly savings of $42 million, illustrating the critical economic necessity of CDNs for high-traffic global platforms.

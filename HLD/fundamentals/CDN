@@ -1,0 +1,33 @@
+# Content Delivery Network (CDN) System Design Notes
+
+## 1. Core Problem: The Physics of Latency
+* **The Constraint:** Data transmission is physically limited by the speed of light in fiber optic cables. 
+* **The Solution:** CDNs distribute content to **Edge Servers** (Points of Presence) physically closer to users, reducing round-trip latency.
+
+## 2. Architecture Components
+* **Origin Server:** The authoritative source of truth for your content (e.g., AWS S3, Azure Blob, or primary app server).
+* **Edge Server (POP):** Distributed nodes that cache copies of content locally for nearby users.
+
+## 3. Request Flow
+* **Cache Hit:** The user requests a file, the edge server serves it immediately from its local storage.
+* **Cache Miss:** The edge server lacks the content, fetches it from the origin, caches it locally, and then serves it to the user.
+
+## 4. Models of Distribution
+* **Pull CDN:** The edge server fetches content from the origin only when requested by a user. This is the **default for most web applications** due to ease of setup and storage efficiency.
+* **Push CDN:** Content is proactively pushed to all edge locations before user requests. Ideal for **high-traffic launches** or critical binary/firmware updates to avoid "cold start" latency.
+
+## 5. Cache Control & Invalidation
+* **Cache-Control Headers:** 
+    * `public`: Cacheable by both browser and CDN.
+    * `private`: Only the browser can cache.
+    * `no-store`: Prohibits caching; used for sensitive data.
+* **Versioned URLs:** The industry standard for invalidation (e.g., `style.v2.css`). Since the URL changes, there is no need to manually purge content.
+
+## 6. Key Performance Metrics
+* **Cache Hit Rate:** Target >80%.
+* **Time to First Byte (TTFB):** Should be under 50ms for an edge hit.
+* **Origin Offload:** Percentage of bandwidth handled by the CDN vs. origin. Target >80% to minimize infrastructure strain.
+
+## 7. When to Use a CDN
+* **Mandatory:** Global media platforms and apps serving heavy static assets.
+* **Optional/Not Necessary:** Internal applications, single-region deployments, or systems serving primarily dynamic, non-cacheable data.

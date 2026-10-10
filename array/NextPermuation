@@ -1,0 +1,10 @@
+https://leetcode.com/problems/next-permutation/description/
+
+Algorithm:
+Find the pivot: Traverse from right to left and find the first index i where nums[i] < nums[i + 1].
+
+Find the successor: If a pivot exists, traverse from right to left and find the first element greater than nums[i]. Swap them.
+
+Reverse the suffix: Reverse the subarray from i + 1 to the end to get the smallest possible suffix.
+
+If no pivot exists, reverse the entire array.
